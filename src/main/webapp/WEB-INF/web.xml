@@ -19,6 +19,11 @@
       <param-name>com.sun.faces.expressionFactory</param-name>
       <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
    </context-param>
+   
+   <context-param>
+				<param-name>primefaces.THEME</param-name>
+				<param-value>smoothness</param-value>
+			</context-param>
 
     <context-param>
         <description>

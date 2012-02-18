@@ -249,5 +249,15 @@
 			<artifactId>primefaces</artifactId>
 			<version>3.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>smoothness</artifactId>
+			<version>1.0.3</version>
+		</dependency>
 	</dependencies>
 </project>
