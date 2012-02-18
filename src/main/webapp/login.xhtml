@@ -9,24 +9,33 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/site/main.xhtml">
 	<ui:define name="center">
+		<h:panelGrid columns="2" columnClasses="twocols,twocols" style="width: 100%;">
+		
 		<p:panel header="Login" style="width: 400px;">
 			<h:form id="loginForm">
 				<p:message for="loginForm" />
-				<h:panelGrid columns="3">
+				<h:panelGrid columns="3" style="width: 385px;">
 					<h:outputLabel for="usernameInput" value="Username:" />
 					<p:inputText id="usernameInput" value="#{LoginBean.username}"
-						required="true" requiredMessage="Required" />
+						required="true" requiredMessage="Required" style="float: right;"/>
 					<p:message for="usernameInput" />
 					<h:outputLabel for="passwordInput" value="Password:" />
 					<p:password id="passwordInput" value="#{LoginBean.password}"
-						required="true" requiredMessage="Required" />
+						required="true" requiredMessage="Required" style="float: right;"/>
 					<p:message for="passwordInput" />
 					<h:outputText value="" />
 					<p:commandButton value="Login" action="#{LoginBean.login}"
 						style="float: right;" ajax="false" />
+						<p:commandLink action="forgotPassword" value="Forgot Password?" style="float: right;" ajax="false"/>
 				</h:panelGrid>
 			</h:form>
 		</p:panel>
+		<p:panel header="New Members" style="width: 400px;">
+			<h:form>
+					<p:commandButton value="Create new account" action="#{LoginBean.login}" ajax="false" />
+			</h:form>
+		</p:panel>
+		</h:panelGrid>
 	</ui:define>
 </ui:composition>
 </html>

@@ -3,34 +3,22 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd 
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<import resource="infrastructure.xml" />
 
 	<context:annotation-config/>
 	<context:component-scan base-package="com.kyle.route66" />
-	<!-- 
-    <bean id="myEmf"
-        class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="com.kyle.health.tracker.data.model" />
-        <property name="jpaVendorAdapter">
-            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
-                <property name="showSql" value="true" />
-                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect" />
-            </bean>
-        </property>
-    </bean>
-    
-    <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-	    <property name="jndiName" value="java:comp/env/jdbc/jelasticDb"/>
+	<jpa:repositories base-package="com.kyle.route66.db.dao" />
+	
+	
+	<!-- this is a template message that we can pre-load with default state -->
+	<bean id="passwordResetEmailTemplate" class="org.springframework.mail.SimpleMailMessage">
+	  <property name="from" value="kyle.delap@gmail.com"/>
+	  <property name="subject" value="Password Reset"/>
 	</bean>
-   
-    <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="myEmf" />
-    </bean>
-    <tx:annotation-driven transaction-manager="txManager" />
-   
-    <bean
-       class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor"/> -->
 </beans>

@@ -3,9 +3,10 @@ package com.kyle.route66.web.model.account;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,12 +15,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.kyle.route66.db.dao.UserAccountRepository;
 import com.kyle.route66.web.model.user.StatusBean;
 import com.kyle.route66.web.model.user.UserSession;
 
 @Service("LoginBean")
 @Scope("request")
 public class LoginBean {
+	private static final Log log = LogFactory.getLog(LoginBean.class);
 
 	private String username;
 	private String password;
@@ -35,6 +38,9 @@ public class LoginBean {
 	@Autowired
 	@Qualifier("authenticationManager")
 	private AuthenticationManager am;
+	
+	@Autowired
+	private UserAccountRepository userAccountRepository;
 
 	public String getUsername() {
 		return username;
@@ -53,11 +59,13 @@ public class LoginBean {
 	}
 
 	public String startLogin() {
+		log.debug("startLogin()");
 		status.setLogIn(true);
 		return "startLogin";
 	}
 
 	public String login() {
+		log.debug("login()");
 		try {
 			Authentication request = new UsernamePasswordAuthenticationToken(
 					this.username, this.password);
@@ -66,6 +74,8 @@ public class LoginBean {
 
 			session.setLoggedIn(true);
 			status.setLogIn(false);
+			
+			session.setUserAccount(userAccountRepository.findByUsername(this.username).get(0));
 
 		} catch (AuthenticationException e) {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -88,4 +98,8 @@ public class LoginBean {
 		this.status = status;
 	}
 
+	public UserAccountRepository getUserAccountRep() {
+		return userAccountRepository;
+	}
+	
 }

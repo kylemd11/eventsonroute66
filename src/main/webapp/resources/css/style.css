@@ -1,3 +1,11 @@
+@CHARSET "ISO-8859-1";
+
 .threecols {
 	width: 33%;
+}
+
+.twocols {
+	width: 50%;
+	vertical-align: top;
+	text-align: center;
 }

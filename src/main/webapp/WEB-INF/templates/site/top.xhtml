@@ -15,16 +15,21 @@
 					<h:panelGrid columns="3" style="width: 100%;" columnClasses="threecols,threecols,threecols">
 						<h:outputText value="" />
 						<h:panelGroup style="width: 100%; text-align: center; display: block;">
-							<h:commandLink action="home" value="Home" />
+							<h:commandLink action="home" value="Home" title="Home"/>
 							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="events" value="Events" />
+							<h:commandLink action="events" value="Events" title="Events"/>
 							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="history" value="History" />
+							<h:commandLink action="history" value="History" title="History"/>
 							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="links" value="Links" />
+							<h:commandLink action="links" value="Links" title="Links"/>
 						</h:panelGroup>
-						<h:commandLink action="#{LoginBean.startLogin}" value="Login" style="float:right;" rendered="#{!UserSession.isLoggedIn}"/>
-						<h:commandLink action="#{LogoutBean.logout}" value="Logout" style="float:right;" rendered="#{UserSession.isLoggedIn}"/>
+						<h:commandLink action="#{LoginBean.startLogin}" value="Login or Register" style="float:right;" rendered="#{!StatusBean.isLogIn and !UserSession.isLoggedIn}" title="Login or Register"/>
+						<h:panelGroup rendered="#{UserSession.isLoggedIn}" style="float:right;">
+							<h:commandLink value="#{UserSession.userAccount.username}" action="accountSettings" title="Account Settings"/>
+							<f:verbatim>&nbsp;&nbsp;</f:verbatim>
+							<h:commandLink action="#{LogoutBean.logout}" value="Logout"  rendered="#{UserSession.isLoggedIn}" title="Logout"/>
+						</h:panelGroup>
+						<h:outputText value=" " rendered="#{StatusBean.isLogIn}"/>
 					</h:panelGrid>
 				</h:form>
 			</p:layoutUnit>

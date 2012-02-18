@@ -1,5 +1,7 @@
 package com.kyle.route66.web.model.user;
 
+import java.util.List;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
@@ -14,11 +16,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.kyle.route66.db.model.UserAccount;
+
 @Service("StatusBean")
 @Scope("session")
 public class StatusBean {
         
 	private boolean logIn = false;
+	
 	
     public boolean isLogIn() {
 		return logIn;
@@ -31,5 +36,7 @@ public class StatusBean {
 	public boolean getIsLogIn() {
 		return logIn;
 	}
+
+	
 }
 
