@@ -78,6 +78,7 @@ public class LoginBean {
 			session.setUserAccount(userAccountRepository.findByUsername(this.username).get(0));
 
 		} catch (AuthenticationException e) {
+			log.error(e.getMessage());
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Invalid Login!", "Invalid Login!");
 			FacesContext.getCurrentInstance().addMessage("loginForm", msg);

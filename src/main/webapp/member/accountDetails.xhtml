@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/templates/site/main.xhtml">
+	<ui:define name="center">
+		<p:tabView id="accountTabs">
+
+			<p:tab id="personalInformationTab" title="Personal Information">
+				<h:form id="accountDetailsForm">
+					<p:message for="accountDetailsForm" />
+					<h:outputText value="Please update the following information." />
+					<h:panelGrid columns="3" style="width: 385px;">
+						<h:outputLabel for="firstNameInput" value="First Name:" />
+						<p:inputText id="firstNameInput"
+							value="#{EditAccountBean.firstName}" required="true"
+							requiredMessage="Please enter your first name"
+							style="float: right;" />
+						<p:message for="firstNameInput" />
+						<h:outputLabel for="lastNameInput" value="Last Name:" />
+						<p:inputText id="lastNameInput"
+							value="#{EditAccountBean.lastName}" required="true"
+							requiredMessage="Please enter your last name"
+							style="float: right;" />
+						<p:message for="lastNameInput" />
+						<h:outputLabel for="emailAddressOneInput" value="Email Address:" />
+						<p:inputText id="emailAddressOneInput"
+							value="#{EditAccountBean.emailAddressOne}" required="true"
+							requiredMessage="Please enter your email address"
+							style="float: right;">
+						</p:inputText>
+						<p:message id="emailAddress1Error" for="emailAddressOneInput" />
+						<h:outputLabel for="emailAddressTwoInput"
+							value="Repeat Email Address:" />
+						<p:inputText id="emailAddressTwoInput"
+							value="#{EditAccountBean.emailAddressTwo}" required="true"
+							requiredMessage="Please enter your email address"
+							style="float: right;" />
+						<p:message id="emailAddress2Error" for="emailAddressTwoInput" />
+						<h:outputLabel for="addressOneInput" value="Address Line 1:" />
+						<p:inputText id="addressOneInput"
+							value="#{EditAccountBean.addressOne}" style="float: right;" />
+						<p:message for="addressOneInput" />
+						<h:outputLabel for="addressTwoInput" value="Address Line 2:" />
+						<p:inputText id="addressTwoInput"
+							value="#{EditAccountBean.addressTwo}" style="float: right;" />
+						<p:message for="addressTwoInput" />
+						<h:outputLabel for="cityInput" value="City:" />
+						<p:inputText id="cityInput" value="#{EditAccountBean.city}"
+							style="float: right;" />
+						<p:message for="cityInput" />
+						<h:outputLabel for="stateInput" value="State:" />
+						<p:inputText id="stateInput" value="#{EditAccountBean.state}"
+							style="float: right;" />
+						<p:message for="stateInput" />
+						<h:outputLabel for="zipInput" value="Zip Code:" />
+						<p:inputText id="zipInput" value="#{EditAccountBean.zip}"
+							style="float: right;" />
+						<p:message for="zipInput" />
+						<h:outputText value="" />
+						<p:commandButton value="Update"
+							actionListener="#{EditAccountBean.update}" style="float: right;"
+							update="accountDetailsForm" id="updateAccountBtn" />
+					</h:panelGrid>
+					<p:blockUI block="accountDetailsForm" trigger="updateAccountBtn">
+					Updating<br />
+						<p:graphicImage value="/images/ajax-loader.gif" />
+					</p:blockUI>
+				</h:form>
+			</p:tab>
+			<p:tab id="passwordTab" title="Change Password">
+				<h:outputText value="you can change your password here" />
+				<h:form id="changePasswordForm">
+					<p:message for="changePasswordForm" />
+					<h:panelGrid columns="3" style="width: 385px;">
+						<h:outputLabel for="passwordOneInput" value="Password:" />
+						<p:password id="passwordOneInput"
+							value="#{PasswordUpdateBean.passwordOne}" required="true"
+							requiredMessage="Please enter your password"
+							style="float: right;" feedback="true">
+						</p:password>
+						<p:message id="password1Error" for="passwordOneInput" />
+						<h:outputLabel for="passwordTwoInput" value="Repeat Password:" />
+						<p:password id="passwordTwoInput"
+							value="#{PasswordUpdateBean.passwordTwo}" required="true"
+							requiredMessage="Please enter your password"
+							style="float: right;" />
+						<p:message id="password2Error" for="passwordTwoInput" />
+						<h:outputText value="" />
+						<p:commandButton value="Update"
+							actionListener="#{PasswordUpdateBean.update}"
+							style="float: right;" update="changePasswordForm"
+							id="passwordUpdateBtn" />
+					</h:panelGrid>
+					<p:blockUI block="changePasswordForm" trigger="passwordUpdateBtn">
+					Updating<br />
+						<p:graphicImage value="/images/ajax-loader.gif" />
+					</p:blockUI>
+				</h:form>
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>
+</html>

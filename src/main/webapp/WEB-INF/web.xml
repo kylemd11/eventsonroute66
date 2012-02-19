@@ -1,94 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.0"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         metadata-complete="false">
-    <display-name>mojarra-regression-test</display-name>
-    <description>A simple regression test to make it easier to get your bug fixed. The only reason we need a web.xml is to set the PROJECT_STAGE to Develoment.  If you have a web.xml, then you need to map the FacesServlet.</description>
-
-	<context-param>
-      <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-      <param-value>server</param-value>
-   </context-param>
-   <context-param>
-      <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-      <param-value>.xhtml</param-value>
-   </context-param>
-   <context-param>
-      <param-name>com.sun.faces.expressionFactory</param-name>
-      <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
-   </context-param>
-   
-   <context-param>
-				<param-name>primefaces.THEME</param-name>
-				<param-value>smoothness</param-value>
-			</context-param>
-
-    <context-param>
-        <description>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="false" version="3.0">
+  <display-name>mojarra-regression-test</display-name>
+  <description>A simple regression test to make it easier to get your bug fixed. The only reason we need a web.xml is to set the PROJECT_STAGE to Develoment.  If you have a web.xml, then you need to map the FacesServlet.</description>
+  <context-param>
+    <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+    <param-value>server</param-value>
+  </context-param>
+  <context-param>
+    <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+    <param-value>.xhtml</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.sun.faces.expressionFactory</param-name>
+    <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.THEME</param-name>
+    <param-value>smoothness</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
+    <param-value>6Le9180SAAAAAKkeuVbCdZeOl_NpV8dcXW3rFrLx</param-value>
+  </context-param>
+  <context-param>
+    <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+    <param-value>6Le9180SAAAAAAiAQpECFzCVT3K3eRrBfBkkJsnk</param-value>
+  </context-param>
+  <context-param>
+    <description>
             Tell the runtime where we are in the project development
             lifecycle.  Valid values are: 
             Development, UnitTest, SystemTest, or Production.
             The runtime will display helpful hints to correct common mistakes
             when the value is Development.
         </description>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
-    </context-param>
-     
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
+    <param-name>javax.faces.PROJECT_STAGE</param-name>
+    <param-value>Development</param-value>
+  </context-param>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
             /WEB-INF/applicationContext.xml
             /WEB-INF/applicationContext-security.xml
         </param-value>
-    </context-param>
-
-   <!--  Faces Servlet -->
+  </context-param>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
-
-   <servlet-mapping>
-       <servlet-name>Faces Servlet</servlet-name>
-       <url-pattern>/faces/*</url-pattern>
-       <url-pattern>*.jsf</url-pattern>
-   </servlet-mapping>
-   
-   <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-
-    <filter-mapping>
-      <filter-name>springSecurityFilterChain</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    
-    <listener>
-        <listener-class>
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>/faces/*</url-pattern>
+    <url-pattern>*.jsf</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>springSecurityFilterChain</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <listener>
+    <listener-class>
                 org.springframework.web.context.ContextLoaderListener
         </listener-class>
   </listener>
   <listener>
-        <listener-class>
+    <listener-class>
                 org.springframework.web.context.request.RequestContextListener
         </listener-class>
   </listener>
-    
-
-   <welcome-file-list>
-     <welcome-file>index.jsp</welcome-file>
-   </welcome-file-list>
-
-	<!-- <resource-ref>
-		<description>MySQL Datasource example</description>
-		<res-ref-name>jdbc/jelasticDb</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-		<res-auth>Container</res-auth>
-	</resource-ref> -->
-
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>AccountActivationServlet</display-name>
+    <servlet-name>AccountActivationServlet</servlet-name>
+    <servlet-class>com.kyle.route66.web.servlet.AccountActivationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AccountActivationServlet</servlet-name>
+    <url-pattern>/account/activate.html</url-pattern>
+  </servlet-mapping>
 </web-app>

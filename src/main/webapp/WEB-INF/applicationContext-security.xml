@@ -11,10 +11,11 @@
 
     <http pattern="/static/**" security="none"/>
     <http pattern="/loggedout.jsp" security="none"/>
+    <http pattern="/account/**" security="none"/>
 
     <http use-expressions="true">
         <intercept-url pattern="/secure/extreme/**" access="hasRole('supervisor')"/>
-        <intercept-url pattern="/member/**" access="isAuthenticated()" />
+        <intercept-url pattern="/member/**" access="hasRole('USER')" />
         <!--
              Allow all other requests. In a real application you should
              adopt a whitelisting approach where access is not allowed by default
@@ -22,11 +23,11 @@
         <intercept-url pattern="/**" access="permitAll" />
          <form-login
             login-processing-url="/jojo" 
-            login-page="/welcome.jsf"
+            login-page="/index.jsf"
             default-target-url="/secured/person/list.jsf"
-            authentication-failure-url="/welcome.jsf" />
+            authentication-failure-url="/index.jsf" />
         <form-login />
-        <logout logout-success-url="/welcome.jsf" delete-cookies="JSESSIONID" />
+        <logout logout-success-url="/index.jsf" delete-cookies="JSESSIONID" />
         <remember-me />
 <!--
     Uncomment to enable X509 client authentication support

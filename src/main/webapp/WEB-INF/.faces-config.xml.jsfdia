@@ -19,6 +19,19 @@
     TITLE="#{LogoutBean.logout}:success" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="startLogin::#login.xhtml" NAME="output2"
     PATH="/login.xhtml" TARGET="rules:#login.xhtml" TITLE="startLogin" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="home::#index.xhtml" NAME="output3"
+    PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="forgotPassword::#lostPassword.xhtml"
+    NAME="output4" PATH="/lostPassword.xhtml"
+    TARGET="rules:#lostPassword.xhtml" TITLE="forgotPassword" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="newAccount::#account#newAccountRequest.xhtml" NAME="output5"
+    PATH="/account/newAccountRequest.xhtml"
+    TARGET="rules:#account#newAccountRequest.xhtml" TITLE="newAccount" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="accountSettings::#member#accountDetails.xhtml" NAME="output6"
+    PATH="/member/accountDetails.xhtml"
+    TARGET="rules:#member#accountDetails.xhtml" TITLE="accountSettings" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#login.xhtml" PATH="/login.xhtml"
@@ -27,4 +40,31 @@
   SHAPE="464,17,0,0" model-entity="JSFProcessGroup"/>
  <PROCESS-ITEM NAME="rules:#index.xhtml" PATH="/index.xhtml"
   SHAPE="272,321,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#lostPassword.xhtml"
+  PATH="/lostPassword.xhtml" SHAPE="304,497,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#account#newAccountRequest.xhtml"
+  PATH="/account/newAccountRequest.xhtml" SHAPE="304,529,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#account#newAccountRequest.xhtml:0"
+   NAME="item" PATH="/account/newAccountRequest.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="success::#account#newAccountSubmitted.xhtml"
+    NAME="output" PATH="/account/newAccountSubmitted.xhtml"
+    TARGET="rules:#account#newAccountSubmitted.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#account#newAccountSubmitted.xhtml"
+  PATH="/account/newAccountSubmitted.xhtml" SHAPE="512,625,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#account#startActivation.xhtml"
+  PATH="/account/startActivation.xhtml" SHAPE="304,753,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#account#startActivation.xhtml:0" NAME="item"
+   PATH="/account/startActivation.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="success::#account#activationConfirmation.xhtml" NAME="output"
+    PATH="/account/activationConfirmation.xhtml"
+    TARGET="rules:#account#activationConfirmation.xhtml" TITLE="success" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#account#activationConfirmation.xhtml"
+  PATH="/account/activationConfirmation.xhtml" SHAPE="448,849,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#member#accountDetails.xhtml"
+  PATH="/member/accountDetails.xhtml" SHAPE="304,561,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

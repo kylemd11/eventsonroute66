@@ -21,4 +21,9 @@
 	  <property name="from" value="kyle.delap@gmail.com"/>
 	  <property name="subject" value="Password Reset"/>
 	</bean>
+	
+	<bean id="accountRequestEmailTemplate" class="org.springframework.mail.SimpleMailMessage">
+	  <property name="from" value="kyle.delap@gmail.com"/>
+	  <property name="subject" value="Account Request"/>
+	</bean>
 </beans>
