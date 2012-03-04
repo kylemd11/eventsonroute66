@@ -42,6 +42,10 @@
    <from-outcome>accountSettings</from-outcome>
    <to-view-id>/member/accountDetails.xhtml</to-view-id>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>events</from-outcome>
+   <to-view-id>/events.xhtml</to-view-id>
+  </navigation-case>
  </navigation-rule>
  
  <navigation-rule>
@@ -68,6 +72,11 @@
   <validator-id>MatchValidator</validator-id>
   <validator-class>com.kyle.route66.web.validator.MatchValidator</validator-class>
  </validator>
+ 
+ <converter>
+ 	<converter-id>stateConverter</converter-id>
+ 	<converter-class>com.kyle.route66.web.converter.StateSelectConverter</converter-class>
+ </converter>
  <application>
   <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
  </application>

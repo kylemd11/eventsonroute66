@@ -9,5 +9,5 @@ import com.kyle.route66.db.model.Users;
 
 public interface AuthoritiesRepository extends CrudRepository<Authorities, Long>{
 
-	List<Users> findByUsername(String username);
+	List<Authorities> findByUsername(String username);
 }

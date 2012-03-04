@@ -19,11 +19,11 @@
 				<p:layoutUnit position="north" size="200">
 					<ui:include src="/WEB-INF/templates/site/top.xhtml" />
 				</p:layoutUnit>
-				<p:layoutUnit position="south" size="100">
+				<p:layoutUnit position="south" size="50">
 					<h:outputText value="Bottom content." />
 				</p:layoutUnit>
-				<p:layoutUnit position="west" size="300" rendered="#{!StatusBean.isLogIn}">
-					<h:outputText value="Left content" />
+				<p:layoutUnit position="west" size="200" rendered="#{StatusBean.showLeftPanel}" header="Event Filter">
+					<ui:insert name="left">Left Template Content</ui:insert>
 				</p:layoutUnit>
 				<p:layoutUnit position="center">
 					<ui:insert name="center">Center Template Content</ui:insert>

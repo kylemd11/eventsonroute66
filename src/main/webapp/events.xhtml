@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/templates/site/main.xhtml">
+	<ui:define name="left">
+	<h:form id="filterForm">
+		<h:messages for="filterForm"/>
+		<p:panel header="Filters" rendered="#{EventFilterBean.filtersApplied}">
+			<h:panelGrid columns="3" rendered="#{EventFilterBean.isStateFiltered}">
+				<h:outputText value="State:"/>
+				<h:outputText value="#{EventFilterBean.stateFilter}"/>
+				<h:commandLink value="remove" actionListener="#{EventFilterBean.removeStateFilter}"/>
+			</h:panelGrid>
+			<h:panelGrid columns="3" rendered="#{EventFilterBean.isEventTypeFiltered}">
+				<h:outputText value="Event Type:"/>
+				<h:outputText value="#{EventFilterBean.eventTypeFilter}"/>
+				<h:commandLink value="remove" actionListener="#{EventFilterBean.removeEventTypeFilter}"/>
+			</h:panelGrid>
+		</p:panel>
+		<h:panelGrid columns="1">
+		<p:fieldset legend="State" toggleable="true" toggleSpeed="500" rendered="#{!EventFilterBean.isStateFiltered}">  
+		<p:selectOneMenu value="#{EventFilterBean.stateFilter}" id="stateDropDown">
+			<f:selectItem itemLabel="Select..." itemValue="1"/>
+            <f:selectItems value="#{EventFilterBean.states}" var="state" itemLabel="#{state.name}" itemValue="#{state.code}"/>
+        </p:selectOneMenu>  
+        </p:fieldset>      
+        <p:fieldset legend="Event Type" toggleable="true" toggleSpeed="500" rendered="#{!EventFilterBean.isEventTypeFiltered}">
+					<p:dataList value="#{EventFilterBean.eventTypes}" var="eventType" itemType="circle">
+						<h:commandLink value="#{eventType.description}" action="#{EventFilterBean.setEventTypeFilterAction}">
+							<f:param name="eventTypeCode" value="#{eventType.code}"/>
+						</h:commandLink>
+					</p:dataList>
+					<p:selectOneMenu value="#{EventFilterBean.eventTypeFilter}" id="eventTypeDropDown">
+			<f:selectItem itemLabel="Select..." itemValue="1"/>
+            <f:selectItems value="#{EventFilterBean.eventTypes}" var="eventType" itemLabel="#{eventType.description}" itemValue="#{eventType.code}"/>
+        </p:selectOneMenu>  
+        </p:fieldset>      
+        <h:commandButton id="filterBtn" value="Submit" style="float: right;" rendered="#{!EventFilterBean.allFiltersApplied}"/>
+        </h:panelGrid>
+        </h:form>
+	</ui:define>
+	<ui:define name="center">
+		<p:layout id="eventLayout" style="height: 100%;'">
+			<p:layoutUnit position="north" size="40">
+				<h:form>
+					<h:outputText value="Center Main Content" />
+					<h:panelGroup style="float: right;">
+						<h:commandButton value="Calendar"
+							actionListener="#{EventStatusBean.setCalendar}"
+							disabled="#{EventStatusBean.isCalendarDisabled}"/>
+						<h:commandButton value="Timeline"
+							actionListener="#{EventStatusBean.setTimeline}"
+							disabled="#{EventStatusBean.isTimelineDisabled}" />
+						<h:commandButton value="List"
+							actionListener="#{EventStatusBean.setList}"
+							disabled="#{EventStatusBean.isListDisabled}" />
+					</h:panelGroup>
+				</h:form>
+			</p:layoutUnit>
+			<p:layoutUnit position="center">
+				<p:schedule value="#{EventScheduleBean.eventModel}"
+					widgetVar="myschedule" style="width: 100%;" aspectRatio="2" rendered="#{EventStatusBean.isCalendarDisabled}">
+				</p:schedule>
+			</p:layoutUnit>
+		</p:layout>
+	</ui:define>
+</ui:composition>
+</html>

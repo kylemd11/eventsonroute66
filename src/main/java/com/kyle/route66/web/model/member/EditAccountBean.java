@@ -185,7 +185,7 @@ public class EditAccountBean {
 	}
 
 	private boolean validateUniqueEmailAddress() {
-		if (userAccountRepository.findByEmailAddr(emailAddressOne).size() > 0) {
+		if (userAccountRepository.findByEmailAddr(emailAddressOne) != null) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage("accountTabs:accountDetailsForm", new FacesMessage(
 					FacesMessage.SEVERITY_ERROR,

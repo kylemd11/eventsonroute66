@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
+import com.kyle.route66.db.model.Event;
+import com.kyle.route66.db.model.State;
 import com.kyle.route66.db.model.Users;
 
-public interface UsersRepository extends CrudRepository<Users, Long>{
-
-	Users findByUsername(String username);
+public interface StateRepository extends CrudRepository<State, String>{
+	
 }

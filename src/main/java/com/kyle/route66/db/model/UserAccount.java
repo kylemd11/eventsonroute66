@@ -1,10 +1,17 @@
 package com.kyle.route66.db.model;
-// Generated Feb 18, 2012 12:52:29 PM by Hibernate Tools 3.4.0.CR1
 
 
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 /**
@@ -26,6 +33,11 @@ public class UserAccount  implements java.io.Serializable {
      private String city;
      private String state;
      private String zip;
+     
+     private Users user;
+     private UserAccountRequest accountRequest;
+     
+     private List<Event> events;
 
     public UserAccount() {
     }
@@ -139,9 +151,41 @@ public class UserAccount  implements java.io.Serializable {
         this.zip = zip;
     }
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+	public Users getUser() {
+		return user;
+	}
 
 
+	public void setUser(Users user) {
+		this.user = user;
+	}
 
+
+	@OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+	public UserAccountRequest getAccountRequest() {
+		return accountRequest;
+	}
+
+
+	public void setAccountRequest(UserAccountRequest accountRequest) {
+		this.accountRequest = accountRequest;
+	}
+
+	@OneToMany(cascade = CascadeType.DETACH)
+	@JoinColumn(name="state_cd")
+	public List<Event> getEvents() {
+		return events;
+	}
+
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
+	
+	
 }
 
 

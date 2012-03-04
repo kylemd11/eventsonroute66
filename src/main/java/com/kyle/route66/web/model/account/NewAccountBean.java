@@ -247,7 +247,7 @@ public class NewAccountBean {
 	}
 
 	private boolean validateUniqueEmailAddress() {
-		if(userAccountRepository.findByEmailAddr(emailAddressOne).size() > 0) {
+		if(userAccountRepository.findByEmailAddr(emailAddressOne) != null) {
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage("newAccountForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email addresses already in use", "Email addresses already in use"));
 			return false;

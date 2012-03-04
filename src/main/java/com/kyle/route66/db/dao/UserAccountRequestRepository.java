@@ -10,5 +10,5 @@ public interface UserAccountRequestRepository extends CrudRepository<UserAccount
 
 	List<UserAccountRequest> findByUsername(String username);
 	
-	List<UserAccountRequest> findByRequestId(String requestId);
+	UserAccountRequest findByRequestId(String requestId);
 }

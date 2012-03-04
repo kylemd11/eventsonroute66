@@ -26,6 +26,8 @@ public class UserSession {
 	
 	public void setUserAccount(UserAccount userAccount) {
 		this.userAccount = userAccount;
+		
+		setLoggedIn(this.userAccount != null);
 	}
 
 	public UserAccount getUserAccount() {

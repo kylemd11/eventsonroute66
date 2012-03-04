@@ -1,5 +1,5 @@
 package com.kyle.route66.db.model;
-// Generated Feb 18, 2012 12:52:29 PM by Hibernate Tools 3.4.0.CR1
+
 
 
 import java.util.Date;

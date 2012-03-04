@@ -15,21 +15,21 @@
 					<h:panelGrid columns="3" style="width: 100%;" columnClasses="threecols,threecols,threecols">
 						<h:outputText value="" />
 						<h:panelGroup style="width: 100%; text-align: center; display: block;">
-							<h:commandLink action="home" value="Home" title="Home"/>
+							<h:commandLink action="home" value="Home" title="Home" actionListener="#{StatusBean.setHome}"/>
 							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="events" value="Events" title="Events"/>
+							<h:commandLink action="events" value="Events" title="Events" actionListener="#{StatusBean.setEvents}"/>
 							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="history" value="History" title="History"/>
+							<h:commandLink action="history" value="History" title="History" actionListener="#{StatusBean.setHistory}"/>
 							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="links" value="Links" title="Links"/>
+							<h:commandLink action="links" value="Links" title="Links" actionListener="#{StatusBean.setLinks}"/>
 						</h:panelGroup>
-						<h:commandLink action="#{LoginBean.startLogin}" value="Login or Register" style="float:right;" rendered="#{!StatusBean.isLogIn and !UserSession.isLoggedIn}" title="Login or Register"/>
+						<h:commandLink action="startLogin" value="Login or Register" style="float:right;" rendered="#{!StatusBean.isLogin and !UserSession.isLoggedIn}" title="Login or Register"  actionListener="#{StatusBean.setLogin}"/>
 						<h:panelGroup rendered="#{UserSession.isLoggedIn}" style="float:right;">
 							<h:commandLink value="#{UserSession.userAccount.username}" action="accountSettings" title="Account Settings"/>
 							<f:verbatim>&nbsp;&nbsp;</f:verbatim>
 							<h:commandLink action="#{LogoutBean.logout}" value="Logout"  rendered="#{UserSession.isLoggedIn}" title="Logout"/>
 						</h:panelGroup>
-						<h:outputText value=" " rendered="#{StatusBean.isLogIn}"/>
+						<h:outputText value=" " rendered="#{StatusBean.isLogin}"/>
 					</h:panelGrid>
 				</h:form>
 			</p:layoutUnit>

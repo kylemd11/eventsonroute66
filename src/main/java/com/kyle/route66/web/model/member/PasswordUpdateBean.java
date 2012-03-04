@@ -54,7 +54,7 @@ public class PasswordUpdateBean {
 
 		if (validatePasswords()) {
 			Users user = usersRepository.findByUsername(
-					session.getUserAccount().getUsername()).get(0);
+					session.getUserAccount().getUsername());
 			user.setPassword(passwordOne);
 			usersRepository.save(user);
 

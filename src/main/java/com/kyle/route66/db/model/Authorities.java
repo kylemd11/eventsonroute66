@@ -1,10 +1,13 @@
 package com.kyle.route66.db.model;
-// Generated Feb 18, 2012 12:52:29 PM by Hibernate Tools 3.4.0.CR1
 
 
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -21,6 +24,8 @@ public class Authorities  implements java.io.Serializable {
 
      private String username;
      private String authority;
+     
+     private Users user;
 
     public Authorities() {
     }
@@ -51,6 +56,16 @@ public class Authorities  implements java.io.Serializable {
     public void setAuthority(String authority) {
         this.authority = authority;
     }
+
+    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
+    @PrimaryKeyJoinColumn
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
+	}
 
 
 

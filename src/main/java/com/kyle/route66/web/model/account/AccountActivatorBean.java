@@ -54,8 +54,6 @@ public class AccountActivatorBean {
 		this.usersRepository = usersRepository;
 	}
 	
-	
-
 	public void setUserAccountRepository(
 			UserAccountRepository userAccountRepository) {
 		this.userAccountRepository = userAccountRepository;
@@ -68,12 +66,12 @@ public class AccountActivatorBean {
 		
 		log.debug("requestId=" + requestId);
 		
-		UserAccountRequest userAccountRequest = userAccountRequestRepository.findByRequestId(requestId).get(0);
+		UserAccountRequest userAccountRequest = userAccountRequestRepository.findByRequestId(requestId);
 		
 		if(userAccountRequest != null) {
 			Date now = new Date();
-			Users user = usersRepository.findByUsername(userAccountRequest.getUsername()).get(0);
-			UserAccount account = userAccountRepository.findByUsername(userAccountRequest.getUsername()).get(0);
+			Users user = usersRepository.findByUsername(userAccountRequest.getUsername());
+			UserAccount account = userAccountRepository.findByUsername(userAccountRequest.getUsername());
 			
 			if(now.before(userAccountRequest.getExpirationDate())) {
 				user.setEnabled(1);

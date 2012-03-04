@@ -8,6 +8,6 @@ import com.kyle.route66.db.model.UserAccount;
 
 public interface UserAccountRepository extends CrudRepository<UserAccount, Long>{
 
-	List<UserAccount> findByUsername(String username);
-	List<UserAccount> findByEmailAddr(String emailAddr);
+	UserAccount findByUsername(String username);
+	UserAccount findByEmailAddr(String emailAddr);
 }

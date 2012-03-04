@@ -53,10 +53,10 @@ public class ResetPasswordBean {
 		
 		FacesContext context = FacesContext.getCurrentInstance();
 		
-		UserAccount account = userAccountRepository.findByEmailAddr(emailAddress).get(0);
+		UserAccount account = userAccountRepository.findByEmailAddr(emailAddress);
 		
 		if(account != null) {
-			Users user = usersRepository.findByUsername(account.getUsername()).get(0);
+			Users user = usersRepository.findByUsername(account.getUsername());
 			
 			String password = randomStringService.randomPassword();
 			

@@ -41,7 +41,7 @@ public class LoginBean {
 	
 	@Autowired
 	private UserAccountRepository userAccountRepository;
-
+	
 	public String getUsername() {
 		return username;
 	}
@@ -58,12 +58,6 @@ public class LoginBean {
 		this.password = password;
 	}
 
-	public String startLogin() {
-		log.debug("startLogin()");
-		status.setLogIn(true);
-		return "startLogin";
-	}
-
 	public String login() {
 		log.debug("login()");
 		try {
@@ -72,11 +66,7 @@ public class LoginBean {
 			Authentication result = am.authenticate(request);
 			SecurityContextHolder.getContext().setAuthentication(result);
 
-			session.setLoggedIn(true);
-			status.setLogIn(false);
-			
-			session.setUserAccount(userAccountRepository.findByUsername(this.username).get(0));
-
+			session.setUserAccount(userAccountRepository.findByUsername(this.username));
 		} catch (AuthenticationException e) {
 			log.error(e.getMessage());
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -102,5 +92,4 @@ public class LoginBean {
 	public UserAccountRepository getUserAccountRep() {
 		return userAccountRepository;
 	}
-	
 }
