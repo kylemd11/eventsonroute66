@@ -8,9 +8,10 @@ import com.kyle.route66.db.model.Event;
 import com.kyle.route66.db.model.EventType;
 import com.kyle.route66.db.model.State;
 import com.kyle.route66.db.model.Users;
+import com.kyle.route66.db.model.ZipCode;
 
-public interface StateRepository extends CrudRepository<State, String>{
+public interface ZipCodeRepository extends CrudRepository<ZipCode, String>{
 
-	State findByCode(String code);
+	ZipCode findByZipCode(String zipCode);
 	
 }

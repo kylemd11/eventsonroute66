@@ -6,44 +6,151 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <ui:composition template="/WEB-INF/templates/site/main.xhtml">
 	<ui:define name="left">
-	<h:form id="filterForm">
-		<h:messages for="filterForm"/>
-		<p:panel header="Filters" rendered="#{EventFilterBean.filtersApplied}">
-			<h:panelGrid columns="3" rendered="#{EventFilterBean.isStateFiltered}">
-				<h:outputText value="State:"/>
-				<h:outputText value="#{EventFilterBean.stateFilter}"/>
-				<h:commandLink value="remove" actionListener="#{EventFilterBean.removeStateFilter}"/>
-			</h:panelGrid>
-			<h:panelGrid columns="3" rendered="#{EventFilterBean.isEventTypeFiltered}">
-				<h:outputText value="Event Type:"/>
-				<h:outputText value="#{EventFilterBean.eventTypeFilter}"/>
-				<h:commandLink value="remove" actionListener="#{EventFilterBean.removeEventTypeFilter}"/>
-			</h:panelGrid>
-		</p:panel>
+		<h:form>
+			<h:messages for="filterForm" />
+			<p:panel header="Filters"
+				rendered="#{EventFilterBean.filtersApplied}">
+				<h:panelGrid columns="3"
+					rendered="#{EventFilterBean.isStateFiltered}">
+					<h:outputText value="State:" />
+					<h:outputText value="#{EventFilterBean.stateFilter}" />
+					<h:commandLink value="remove"
+						actionListener="#{EventFilterBean.removeStateFilter}" />
+				</h:panelGrid>
+				<h:panelGrid columns="3"
+					rendered="#{EventFilterBean.isEventTypeFiltered}">
+					<h:outputText value="Event Type:" />
+					<h:outputText value="#{EventFilterBean.eventTypeFilter}" />
+					<h:commandLink value="remove"
+						actionListener="#{EventFilterBean.removeEventTypeFilter}" />
+				</h:panelGrid>
+				<h:panelGrid columns="3"
+					rendered="#{EventFilterBean.isDateRangeFiltered}">
+					<h:outputText value="Start Date:" />
+					<h:outputText value="#{EventFilterBean.startDate}">
+						<f:convertDateTime pattern="MM/dd/yyyy" />
+					</h:outputText>
+					<h:commandLink value="remove"
+						actionListener="#{EventFilterBean.removeDateRangeFilter}" />
+					<h:outputText value="End Date:" />
+					<h:outputText value="#{EventFilterBean.endDate}">
+						<f:convertDateTime pattern="MM/dd/yyyy" />
+					</h:outputText>
+				</h:panelGrid>
+				<h:panelGrid columns="3"
+					rendered="#{EventFilterBean.isLocationFiltered}">
+					<h:outputText value="Zip Code:" />
+					<h:outputText value="#{EventFilterBean.zipCode}">
+						<f:convertDateTime pattern="MM/dd/yyyy" />
+					</h:outputText>
+					<h:commandLink value="remove"
+						actionListener="#{EventFilterBean.removeLocationFilter}" />
+					<h:outputText value="Distance:" />
+					<h:outputText value="#{EventFilterBean.distance}" />
+				</h:panelGrid>
+			</p:panel>
+		</h:form>
 		<h:panelGrid columns="1">
-		<p:fieldset legend="State" toggleable="true" toggleSpeed="500" rendered="#{!EventFilterBean.isStateFiltered}">  
-		<p:selectOneMenu value="#{EventFilterBean.stateFilter}" id="stateDropDown">
-			<f:selectItem itemLabel="Select..." itemValue="1"/>
-            <f:selectItems value="#{EventFilterBean.states}" var="state" itemLabel="#{state.name}" itemValue="#{state.code}"/>
-        </p:selectOneMenu>  
-        </p:fieldset>      
-        <p:fieldset legend="Event Type" toggleable="true" toggleSpeed="500" rendered="#{!EventFilterBean.isEventTypeFiltered}">
-					<p:dataList value="#{EventFilterBean.eventTypes}" var="eventType" itemType="circle">
-						<h:commandLink value="#{eventType.description}" action="#{EventFilterBean.setEventTypeFilterAction}">
-							<f:param name="eventTypeCode" value="#{eventType.code}"/>
+			<h:form>
+				<p:fieldset legend="State" toggleable="true" toggleSpeed="500"
+					rendered="#{!EventFilterBean.isStateFiltered}" style="width:100%;">
+					<a4j:repeat value="#{EventFilterBean.states}" var="state">
+						<h:panelGroup
+							rendered="#{state.code!='more' and state.code!='less'}">
+							<h:commandLink value="#{state.name}"
+								action="#{EventFilterBean.setStateCodeFilterAction}">
+								<f:param name="stateCode" value="#{state.code}" />
+							</h:commandLink>
+							<br />
+						</h:panelGroup>
+						<h:panelGroup rendered="#{state.code=='more'}">
+							<br />
+							<h:commandLink value="#{state.name}"
+								action="#{EventFilterBean.setStateCodeFilterAction}">
+								<f:param name="stateCode" value="#{state.code}" />
+							</h:commandLink>
+							<br />
+							<br />
+						</h:panelGroup>
+						<h:panelGroup rendered="#{state.code=='less'}">
+							<br />
+							<h:commandLink value="#{state.name}"
+								action="#{EventFilterBean.setStateCodeFilterAction}">
+								<f:param name="stateCode" value="#{state.code}" />
+							</h:commandLink>
+							<br />
+							<br />
+						</h:panelGroup>
+					</a4j:repeat>
+				</p:fieldset>
+			</h:form>
+			<h:form>
+				<p:fieldset legend="Event Type" toggleable="true" toggleSpeed="500"
+					rendered="#{!EventFilterBean.isEventTypeFiltered}"
+					style="width:100%;">
+					<a4j:repeat value="#{EventFilterBean.eventTypes}" var="eventType">
+						<h:commandLink value="#{eventType.description}"
+							action="#{EventFilterBean.setEventTypeFilterAction}">
+							<f:param name="eventTypeCode" value="#{eventType.code}" />
 						</h:commandLink>
-					</p:dataList>
-					<p:selectOneMenu value="#{EventFilterBean.eventTypeFilter}" id="eventTypeDropDown">
-			<f:selectItem itemLabel="Select..." itemValue="1"/>
-            <f:selectItems value="#{EventFilterBean.eventTypes}" var="eventType" itemLabel="#{eventType.description}" itemValue="#{eventType.code}"/>
-        </p:selectOneMenu>  
-        </p:fieldset>      
-        <h:commandButton id="filterBtn" value="Submit" style="float: right;" rendered="#{!EventFilterBean.allFiltersApplied}"/>
-        </h:panelGrid>
-        </h:form>
+						<br />
+					</a4j:repeat>
+				</p:fieldset>
+			</h:form>
+			<h:form id="filterForm">
+				<p:fieldset legend="Date Range" toggleable="true" toggleSpeed="500"
+					rendered="#{!EventFilterBean.isDateRangeFiltered}"
+					style="width:100%;">
+					<h:panelGrid columns="1">
+						<h:message for="startDateInput" />
+						<h:message for="endDateInput" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<h:outputText value="Start:" />
+						<p:calendar value="#{EventFilterBean.startDate}" showOn="button"
+							maxlength="10" size="10" id="startDateInput" pattern="MM/dd/yyyy" />
+						<h:outputText value="End:" />
+						<p:calendar value="#{EventFilterBean.endDate}" showOn="button"
+							maxlength="10" size="10" id="endDateInput" pattern="MM/dd/yyyy" />
+					</h:panelGrid>
+					<h:commandButton id="dateFilterBtn" value="Apply"
+						style="float: right;" action="#{EventFilterBean.applyDateFilter}" />
+				</p:fieldset>
+			</h:form>
+			<h:form id="locationForm">
+				<p:fieldset legend="Location" toggleable="true" toggleSpeed="500"
+					rendered="#{!EventFilterBean.isLocationFiltered}"
+					style="width:100%;">
+					<h:panelGrid columns="1">
+						<h:message for="zipCodeInput" />
+						<h:message for="distanceInput" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<h:outputText value="Zip Code:" />
+						<h:inputText value="#{EventFilterBean.zipCode}" id="zipCodeInput"
+							size="6" maxlength="5" required="true" requiredMessage="You must supply a zip code">
+							<f:validateRegex pattern="[0-9]{5}" />
+						</h:inputText>
+						<h:outputText value="Distance:" />
+						<p:selectOneMenu value="#{EventFilterBean.distance}"
+							id="distanceInput">
+							<f:selectItem itemLabel="Select..." itemValue="-1" />
+							<f:selectItem itemLabel="5" itemValue="5" />
+							<f:selectItem itemLabel="10" itemValue="10" />
+							<f:selectItem itemLabel="25" itemValue="25" />
+							<f:selectItem itemLabel="50" itemValue="50" />
+							<f:selectItem itemLabel="100" itemValue="100" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:commandButton id="zipFilterBtn" value="Apply"
+						style="float: right;" action="#{EventFilterBean.applyLocationFilter}" />
+				</p:fieldset>
+			</h:form>
+		</h:panelGrid>
 	</ui:define>
 	<ui:define name="center">
 		<p:layout id="eventLayout" style="height: 100%;'">
@@ -53,7 +160,7 @@
 					<h:panelGroup style="float: right;">
 						<h:commandButton value="Calendar"
 							actionListener="#{EventStatusBean.setCalendar}"
-							disabled="#{EventStatusBean.isCalendarDisabled}"/>
+							disabled="#{EventStatusBean.isCalendarDisabled}" />
 						<h:commandButton value="Timeline"
 							actionListener="#{EventStatusBean.setTimeline}"
 							disabled="#{EventStatusBean.isTimelineDisabled}" />
@@ -65,7 +172,8 @@
 			</p:layoutUnit>
 			<p:layoutUnit position="center">
 				<p:schedule value="#{EventScheduleBean.eventModel}"
-					widgetVar="myschedule" style="width: 100%;" aspectRatio="2" rendered="#{EventStatusBean.isCalendarDisabled}">
+					widgetVar="myschedule" style="width: 100%;" aspectRatio="2"
+					rendered="#{EventStatusBean.isCalendarDisabled}">
 				</p:schedule>
 			</p:layoutUnit>
 		</p:layout>

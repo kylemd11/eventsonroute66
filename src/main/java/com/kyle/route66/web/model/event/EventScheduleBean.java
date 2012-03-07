@@ -29,29 +29,9 @@ public class EventScheduleBean {
 	public DefaultScheduleModel getEventModel() {
 		DefaultScheduleModel eventModel = new DefaultScheduleModel();  
 		
-		if(filter.isEmpty()) {
-			log.debug("Empty Filter");
-			for(Event event : eventService.getEvents()) {
-				eventModel.addEvent(new DefaultScheduleEvent(event.getTitle(), event.getStartDtg(), event.getEndDtg()));
-			}
-		}
-		else if(filter.isState()) {
-			log.debug("State Filter");
-			for(Event event : eventService.getEventsByState(filter.getStateFilter())) {
-				eventModel.addEvent(new DefaultScheduleEvent(event.getTitle(), event.getStartDtg(), event.getEndDtg()));
-			}
-		}
-		else if(filter.isEventType()) {
-			log.debug("Event Type Filter");
-			for(Event event : eventService.getEventsByEventType(filter.getEventTypeFilter())) {
-				eventModel.addEvent(new DefaultScheduleEvent(event.getTitle(), event.getStartDtg(), event.getEndDtg()));
-			}
-		}
-		else if(filter.isStateAndEventType()) {
-			log.debug("State and Event Type Filter");
-			for(Event event : eventService.getEventsByStateAndEventType(filter.getStateFilter(), filter.getEventTypeFilter())) {
-				eventModel.addEvent(new DefaultScheduleEvent(event.getTitle(), event.getStartDtg(), event.getEndDtg()));
-			}
+		for (Event event : eventService.getEvents(filter.getSearchCriteria())) {
+			eventModel.addEvent(new DefaultScheduleEvent(event.getTitle(),
+					event.getStartDtg(), event.getEndDtg()));
 		}
           
         return eventModel;

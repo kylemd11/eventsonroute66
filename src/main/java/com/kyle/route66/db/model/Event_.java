@@ -1,11 +1,12 @@
 package com.kyle.route66.db.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2012-03-04T13:26:21.315-0600")
+@Generated(value="Dali", date="2012-03-07T13:32:00.454-0600")
 @StaticMetamodel(Event.class)
 public class Event_ {
 	public static volatile SingularAttribute<Event, Integer> eventSeqId;
@@ -25,4 +26,6 @@ public class Event_ {
 	public static volatile SingularAttribute<Event, State> state;
 	public static volatile SingularAttribute<Event, UserAccount> user;
 	public static volatile SingularAttribute<Event, EventType> eventType;
+	public static volatile SingularAttribute<Event, BigDecimal> latitude;
+	public static volatile SingularAttribute<Event, BigDecimal> longitude;
 }

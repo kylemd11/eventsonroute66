@@ -2,6 +2,7 @@ package com.kyle.route66.db.model;
 // Generated Feb 28, 2012 7:59:49 PM by Hibernate Tools 3.4.0.CR1
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,12 +46,14 @@ public class Event  implements java.io.Serializable {
      private State state;
      private EventType eventType;
      private UserAccount user;
-
+     private BigDecimal	latitude;
+     private BigDecimal	longitude;
+     
     public Event() {
     }
 
 	
-    public Event(String username, String title, Date startDtg, Date endDtg, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg) {
+    public Event(String username, String title, Date startDtg, Date endDtg, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, BigDecimal latitude, BigDecimal longitude) {
         this.username = username;
         this.title = title;
         this.startDtg = startDtg;
@@ -61,8 +64,10 @@ public class Event  implements java.io.Serializable {
         this.content = content;
         this.eventTypeCd = eventTypeCd;
         this.createDtg = createDtg;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
-    public Event(String username, String title, Date startDtg, Date endDtg, String address1, String address2, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, Date updateDtg) {
+    public Event(String username, String title, Date startDtg, Date endDtg, String address1, String address2, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, BigDecimal latitude, BigDecimal longitude, Date updateDtg) {
        this.username = username;
        this.title = title;
        this.startDtg = startDtg;
@@ -75,6 +80,8 @@ public class Event  implements java.io.Serializable {
        this.content = content;
        this.eventTypeCd = eventTypeCd;
        this.createDtg = createDtg;
+       this.latitude = latitude;
+       this.longitude = longitude;
        this.updateDtg = updateDtg;
     }
    
@@ -219,7 +226,25 @@ public class Event  implements java.io.Serializable {
         this.updateDtg = updateDtg;
     }
 
-    @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @Column(name="latitude", nullable=false)
+    public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
+	}
+
+	@Column(name="longitude", nullable=false)
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name="state_cd", insertable=false, updatable=false)
 	public State getState() {
 		return state;

@@ -10,5 +10,7 @@ import com.kyle.route66.db.model.State;
 import com.kyle.route66.db.model.Users;
 
 public interface EventTypeRepository extends CrudRepository<EventType, String>{
+
+	EventType findByCode(String code);
 	
 }

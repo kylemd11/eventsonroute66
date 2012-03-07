@@ -6,12 +6,15 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.primefaces.model.DefaultScheduleEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.kyle.route66.db.dao.EventDao;
 import com.kyle.route66.db.dao.EventRepository;
 import com.kyle.route66.db.model.Event;
+import com.kyle.route66.db.model.EventType;
 import com.kyle.route66.db.model.State;
 import com.kyle.route66.service.model.EventCriteria;
 
@@ -22,6 +25,12 @@ public class EventService {
 
 	@Autowired
 	private EventRepository eventRepository;
+	
+	@Autowired
+	private EventDao eventDao;
+	
+	@Autowired
+	private DistanceService distanceService;
 	
 	public List<Event> getEvents() {
 		List<Event> events = new ArrayList<Event>();
@@ -40,25 +49,47 @@ public class EventService {
 	}
 	
 	public List<Event> getEvents(EventCriteria criteria) {
-		List<Event> events = new ArrayList<Event>();
+		List<Event> events;
 		
-		return events;
+		if(criteria.getState() != null || criteria.getEventType() != null || criteria.getStartDate() != null || criteria.getEndDate() != null ) {
+			events = eventDao.getEvents(criteria);
+		}
+		else {
+			events = getEvents();
+		}
+		
+		if(criteria.getZipCode() != null && criteria.getDistance() != null) {
+			return distanceService.filterEventsByDistance(events, criteria);
+		}
+		else {
+			return events;
+		}
 	}
 
 	public void setEventRepository(EventRepository eventRepository) {
 		this.eventRepository = eventRepository;
 	}
-
-	public List<Event> getEventsByState(String string) {
-		return eventRepository.findByStateCode(string);
+	
+	public void setEventDao(EventDao eventDao) {
+		this.eventDao = eventDao;
 	}
 
-	public List<Event> getEventsByEventType(String eventTypeFilter) {
-		return eventRepository.findByEventTypeCode(eventTypeFilter);
+	public List<Event> getEventsByState(State state) {
+		return eventRepository.findByState(state);
 	}
 
-	public List<Event> getEventsByStateAndEventType(String stateFilter,
-			String eventTypeFilter) {
-		return eventRepository.findByStateCodeAndEventTypeCode(stateFilter, eventTypeFilter);
+	public List<Event> getEventsByEventType(EventType eventType) {
+		return eventRepository.findByEventType(eventType);
 	}
+
+	public List<Event> getEventsByStateAndEventType(State state,
+			EventType eventType) {
+		return eventRepository.findByStateAndEventType(state, eventType);
+	}
+
+	public void setDistanceService(DistanceService distanceService) {
+		this.distanceService = distanceService;
+	}
+	
+	
 }
