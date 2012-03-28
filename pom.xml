@@ -187,19 +187,7 @@
 		<jsf.version>2.1.2</jsf.version>
 		<spring.version>3.1.0.RELEASE</spring.version>
 		<spring.security.version>3.1.0.RELEASE</spring.security.version>
-		<org.richfaces.bom.version>4.2.0.Final</org.richfaces.bom.version>
 	</properties>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.richfaces</groupId>
-				<artifactId>richfaces-bom</artifactId>
-				<version>${org.richfaces.bom.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>javax</groupId>
@@ -280,7 +268,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>3.2-SNAPSHOT</version>
+			<version>3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-dbcp</groupId>
@@ -341,14 +329,6 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.richfaces.ui</groupId>
-			<artifactId>richfaces-components-ui</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.richfaces.core</groupId>
-			<artifactId>richfaces-core-impl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>

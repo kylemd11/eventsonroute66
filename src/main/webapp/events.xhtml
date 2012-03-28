@@ -6,8 +6,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui" xmlns:a4j="http://richfaces.org/a4j"
-	xmlns:rich="http://richfaces.org/rich">
+	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/site/main.xhtml">
 	<ui:define name="left">
 		<h:form>
@@ -55,10 +54,10 @@
 			</p:panel>
 		</h:form>
 		<h:panelGrid columns="1">
-			<h:form>
-				<p:fieldset legend="State" toggleable="true" toggleSpeed="500"
-					rendered="#{!EventFilterBean.isStateFiltered}" style="width:100%;">
-					<a4j:repeat value="#{EventFilterBean.states}" var="state">
+			<h:form id="stateForm">
+				<p:panel header="State" toggleable="true" toggleSpeed="500"
+					rendered="#{!EventFilterBean.isStateFiltered}" style="width:100%;" id="statePanel">
+					<ui:repeat value="#{EventFilterBean.states}" var="state">
 						<h:panelGroup
 							rendered="#{state.code!='more' and state.code!='less'}">
 							<h:commandLink value="#{state.name}"
@@ -69,86 +68,91 @@
 						</h:panelGroup>
 						<h:panelGroup rendered="#{state.code=='more'}">
 							<br />
-							<h:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}">
+							<p:commandLink value="#{state.name}"
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="false">
 								<f:param name="stateCode" value="#{state.code}" />
-							</h:commandLink>
+							</p:commandLink>
 							<br />
 							<br />
 						</h:panelGroup>
 						<h:panelGroup rendered="#{state.code=='less'}">
 							<br />
-							<h:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}">
+							<p:commandLink value="#{state.name}"
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="false">
 								<f:param name="stateCode" value="#{state.code}" />
-							</h:commandLink>
+							</p:commandLink>
 							<br />
 							<br />
 						</h:panelGroup>
-					</a4j:repeat>
-				</p:fieldset>
+					</ui:repeat>
+				</p:panel>
 			</h:form>
 			<h:form>
-				<p:fieldset legend="Event Type" toggleable="true" toggleSpeed="500"
+				<p:panel header="Event Type" toggleable="true" toggleSpeed="500"
 					rendered="#{!EventFilterBean.isEventTypeFiltered}"
 					style="width:100%;">
-					<a4j:repeat value="#{EventFilterBean.eventTypes}" var="eventType">
+					<ui:repeat value="#{EventFilterBean.eventTypes}" var="eventType">
 						<h:commandLink value="#{eventType.description}"
 							action="#{EventFilterBean.setEventTypeFilterAction}">
 							<f:param name="eventTypeCode" value="#{eventType.code}" />
 						</h:commandLink>
 						<br />
-					</a4j:repeat>
-				</p:fieldset>
+					</ui:repeat>
+				</p:panel>
 			</h:form>
 			<h:form id="filterForm">
-				<p:fieldset legend="Date Range" toggleable="true" toggleSpeed="500"
+				<p:panel header="Date Range" toggleable="true" toggleSpeed="500"
 					rendered="#{!EventFilterBean.isDateRangeFiltered}"
 					style="width:100%;">
 					<h:panelGrid columns="1">
 						<h:message for="startDateInput" />
 						<h:message for="endDateInput" />
+
+						<h:panelGrid columns="2">
+							<h:outputText value="Start:" />
+							<p:calendar value="#{EventFilterBean.startDate}" showOn="button"
+								maxlength="10" size="10" id="startDateInput"
+								pattern="MM/dd/yyyy" />
+							<h:outputText value="End:" />
+							<p:calendar value="#{EventFilterBean.endDate}" showOn="button"
+								maxlength="10" size="10" id="endDateInput" pattern="MM/dd/yyyy" />
+						</h:panelGrid>
+						<h:commandButton id="dateFilterBtn" value="Apply"
+							style="float: right;" action="#{EventFilterBean.applyDateFilter}" />
 					</h:panelGrid>
-					<h:panelGrid columns="2">
-						<h:outputText value="Start:" />
-						<p:calendar value="#{EventFilterBean.startDate}" showOn="button"
-							maxlength="10" size="10" id="startDateInput" pattern="MM/dd/yyyy" />
-						<h:outputText value="End:" />
-						<p:calendar value="#{EventFilterBean.endDate}" showOn="button"
-							maxlength="10" size="10" id="endDateInput" pattern="MM/dd/yyyy" />
-					</h:panelGrid>
-					<h:commandButton id="dateFilterBtn" value="Apply"
-						style="float: right;" action="#{EventFilterBean.applyDateFilter}" />
-				</p:fieldset>
+				</p:panel>
 			</h:form>
 			<h:form id="locationForm">
-				<p:fieldset legend="Location" toggleable="true" toggleSpeed="500"
+				<p:panel header="Location" toggleable="true" toggleSpeed="500"
 					rendered="#{!EventFilterBean.isLocationFiltered}"
 					style="width:100%;">
 					<h:panelGrid columns="1">
 						<h:message for="zipCodeInput" />
 						<h:message for="distanceInput" />
+
+						<h:panelGrid columns="2">
+							<h:outputText value="Zip Code:" />
+							<h:inputText value="#{EventFilterBean.zipCode}" id="zipCodeInput"
+								size="6" maxlength="5" required="true"
+								requiredMessage="You must supply a zip code">
+								<f:validateRegex pattern="[0-9]{5}" />
+							</h:inputText>
+							<h:outputText value="Distance:" />
+							<p:selectOneMenu value="#{EventFilterBean.distance}"
+								id="distanceInput">
+								<f:selectItem itemLabel="Select..." itemValue="-1" />
+								<f:selectItem itemLabel="5" itemValue="5" />
+								<f:selectItem itemLabel="10" itemValue="10" />
+								<f:selectItem itemLabel="25" itemValue="25" />
+								<f:selectItem itemLabel="50" itemValue="50" />
+								<f:selectItem itemLabel="100" itemValue="100" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:commandButton id="zipFilterBtn" value="Apply"
+							style="float: right;"
+							action="#{EventFilterBean.applyLocationFilter}" />
 					</h:panelGrid>
-					<h:panelGrid columns="2">
-						<h:outputText value="Zip Code:" />
-						<h:inputText value="#{EventFilterBean.zipCode}" id="zipCodeInput"
-							size="6" maxlength="5" required="true" requiredMessage="You must supply a zip code">
-							<f:validateRegex pattern="[0-9]{5}" />
-						</h:inputText>
-						<h:outputText value="Distance:" />
-						<p:selectOneMenu value="#{EventFilterBean.distance}"
-							id="distanceInput">
-							<f:selectItem itemLabel="Select..." itemValue="-1" />
-							<f:selectItem itemLabel="5" itemValue="5" />
-							<f:selectItem itemLabel="10" itemValue="10" />
-							<f:selectItem itemLabel="25" itemValue="25" />
-							<f:selectItem itemLabel="50" itemValue="50" />
-							<f:selectItem itemLabel="100" itemValue="100" />
-						</p:selectOneMenu>
-					</h:panelGrid>
-					<h:commandButton id="zipFilterBtn" value="Apply"
-						style="float: right;" action="#{EventFilterBean.applyLocationFilter}" />
-				</p:fieldset>
+				</p:panel>
 			</h:form>
 		</h:panelGrid>
 	</ui:define>
@@ -156,6 +160,9 @@
 		<p:layout id="eventLayout" style="height: 100%;'">
 			<p:layoutUnit position="north" size="40">
 				<h:form>
+					<h:panelGroup style="float: left;">
+						<p:commandButton value="Create New Event" action="new_event" ajax="false" rendered="#{UserSession.isLoggedIn}"/>
+					</h:panelGroup>
 					<h:outputText value="Center Main Content" />
 					<h:panelGroup style="float: right;">
 						<h:commandButton value="Calendar"
@@ -167,14 +174,85 @@
 						<h:commandButton value="List"
 							actionListener="#{EventStatusBean.setList}"
 							disabled="#{EventStatusBean.isListDisabled}" />
+						<h:commandButton value="Map"
+							actionListener="#{EventStatusBean.setMap}"
+							disabled="#{EventStatusBean.isMapDisabled}" />
 					</h:panelGroup>
 				</h:form>
 			</p:layoutUnit>
 			<p:layoutUnit position="center">
+				<h:form prependId="false"> 
 				<p:schedule value="#{EventScheduleBean.eventModel}"
 					widgetVar="myschedule" style="width: 100%;" aspectRatio="2"
-					rendered="#{EventStatusBean.isCalendarDisabled}">
+					rendered="#{EventStatusBean.isCalendarDisabled}" view="month" draggable="false" resizeable="false" editable="true">
+					<p:ajax event="eventSelect" listener="#{EventScheduleBean.setEventSelection}"/>
 				</p:schedule>
+					<p:dataTable id="dataTable" var="event"
+						value="#{EventScheduleBean.events}" paginator="true" rows="10"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15"
+						rendered="#{EventStatusBean.isListDisabled}">
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Title" />
+							</f:facet>
+							<h:commandLink action="#{EventBean.showEvent}" value="#{event.title}">
+								<f:param name="id" value="#{event.eventSeqId}" />
+							</h:commandLink>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Type" />
+							</f:facet>
+							<h:outputText value="#{event.eventType.description}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="State" />
+							</f:facet>
+							<h:outputText value="#{event.state.name}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Start Date" />
+							</f:facet>
+							<h:outputText value="#{event.startDtg}">
+								<f:convertDateTime pattern="MM/dd/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="End Date" />
+							</f:facet>
+							<h:outputText value="#{event.endDtg}">
+								<f:convertDateTime pattern="MM/dd/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column rendered="#{UserSession.isLoggedIn}">
+							<f:facet name="header">
+								<h:outputText value="Status" />
+							</f:facet>
+							<h:outputText value="#{event.eventStatus.description}">
+								<f:convertDateTime pattern="MM/dd/yyyy" />
+							</h:outputText>
+						</p:column>
+					</p:dataTable>
+					
+					<p:gmap center="39.368279,-99.580078" zoom="4" type="HYBRID"
+						style="width:800px;height:600px;"
+						model="#{EventScheduleBean.eventMapModel}"
+						rendered="#{EventStatusBean.isMapDisabled}">
+
+						<p:ajax event="overlaySelect"
+							listener="#{EventScheduleBean.onMarkerSelect}" />
+						<p:gmapInfoWindow>
+							<h:outputText
+								value="#{EventScheduleBean.marker.data}" />
+							<h:outputText value="#{EventScheduleBean.marker.title}" />
+						</p:gmapInfoWindow>
+					</p:gmap>
+
+				</h:form>
 			</p:layoutUnit>
 		</p:layout>
 	</ui:define>

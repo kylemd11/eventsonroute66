@@ -9,3 +9,16 @@
 	vertical-align: top;
 	text-align: center;
 }
+
+.labelColumn {
+	text-align: right;
+}
+
+.dataColumn {
+	text-align: left;
+}
+
+.leftLabelColumn {
+	vertical-align: top;
+	width: 50px;
+}

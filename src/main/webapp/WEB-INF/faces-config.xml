@@ -64,6 +64,14 @@
   </navigation-case>
  </navigation-rule>
  
+ <navigation-rule>
+  <from-view-id>/events.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/event.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ 
  <validator>
   <validator-id>EmailValidator</validator-id>
   <validator-class>com.kyle.route66.web.validator.EmailValidator</validator-class>

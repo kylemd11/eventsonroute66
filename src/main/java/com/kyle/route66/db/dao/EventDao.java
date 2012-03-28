@@ -27,20 +27,56 @@ public class EventDao {
 	}
 
 	public List<Event> getEvents(EventCriteria criteria) {
-		List<Event> events = new ArrayList<Event>();
+		boolean multiple = false;
+		
 		String sql = "select e from Event e where ";
 
 		if (criteria.getState() != null) {
 			sql += "e.stateCd = :state ";
+			
+			multiple = true;
 		}
 		
 		if(criteria.getEventType() != null) {
+			if(multiple) {
+				sql += "and ";
+			}
+			
 			sql += "e.eventTypeCd = :eventType ";
+			
+			multiple = true;
 		}
 		
 		if(criteria.getStartDate() != null && criteria.getEndDate() != null) {
-			sql += "(e.startDtg between :startDate and :endDate) or (e.endDtg between :startDate and :endDate)";
+			if(multiple) {
+				sql += "and ";
+			}
+			
+			sql += "(e.startDtg between :startDate and :endDate) or (e.endDtg between :startDate and :endDate) ";
+			
+			multiple = true;
 		}
+		
+		if(criteria.getUsername() != null) {
+			if(multiple) {
+				sql += "and ";
+			}
+			
+			sql += "(e.eventStatusCd = 'A' or e.username = :username) ";
+			
+			multiple = true;
+		}
+		else {
+			if(multiple) {
+				sql += "and ";
+			}
+			
+			sql += "e.eventStatusCd = 'A' ";
+			
+			multiple = true;
+		}
+		
+		log.debug("JPQL: " + sql);
 
 		Query query = em.createQuery(sql);
 
@@ -56,8 +92,12 @@ public class EventDao {
 			query.setParameter("startDate", criteria.getStartDate());
 			query.setParameter("endDate", criteria.getEndDate());
 		}
+		
+		if(criteria.getUsername() != null) {
+			query.setParameter("username", criteria.getUsername());
+		}
 
-		return query.getResultList();
+		return (List<Event>)query.getResultList();
 	}
 
 	public void setEm(EntityManager em) {

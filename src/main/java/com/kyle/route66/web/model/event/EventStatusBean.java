@@ -39,6 +39,10 @@ public class EventStatusBean {
 		state = EventStateConstants.LIST;
 	}
 	
+	public void setMap(ActionEvent ae) {
+		state = EventStateConstants.MAP;
+	}
+	
 	public boolean getIsCalendarDisabled() {
 		return state == EventStateConstants.CALENDAR;
 	}
@@ -49,6 +53,10 @@ public class EventStatusBean {
 	
 	public boolean getIsListDisabled() {
 		return state == EventStateConstants.LIST;
+	}
+	
+	public boolean getIsMapDisabled() {
+		return state == EventStateConstants.MAP;
 	}
 }
 

@@ -12,6 +12,7 @@ public class EventCriteria {
 	private Date endDate = null;
 	private String zipCode = null;
 	private Integer distance;
+	private String username;
 	
 	public EventCriteria(State state, EventType eventType, Date startDate,
 			Date endDate, String zipCode, Integer distance) {
@@ -61,5 +62,13 @@ public class EventCriteria {
 
 	public Integer getDistance() {
 		return distance;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public String getUsername() {
+		return this.username;
 	}
 }

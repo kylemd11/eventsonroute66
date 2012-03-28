@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/templates/site/event.xhtml">
+	<ui:define name="left">
+		<h:panelGrid columns="1" style="width: 100%; text-align: center;">
+		<h:outputText style="font-weight: bold; font-size: 10pt; border-bottom: 2px solid black;" value="Map"/>
+		<p:gmap center="#{EventBean.event.latitude},#{EventBean.event.longitude}" zoom="12" type="HYBRID"
+						style="width:240px;height:240px;"
+						model="#{EventBean.eventMapModel}">						
+					</p:gmap>
+					<h:outputText value="&nbsp;"/>
+		<h:outputText style="font-weight: bold; font-size: 10pt; border-bottom: 2px solid black;" value="Address"/>
+		<h:panelGroup style="text-align: left;">
+		<h:outputText value="#{EventBean.event.address1}"/><br/>
+		<h:panelGroup rendered="#{EventBean.event.address2 != null}"><h:outputText value="#{EventBean.event.address2}"/><br/></h:panelGroup>
+		<h:outputText value="#{EventBean.event.city}"/>,&nbsp;
+		<h:outputText value="#{EventBean.event.stateCd}"/>&nbsp;
+		<h:outputText value="#{EventBean.event.zipCode}"/>
+		</h:panelGroup>
+		<h:outputText value="&nbsp;"/>
+		<h:outputText style="font-weight: bold; font-size: 10pt; border-bottom: 2px solid black;" value="Details"/>
+		<h:panelGrid columns="2" style="width: 100%;" columnClasses="labelColumn, dataColumn">
+		<h:outputText value="Event Type:"/>
+		<h:outputText value="#{EventBean.event.eventType.description}"/>
+		<h:outputText value="Event Status:" rendered="#{UserSession.isLoggedIn and EventBean.isMine}"/>
+		<h:outputText value="#{EventBean.event.eventStatus.description}" rendered="#{UserSession.isLoggedIn and EventBean.isMine}"/>
+		<h:outputText value="Start Date:"/>
+		<h:outputText value="#{EventBean.event.startDtg}">
+			<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+		</h:outputText>
+		<h:outputText value="End Date:"/>
+		<h:outputText value="#{EventBean.event.endDtg}">
+			<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+		</h:outputText>
+		</h:panelGrid>
+		</h:panelGrid>
+	</ui:define>
+	<ui:define name="center">
+		<h:panelGrid columns="1" style="width: 100%; text-align: center;">
+			<h:outputText style="font-weight: bold; font-size: 16pt; border-bottom: 2px solid black;" value="#{EventBean.event.title}" />
+		</h:panelGrid>
+		<h:panelGrid columns="1" style="width: 100%;">
+			<h:outputText value="#{EventBean.event.content}" />
+		</h:panelGrid>
+		<p:panel header="Comments" style="width:100%; margin-top: 15px;" rendered="#{UserSession.isLoggedIn or EventBean.hasComments}">
+			<h:panelGroup rendered="#{UserSession.isLoggedIn}" style="width: 100%; display: block;">
+			<h:form id="commentForm">
+				<p:messages showDetail="true"/>
+				<h:panelGrid columns="1" style="width: 100%;">  
+					<h:outputText value="Add New Comment:"/>
+					<p:inputTextarea id="keyword" rows="5" style="width: 100%;" value="#{EventBean.comment}"/>
+					<p:watermark for="keyword" value="Type your comment here." />
+				</h:panelGrid>
+				<h:panelGrid columns="3" style="width; 100%; text-align: center;" columnClasses="threecols,threecols,threecols">
+				<h:outputText value="&nbsp;"/>
+				<p:captcha label="Captcha"/>
+				<h:outputText value="&nbsp;"/>
+				<h:outputText value="&nbsp;"/>
+				<h:outputText value="&nbsp;"/>
+				<p:commandButton ajax="false" value="Submit" style="float: right;" actionListener="#{EventBean.saveComment}"/>  
+				</h:panelGrid>
+				 
+			</h:form>
+			</h:panelGroup>
+			<ui:repeat value="#{EventBean.event.comments}" var="comment" rendered="#{EventBean.hasComments}">
+				<h:panelGrid columns="1" style="width: 100%; border: 1px solid black;">
+					<h:panelGroup style="width: 100%;">
+						<h:outputText value="#{comment.username}" style="float: left;"/>
+						<h:outputText value="#{comment.createDtg}"  style="float: right;"/>
+					</h:panelGroup>
+					<h:outputText value="#{comment.content}" />
+				</h:panelGrid>
+			</ui:repeat>
+		</p:panel>
+		
+	</ui:define>
+</ui:composition>
+</html>

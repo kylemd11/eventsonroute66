@@ -9,8 +9,9 @@ import com.kyle.route66.db.model.EventType;
 import com.kyle.route66.db.model.State;
 import com.kyle.route66.db.model.Users;
 
-public interface EventRepository extends CrudRepository<Event, Long>{
+public interface EventRepository extends CrudRepository<Event, Integer>{
 
+	Event findByEventSeqId(Integer id);
 	List<Event> findByUsername(String username);
 	List<Event> findByState(State state);
 	List<Event> findByStateCode(String code);
