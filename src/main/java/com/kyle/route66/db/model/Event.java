@@ -56,6 +56,8 @@ public class Event  implements java.io.Serializable {
      private List<Comment> comments;
 	private EventStatus eventStatus;
 	private String eventStatusCd;
+	
+	private boolean isNew;
      
     public Event() {
     }
@@ -75,7 +77,7 @@ public class Event  implements java.io.Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    public Event(String username, String title, Date startDtg, Date endDtg, String address1, String address2, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, BigDecimal latitude, BigDecimal longitude, Date updateDtg) {
+    public Event(String username, String title, Date startDtg, Date endDtg, String address1, String address2, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, BigDecimal latitude, BigDecimal longitude, Date updateDtg, boolean isNew) {
        this.username = username;
        this.title = title;
        this.startDtg = startDtg;
@@ -91,6 +93,7 @@ public class Event  implements java.io.Serializable {
        this.latitude = latitude;
        this.longitude = longitude;
        this.updateDtg = updateDtg;
+       this.isNew = isNew;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -251,6 +254,16 @@ public class Event  implements java.io.Serializable {
 	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
+	
+	
+	@Column(name="is_new", nullable = false)
+	public boolean getIsNew() {
+		return isNew;
+	}
+
+	public void setIsNew(boolean isNew) {
+		this.isNew = isNew;
+	}
 
 	@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name="state_cd", insertable=false, updatable=false)
@@ -282,7 +295,7 @@ public class Event  implements java.io.Serializable {
 		this.eventType = eventType;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "event", orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, mappedBy = "event")
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -309,6 +322,16 @@ public class Event  implements java.io.Serializable {
 
 	public void setEventStatus(EventStatus eventStatus) {
 		this.eventStatus = eventStatus;
+	}
+	
+	@Transient
+	public boolean getIsPending() {
+		if(this.eventStatusCd.equals("P")) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 }

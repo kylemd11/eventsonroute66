@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kyle.route66.db.dao.UserAccountRepository;
@@ -26,6 +27,9 @@ public class PasswordUpdateBean {
 	@Autowired
 	@Qualifier("UserSession")
 	private UserSession session;
+	
+	@Autowired
+	private ShaPasswordEncoder passwordEncoder;
 
 	private String passwordOne;
 	private String passwordTwo;
@@ -55,7 +59,7 @@ public class PasswordUpdateBean {
 		if (validatePasswords()) {
 			Users user = usersRepository.findByUsername(
 					session.getUserAccount().getUsername());
-			user.setPassword(passwordOne);
+			user.setPassword(passwordEncoder.encodePassword(passwordOne,null));
 			usersRepository.save(user);
 
 			FacesContext context = FacesContext.getCurrentInstance();
@@ -84,5 +88,9 @@ public class PasswordUpdateBean {
 
 	public void setSession(UserSession session) {
 		this.session = session;
+	}
+	
+	public void setPasswordEncoder(ShaPasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
 	}
 }

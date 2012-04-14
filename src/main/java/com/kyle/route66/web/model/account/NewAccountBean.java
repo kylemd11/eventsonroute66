@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -70,6 +71,9 @@ public class NewAccountBean {
 	@Autowired
 	@Qualifier("EmailService")
 	private EmailService emailService;
+	
+	@Autowired
+	private ShaPasswordEncoder passwordEncoder;
 
 	public String getFirstName() {
 		return firstName;
@@ -191,6 +195,10 @@ public class NewAccountBean {
 	public void setRandomStringService(RandomStringService randomStringService) {
 		this.randomStringService = randomStringService;
 	}
+	
+	public void setPasswordEncoder(ShaPasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	public String submit() {
 		log.debug("submit()");
@@ -203,7 +211,8 @@ public class NewAccountBean {
 				Users users = new Users();
 				users.setEnabled(0);
 				users.setUsername(username);
-				users.setPassword(passwordOne);
+				
+				users.setPassword(passwordEncoder.encodePassword(passwordOne, null));
 				
 				Authorities authorities = new Authorities();
 				authorities.setUsername(username);

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,6 +48,9 @@ public class ResetPasswordBean {
 	
 	@Autowired
 	private UsersRepository usersRepository;
+	
+	@Autowired
+	private ShaPasswordEncoder passwordEncoder;
 
 	public void resetPassword(ActionEvent ae) {
 		log.debug("resetPassword()");
@@ -60,7 +64,7 @@ public class ResetPasswordBean {
 			
 			String password = randomStringService.randomPassword();
 			
-			user.setPassword(password);
+			user.setPassword(passwordEncoder.encodePassword(password,null));
 			usersRepository.save(user);
 			
 			context.addMessage("lostPasswordForm", new FacesMessage(FacesMessage.SEVERITY_INFO, "Successful", "An email has been sent to the address entered below with your new password."));
@@ -96,6 +100,8 @@ public class ResetPasswordBean {
 		this.randomStringService = randomStringService;
 	}
 
-	
+	public void setPasswordEncoder(ShaPasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 	
 }

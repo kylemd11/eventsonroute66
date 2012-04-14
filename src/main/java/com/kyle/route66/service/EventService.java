@@ -48,16 +48,20 @@ public class EventService {
 		return events;
 	}
 	
-	public List<Event> getEvents(EventCriteria criteria) {
+	public List<Event> getEvents(EventCriteria criteria, boolean isModerator) {
 		List<Event> events;
 		
-		if(criteria.getState() != null || criteria.getEventType() != null || criteria.getStartDate() != null || criteria.getEndDate() != null ) {
-			events = eventDao.getEvents(criteria);
-		}
-		else {
-			events = getEvents();
-		}
+		//if(criteria.getState() != null || criteria.getEventType() != null || criteria.getStartDate() != null || criteria.getEndDate() != null  || criteria.getUsername() != null) {
+			events = eventDao.getEvents(criteria, isModerator);
+		//}
+		//else {
+		//	events = getEvents();
+		//}
 		
+			log.debug("events: " + events.size());
+			
+			log.debug("zipCode: " + criteria.getZipCode());
+			log.debug("distance: " + criteria.getDistance());
 		if(criteria.getZipCode() != null && criteria.getDistance() != null) {
 			return distanceService.filterEventsByDistance(events, criteria);
 		}

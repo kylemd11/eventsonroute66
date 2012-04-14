@@ -15,29 +15,25 @@ import javax.persistence.Table;
     ,catalog="route66Db"
 )
 public class EventStatus  implements java.io.Serializable {
-
-
-     private String statusCd;
+     private String code;
      private String description;
 
     public EventStatus() {
     }
 
-    public EventStatus(String statusCd, String description) {
-       this.statusCd = statusCd;
+    public EventStatus(String code, String description) {
+       this.code = code;
        this.description = description;
     }
    
-     @Id 
-
-    
-    @Column(name="status_cd", unique=true, nullable=false, length=2)
+    @Id 
+    @Column(name="code", unique=true, nullable=false, length=2)
     public String getCode() {
-        return this.statusCd;
+        return this.code;
     }
     
     public void setCode(String code) {
-        this.statusCd = code;
+        this.code = code;
     }
 
     

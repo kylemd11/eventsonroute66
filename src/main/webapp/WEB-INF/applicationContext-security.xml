@@ -9,6 +9,7 @@
 
     <global-method-security pre-post-annotations="enabled" />
 
+	<http pattern="/image/**" security="none"/>
     <http pattern="/static/**" security="none"/>
     <http pattern="/loggedout.jsp" security="none"/>
     <http pattern="/account/**" security="none"/>
@@ -47,11 +48,14 @@
         scott/wombat
         peter/opal
     -->
-    <b:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+    <b:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    
+    <!-- <b:bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/> -->
 
     <authentication-manager alias="authenticationManager">
         <authentication-provider>
         	<jdbc-user-service data-source-ref="dataSource"/>
+        	<password-encoder hash="sha"/>
             <!-- <password-encoder ref="encoder"/> -->
            <!--  <user-service>
                 <user name="rod" password="4efe081594ce25ee4efd9f7067f7f678a347bccf2de201f3adf2a3eb544850b465b4e51cdc3fcdde" authorities="supervisor, user, teller" />

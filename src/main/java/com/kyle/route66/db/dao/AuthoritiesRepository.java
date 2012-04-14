@@ -1,13 +1,10 @@
 package com.kyle.route66.db.dao;
 
-import java.util.List;
-
 import org.springframework.data.repository.CrudRepository;
 
 import com.kyle.route66.db.model.Authorities;
-import com.kyle.route66.db.model.Users;
 
-public interface AuthoritiesRepository extends CrudRepository<Authorities, Long>{
+public interface AuthoritiesRepository extends CrudRepository<Authorities, String>{
 
-	List<Authorities> findByUsername(String username);
+	Authorities findByUsername(String username);
 }

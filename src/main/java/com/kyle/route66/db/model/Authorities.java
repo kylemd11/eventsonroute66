@@ -57,15 +57,15 @@ public class Authorities  implements java.io.Serializable {
         this.authority = authority;
     }
 
-    @ManyToOne( cascade = {CascadeType.PERSIST, CascadeType.MERGE} )
-    @PrimaryKeyJoinColumn
-	public Users getUser() {
-		return user;
-	}
-
-	public void setUser(Users user) {
-		this.user = user;
-	}
+//    @ManyToOne( cascade = {CascadeType.DETACH} )
+//    @PrimaryKeyJoinColumn
+//	public Users getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(Users user) {
+//		this.user = user;
+//	}
 
 
 

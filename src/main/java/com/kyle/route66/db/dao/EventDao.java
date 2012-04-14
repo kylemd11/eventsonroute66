@@ -26,7 +26,7 @@ public class EventDao {
 	public EventDao() {
 	}
 
-	public List<Event> getEvents(EventCriteria criteria) {
+	public List<Event> getEvents(EventCriteria criteria, boolean isModerator) {
 		boolean multiple = false;
 		
 		String sql = "select e from Event e where ";
@@ -52,7 +52,7 @@ public class EventDao {
 				sql += "and ";
 			}
 			
-			sql += "(e.startDtg between :startDate and :endDate) or (e.endDtg between :startDate and :endDate) ";
+			sql += "((e.startDtg between :startDate and :endDate) or (e.endDtg between :startDate and :endDate)) ";
 			
 			multiple = true;
 		}
@@ -62,7 +62,12 @@ public class EventDao {
 				sql += "and ";
 			}
 			
-			sql += "(e.eventStatusCd = 'A' or e.username = :username) ";
+			if(isModerator) {
+				sql += "e.isNew = false ";
+			}
+			else {
+				sql += "(e.eventStatusCd = 'A' or (e.username = :username and e.isNew = false)) ";
+			}
 			
 			multiple = true;
 		}
@@ -79,6 +84,14 @@ public class EventDao {
 		log.debug("JPQL: " + sql);
 
 		Query query = em.createQuery(sql);
+		
+		if(criteria.getFirst() != null) {
+			query.setFirstResult(criteria.getFirst());
+		}
+		
+		if(criteria.getPageSize() != null) {
+			query.setMaxResults(criteria.getPageSize());
+		}
 
 		if (criteria.getState() != null) {
 			query.setParameter("state", criteria.getState().getCode());
@@ -93,7 +106,7 @@ public class EventDao {
 			query.setParameter("endDate", criteria.getEndDate());
 		}
 		
-		if(criteria.getUsername() != null) {
+		if(criteria.getUsername() != null && !isModerator) {
 			query.setParameter("username", criteria.getUsername());
 		}
 

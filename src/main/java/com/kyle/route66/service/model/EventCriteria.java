@@ -13,6 +13,8 @@ public class EventCriteria {
 	private String zipCode = null;
 	private Integer distance;
 	private String username;
+	private Integer first = null;
+	private Integer pageSize = null;
 	
 	public EventCriteria(State state, EventType eventType, Date startDate,
 			Date endDate, String zipCode, Integer distance) {
@@ -70,5 +72,21 @@ public class EventCriteria {
 	
 	public String getUsername() {
 		return this.username;
+	}
+
+	public void setFirst(Integer first) {
+		this.first = first;
+	}
+
+	public Integer getFirst() {
+		return first;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
 	}
 }

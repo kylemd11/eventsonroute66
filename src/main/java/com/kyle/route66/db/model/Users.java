@@ -69,14 +69,14 @@ public class Users  implements java.io.Serializable {
         this.enabled = enabled;
     }
 
-    @OneToMany(mappedBy="user", cascade={CascadeType.ALL})
-	public List<Authorities> getAuthorities() {
-		return authorities;
-	}
-
-	public void setAuthorities(List<Authorities> authorities) {
-		this.authorities = authorities;
-	}
+//    @OneToMany(mappedBy="user", cascade={CascadeType.ALL})
+//	public List<Authorities> getAuthorities() {
+//		return authorities;
+//	}
+//
+//	public void setAuthorities(List<Authorities> authorities) {
+//		this.authorities = authorities;
+//	}
 
 
 

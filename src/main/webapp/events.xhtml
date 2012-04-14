@@ -9,7 +9,7 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/site/main.xhtml">
 	<ui:define name="left">
-		<h:form>
+		<h:form id="filterForm">
 			<h:messages for="filterForm" />
 			<p:panel header="Filters"
 				rendered="#{EventFilterBean.filtersApplied}">
@@ -61,7 +61,7 @@
 						<h:panelGroup
 							rendered="#{state.code!='more' and state.code!='less'}">
 							<h:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}">
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="filterForm">
 								<f:param name="stateCode" value="#{state.code}" />
 							</h:commandLink>
 							<br />
@@ -69,7 +69,7 @@
 						<h:panelGroup rendered="#{state.code=='more'}">
 							<br />
 							<p:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="false">
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="@form">
 								<f:param name="stateCode" value="#{state.code}" />
 							</p:commandLink>
 							<br />
@@ -78,7 +78,7 @@
 						<h:panelGroup rendered="#{state.code=='less'}">
 							<br />
 							<p:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="false">
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="@form">
 								<f:param name="stateCode" value="#{state.code}" />
 							</p:commandLink>
 							<br />
@@ -100,7 +100,7 @@
 					</ui:repeat>
 				</p:panel>
 			</h:form>
-			<h:form id="filterForm">
+			<h:form>
 				<p:panel header="Date Range" toggleable="true" toggleSpeed="500"
 					rendered="#{!EventFilterBean.isDateRangeFiltered}"
 					style="width:100%;">
@@ -161,7 +161,7 @@
 			<p:layoutUnit position="north" size="40">
 				<h:form>
 					<h:panelGroup style="float: left;">
-						<p:commandButton value="Create New Event" action="new_event" ajax="false" rendered="#{UserSession.isLoggedIn}"/>
+						<p:commandButton value="Create New Event" action="new_event" actionListener="#{NewEventBean.createNewEvent}" ajax="false" rendered="#{UserSession.isLoggedIn}"/>
 					</h:panelGroup>
 					<h:outputText value="Center Main Content" />
 					<h:panelGroup style="float: right;">
@@ -188,7 +188,7 @@
 					<p:ajax event="eventSelect" listener="#{EventScheduleBean.setEventSelection}"/>
 				</p:schedule>
 					<p:dataTable id="dataTable" var="event"
-						value="#{EventScheduleBean.events}" paginator="true" rows="10"
+						value="#{EventScheduleBean.lazyModel}" paginator="true" rows="10"
 						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,15"
 						rendered="#{EventStatusBean.isListDisabled}">
@@ -196,7 +196,10 @@
 							<f:facet name="header">
 								<h:outputText value="Title" />
 							</f:facet>
-							<h:commandLink action="#{EventBean.showEvent}" value="#{event.title}">
+							<h:commandLink action="#{EventBean.showEvent}" value="#{event.title}" rendered="#{(!UserSession.isLoggedIn or event.username != UserSession.userAccount.username or !event.isPending) and !UserSession.isModerator}">
+								<f:param name="id" value="#{event.eventSeqId}" />
+							</h:commandLink>
+							<h:commandLink action="#{NewEventBean.editEvent}" value="#{event.title}" rendered="#{(UserSession.isLoggedIn and event.username == UserSession.userAccount.username and event.isPending) or UserSession.isModerator}">
 								<f:param name="id" value="#{event.eventSeqId}" />
 							</h:commandLink>
 						</p:column>

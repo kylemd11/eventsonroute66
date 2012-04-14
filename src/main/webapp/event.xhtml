@@ -47,7 +47,7 @@
 			<h:outputText style="font-weight: bold; font-size: 16pt; border-bottom: 2px solid black;" value="#{EventBean.event.title}" />
 		</h:panelGrid>
 		<h:panelGrid columns="1" style="width: 100%;">
-			<h:outputText value="#{EventBean.event.content}" />
+			<h:outputText value="#{EventBean.event.content}" escape="false"/>
 		</h:panelGrid>
 		<p:panel header="Comments" style="width:100%; margin-top: 15px;" rendered="#{UserSession.isLoggedIn or EventBean.hasComments}">
 			<h:panelGroup rendered="#{UserSession.isLoggedIn}" style="width: 100%; display: block;">

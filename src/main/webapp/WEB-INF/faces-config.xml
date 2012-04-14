@@ -46,6 +46,10 @@
    <from-outcome>events</from-outcome>
    <to-view-id>/events.xhtml</to-view-id>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>new_event</from-outcome>
+   <to-view-id>/newEvent.xhtml</to-view-id>
+  </navigation-case>
  </navigation-rule>
  
  <navigation-rule>

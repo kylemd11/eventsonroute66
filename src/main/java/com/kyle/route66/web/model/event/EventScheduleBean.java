@@ -3,6 +3,7 @@ package com.kyle.route66.web.model.event;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 
@@ -12,9 +13,11 @@ import org.primefaces.event.ScheduleEntrySelectEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
+import org.primefaces.model.SortOrder;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
@@ -56,7 +59,7 @@ public class EventScheduleBean {
 					searchCriteria.setUsername(session.getUserAccount().getUsername());
 				}
 				
-				for (Event event : eventService.getEvents(searchCriteria)) {
+				for (Event event : eventService.getEvents(searchCriteria, session.getIsModerator())) {
 					addEvent(new DefaultScheduleEvent(event.getTitle(),event.getStartDtg(),event.getEndDtg()));
 				}
 			}
@@ -64,6 +67,37 @@ public class EventScheduleBean {
 
 		return eventModel;
 	}
+	
+	public LazyDataModel<Event> getLazyModel() { 
+		LazyDataModel<Event> lazyModel = new LazyDataModel<Event>() {
+
+			@Override
+			public int getRowCount() {
+				EventCriteria searchCriteria = filter.getSearchCriteria();
+				return eventService.getEvents(searchCriteria, session.getIsModerator()).size();
+			}
+
+			@Override
+			public List<Event> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+				EventCriteria searchCriteria = filter.getSearchCriteria();
+				
+				searchCriteria.setFirst(first);
+				searchCriteria.setPageSize(pageSize);	
+				
+				log.debug("first: " + first);
+				log.debug("pageSize: " + pageSize);
+				
+				if(session.isLoggedIn()) {
+					searchCriteria.setUsername(session.getUserAccount().getUsername());
+				}
+				
+				return eventService.getEvents(searchCriteria, session.getIsModerator());
+			}
+			
+		};
+		
+        return lazyModel;  
+    }
 
 	public List<Event> getEvents() {
 		EventCriteria searchCriteria = filter.getSearchCriteria();
@@ -71,13 +105,13 @@ public class EventScheduleBean {
 			searchCriteria.setUsername(session.getUserAccount().getUsername());
 		}
 		
-		return eventService.getEvents(searchCriteria);
+		return eventService.getEvents(searchCriteria, session.getIsModerator());
 	}
 
 	public MapModel getEventMapModel() {
 		DefaultMapModel simpleModel = new DefaultMapModel();
 
-		for (Event event : eventService.getEvents(filter.getSearchCriteria())) {
+		for (Event event : eventService.getEvents(filter.getSearchCriteria(), session.getIsModerator())) {
 			simpleModel.addOverlay(new Marker(new LatLng(event.getLatitude()
 					.doubleValue(), event.getLongitude().doubleValue()), event
 					.getTitle(), event.getCity()));

@@ -123,7 +123,12 @@ public class EventBean {
 	}
 	
 	public boolean getHasComments() {
-		return this.event.getComments().size() > 0;
+		if(this.event != null) {
+			return this.event.getComments().size() > 0;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	
