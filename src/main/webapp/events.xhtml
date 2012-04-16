@@ -66,28 +66,24 @@
 							</h:commandLink>
 							<br />
 						</h:panelGroup>
-						<h:panelGroup rendered="#{state.code=='more'}">
-							<br />
+						<h:panelGroup rendered="#{state.code=='more'}" style="vertical-align: top; padding-top: 5px; padding-bottom: 5px; display: block;">							
+							<h:graphicImage library="images" name="add_16.png" height="10" width="10" style="padding-right: 5px;"/>
 							<p:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="@form">
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="@form" style="height: 16px;">
 								<f:param name="stateCode" value="#{state.code}" />
 							</p:commandLink>
-							<br />
-							<br />
 						</h:panelGroup>
-						<h:panelGroup rendered="#{state.code=='less'}">
-							<br />
+						<h:panelGroup rendered="#{state.code=='less'}" style="vertical-align: top; padding-top: 5px; padding-bottom: 5px; display: block;">
+							<h:graphicImage library="images" name="minus_16.png" height="10" width="10" style="padding-right: 5px;"/>
 							<p:commandLink value="#{state.name}"
-								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="@form">
+								action="#{EventFilterBean.setStateCodeFilterAction}" ajax="true" update="@form" style="height: 16px;">
 								<f:param name="stateCode" value="#{state.code}" />
 							</p:commandLink>
-							<br />
-							<br />
 						</h:panelGroup>
 					</ui:repeat>
 				</p:panel>
 			</h:form>
-			<h:form>
+			<h:form rendered="false">
 				<p:panel header="Event Type" toggleable="true" toggleSpeed="500"
 					rendered="#{!EventFilterBean.isEventTypeFiltered}"
 					style="width:100%;">

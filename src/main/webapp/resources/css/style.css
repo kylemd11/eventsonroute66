@@ -4,13 +4,26 @@
 	width: 33%;
 }
 
-.twocols {
+.twoColumnCenter {
 	width: 50%;
 	vertical-align: top;
 	text-align: center;
 }
 
+.twoColumnLeft {
+	width: 50%;
+	vertical-align: top;
+	text-align: left;'
+}
+
+.twoColumn {
+	width: 50%;
+	vertical-align: top;
+}
+
 .labelColumn {
+	vertical-align: top;
+	white-space:nowrap;
 	text-align: right;
 }
 

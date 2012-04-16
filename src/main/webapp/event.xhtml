@@ -27,8 +27,8 @@
 		<h:outputText value="&nbsp;"/>
 		<h:outputText style="font-weight: bold; font-size: 10pt; border-bottom: 2px solid black;" value="Details"/>
 		<h:panelGrid columns="2" style="width: 100%;" columnClasses="labelColumn, dataColumn">
-		<h:outputText value="Event Type:"/>
-		<h:outputText value="#{EventBean.event.eventType.description}"/>
+		<h:outputText value="Event Type:" rendered="false"/>
+		<h:outputText value="#{EventBean.event.eventType.description}" rendered="false"/>
 		<h:outputText value="Event Status:" rendered="#{UserSession.isLoggedIn and EventBean.isMine}"/>
 		<h:outputText value="#{EventBean.event.eventStatus.description}" rendered="#{UserSession.isLoggedIn and EventBean.isMine}"/>
 		<h:outputText value="Start Date:"/>

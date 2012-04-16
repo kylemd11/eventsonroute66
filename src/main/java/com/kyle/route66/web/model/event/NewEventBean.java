@@ -218,7 +218,7 @@ public class NewEventBean {
 		this.event.setStartDtg(new Date());
 		this.event.setEndDtg(new Date());
 		this.event.setCity("");
-		this.event.setStateCd("AK");
+		this.event.setStateCd("IL");
 		this.event.setZipCode("");
 		this.event.setContent("");
 		this.event.setEventTypeCd("PU");

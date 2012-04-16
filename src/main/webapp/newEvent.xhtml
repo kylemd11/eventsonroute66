@@ -57,34 +57,47 @@
 				<h:panelGrid columns="2" style="width: 100%;"
 					columnClasses="alignTopColumn,alignTopColumn">
 					<p:fieldset legend="General">
-						<h:panelGrid columns="3">
-							<h:outputLabel value="Title:" for="titleInput" />
+						<h:panelGrid columns="3" columnClasses="labelColumn,dataColumn,dataColumn">
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
+								<h:outputLabel value="Title:" for="titleInput" />
+							</h:panelGroup>
 							<p:inputText id="titleInput" value="#{NewEventBean.event.title}"
 								required="true" requiredMessage="Required" />
 							<p:message for="titleInput" />
+							<h:outputText value="All Day Event?"/>
+							<p:selectBooleanCheckbox value="#{NewEventBean.allDay}" />  
+							<h:outputText value=""/>
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="startDateInput" value="Start Date/Time:" />
+							</h:panelGroup>
 							<p:calendar value="#{NewEventBean.event.startDtg}"
 								showOn="button" maxlength="20" size="20" id="startDateInput"
 								pattern="MM/dd/yyyy hh:mm a" required="true"
 								requiredMessage="Required" />
 							<p:message for="startDateInput" />
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="endDateInput" value="End Date/Time:" />
+							</h:panelGroup>
 							<p:calendar value="#{NewEventBean.event.endDtg}" showOn="button"
 								maxlength="20" size="20" id="endDateInput"
 								pattern="MM/dd/yyyy hh:mm a" required="true"
 								requiredMessage="Required" />
 							<p:message for="endDateInput" />
-							<h:outputLabel for="typeInput" value="Type:" />
+							<h:outputLabel for="typeInput" value="Type:" rendered="false"/>
 							<p:selectOneMenu id="typeInput"
 								value="#{NewEventBean.event.eventTypeCd}" required="true"
 								requiredMessage="Required"
-								validator="#{NewEventBean.validateNotEmpty}">
+								validator="#{NewEventBean.validateNotEmpty}"
+								 rendered="false">
 								<f:selectItem itemLabel="Select..." itemValue="NONE" />
 								<f:selectItems value="#{NewEventBean.eventTypes}"
 									var="eventType" itemLabel="#{eventType.description}"
 									itemValue="#{eventType.code}" />
 							</p:selectOneMenu>
-							<p:message for="typeInput" />
+							<p:message for="typeInput" rendered="false"/>
 							<h:outputLabel for="statusInput" value="Status:" rendered="#{UserSession.isModerator}"/>
 							<p:selectOneMenu id="statusInput"
 								value="#{NewEventBean.event.eventStatusCd}" required="true"
@@ -98,8 +111,11 @@
 						</h:panelGrid>
 					</p:fieldset>
 					<p:fieldset legend="Address">
-						<h:panelGrid columns="3">
+						<h:panelGrid columns="3" columnClasses="labelColumn,dataColumn,dataColumn">
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="address1Input" value="Address 1:" />
+							</h:panelGroup>
 							<p:inputText id="address1Input"
 								value="#{NewEventBean.event.address1}" required="true"
 								requiredMessage="Required" />
@@ -108,11 +124,17 @@
 							<p:inputText id="address2Input"
 								value="#{NewEventBean.event.address2}" />
 							<p:message for="address2Input" />
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="cityInput" value="City:" />
+							</h:panelGroup>
 							<p:inputText id="cityInput" value="#{NewEventBean.event.city}"
 								required="true" requiredMessage="Required" />
 							<p:message for="cityInput" />
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="stateInput" value="State:" />
+							</h:panelGroup>
 							<p:selectOneMenu id="stateInput"
 								value="#{NewEventBean.event.stateCd}" required="true"
 								requiredMessage="Required"
@@ -122,27 +144,46 @@
 									itemLabel="#{state.name}" itemValue="#{state.code}" />
 							</p:selectOneMenu>
 							<p:message for="stateInput" />
+							<h:panelGroup>
+								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="zipInput" value="Zip Code:" />
-							<p:inputText id="zipInput" value="#{NewEventBean.event.zipCode}"
-								required="true" requiredMessage="Required" />
+							</h:panelGroup>
+							<p:inputMask  id="zipInput" value="#{NewEventBean.event.zipCode}"
+								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999"/>
 							<p:message for="zipInput" />
 						</h:panelGrid>
 					</p:fieldset>
 				</h:panelGrid>
-				<h:panelGrid style="width: 100%; text-align: center;">
+				<h:panelGrid columns="2" columnClasses="twoColumnLeft,twoColumn" style="width: 100%;">
+					<p:panel header="Instructions">
+						<h:panelGrid columns="2" columnClasses="labelColumn,dataColumn">
+						<h:outputText value="Step 1:" style="font-weight: bold;"/>
+						<h:outputText value="Enter all the required information above."/>
+						<h:outputText value="Step 2:" style="font-weight: bold;"/>
+						<h:outputText value="Use the editor to the right to enter the event information.  This is a rich text editor, so you can layout and include any event information.  You can include images by uploading them on the left and using the url provided in the image in the editor."/>
+						<h:outputText value="Step 3:" style="font-weight: bold;"/>
+						<h:outputText value="Use the preview button down below to preview what your event will look like."/>
+						<h:outputText value="Step 4:" style="font-weight: bold;"/>
+						<h:outputText value="Hit the Submit button to send the event to the moderator for approval.  Once your event is approved, it will be available to all visitors and members."/>
+						<h:outputText value=""/>
+						<h:outputText value=""/>
+						<h:outputText value="Note:" style="font-weight: bold;"/>
+						<h:outputText value="You can come back and edit your event until the moderator has approved the event.  If you wish to make a change after the event has been approved, please contact the moderator."/>
+						</h:panelGrid>
+						</p:panel>
 					<p:editor id="editor" value="#{NewEventBean.event.content}"
 						required="true" requiredMessage="Required"
 						style="width: 100%; text-align: center;" />
-					<h:panelGrid columns="2" style="width: 100%;">
+				</h:panelGrid>				
+				<h:panelGrid columns="2" style="width: 100%;">
 						<h:panelGroup style="float: left; display: inline;">
 							<p:commandButton value="Preview" actionListener="#{NewEventBean.save}"
 								ajax="true" oncomplete="eventDialog.show()" update=":eventPreviewDialog"/>
 						</h:panelGroup>
 						<h:panelGroup style="float: right;">
 							<p:commandButton value="Submit" action="#{NewEventBean.save}" ajax="false" />
-							<p:commandButton value="Cancel" action="#{NewEventBean.delete}" ajax="false" />
+							<p:commandButton value="Cancel" immediate="true" action="#{NewEventBean.delete}" ajax="false" />
 						</h:panelGroup>
-					</h:panelGrid>
 				</h:panelGrid>
 			</h:form>
 		</h:panelGrid>
