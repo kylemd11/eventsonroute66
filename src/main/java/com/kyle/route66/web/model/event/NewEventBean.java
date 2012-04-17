@@ -88,6 +88,9 @@ public class NewEventBean {
 	private Event event = new Event();
 	
 	private boolean isNew = false;
+	
+	private String dateTimeFormat = "MM/dd/yyyy hh:mm a";
+	private String dateFormat = "MM/dd/yyyy";
 
 	public List<EventType> getEventTypes() {
 		return eventTypeRepository.findAll();
@@ -163,6 +166,15 @@ public class NewEventBean {
 
 	public void setImageDao(ImageDao imageDao) {
 		this.imageDao = imageDao;
+	}
+	
+	public String getDateFormat() {
+		if(this.event.getAllDay()) {
+			return dateFormat;
+		}
+		else {
+			return dateTimeFormat;
+		}
 	}
 
 	public void validateNotEmpty(FacesContext context, UIComponent component, Object obj) {

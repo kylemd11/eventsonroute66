@@ -58,6 +58,7 @@ public class Event  implements java.io.Serializable {
 	private String eventStatusCd;
 	
 	private boolean isNew;
+	private boolean allDay;
      
     public Event() {
     }
@@ -77,7 +78,7 @@ public class Event  implements java.io.Serializable {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    public Event(String username, String title, Date startDtg, Date endDtg, String address1, String address2, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, BigDecimal latitude, BigDecimal longitude, Date updateDtg, boolean isNew) {
+    public Event(String username, String title, Date startDtg, Date endDtg, String address1, String address2, String city, String stateCd, String zipCode, String content, String eventTypeCd, Date createDtg, BigDecimal latitude, BigDecimal longitude, Date updateDtg, boolean isNew, boolean allDay) {
        this.username = username;
        this.title = title;
        this.startDtg = startDtg;
@@ -94,6 +95,7 @@ public class Event  implements java.io.Serializable {
        this.longitude = longitude;
        this.updateDtg = updateDtg;
        this.isNew = isNew;
+       this.allDay = allDay;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -255,7 +257,6 @@ public class Event  implements java.io.Serializable {
 		this.longitude = longitude;
 	}
 	
-	
 	@Column(name="is_new", nullable = false)
 	public boolean getIsNew() {
 		return isNew;
@@ -263,6 +264,15 @@ public class Event  implements java.io.Serializable {
 
 	public void setIsNew(boolean isNew) {
 		this.isNew = isNew;
+	}
+	
+	@Column(name="all_day", nullable = false)
+	public boolean getAllDay() {
+		return allDay;
+	}
+
+	public void setAllDay(boolean allDay) {
+		this.allDay = allDay;
 	}
 
 	@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)

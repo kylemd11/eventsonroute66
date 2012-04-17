@@ -13,7 +13,7 @@
 			<p:fileUpload fileUploadListener="#{NewEventBean.handleFileUpload}"
 				mode="advanced" multiple="true" auto="true" update="dataTable"
 				allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
-
+			
 			<p:dataTable id="dataTable" var="image"
 				value="#{NewEventBean.images}">
 				<p:column style="text-align: center;">
@@ -54,9 +54,12 @@
 				style="font-weight: bold; font-size: 16pt; border-bottom: 2px solid black;"
 				value="Create New Event" />
 			<h:form>
+				<p:blockUI block="generalField" trigger="allDayInput">					
+        			<p:graphicImage value="/images/ajax-loader.gif"/>  
+				</p:blockUI>
 				<h:panelGrid columns="2" style="width: 100%;"
 					columnClasses="alignTopColumn,alignTopColumn">
-					<p:fieldset legend="General">
+					<p:fieldset legend="General" id="generalField">
 						<h:panelGrid columns="3" columnClasses="labelColumn,dataColumn,dataColumn">
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -66,7 +69,9 @@
 								required="true" requiredMessage="Required" />
 							<p:message for="titleInput" />
 							<h:outputText value="All Day Event?"/>
-							<p:selectBooleanCheckbox value="#{NewEventBean.allDay}" />  
+							<p:selectBooleanCheckbox id="allDayInput" value="#{NewEventBean.event.allDay}" immediate="true">
+								<p:ajax update="startDateInput endDateInput"/>
+							</p:selectBooleanCheckbox>  
 							<h:outputText value=""/>
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -74,7 +79,7 @@
 							</h:panelGroup>
 							<p:calendar value="#{NewEventBean.event.startDtg}"
 								showOn="button" maxlength="20" size="20" id="startDateInput"
-								pattern="MM/dd/yyyy hh:mm a" required="true"
+								pattern="#{NewEventBean.dateFormat}" required="true"
 								requiredMessage="Required" />
 							<p:message for="startDateInput" />
 							<h:panelGroup>
@@ -83,7 +88,7 @@
 							</h:panelGroup>
 							<p:calendar value="#{NewEventBean.event.endDtg}" showOn="button"
 								maxlength="20" size="20" id="endDateInput"
-								pattern="MM/dd/yyyy hh:mm a" required="true"
+								pattern="#{NewEventBean.dateFormat}" required="true"
 								requiredMessage="Required" />
 							<p:message for="endDateInput" />
 							<h:outputLabel for="typeInput" value="Type:" rendered="false"/>

@@ -1,12 +1,15 @@
 package com.kyle.route66.web.model.event;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.primefaces.event.ScheduleEntrySelectEvent;
@@ -110,8 +113,29 @@ public class EventScheduleBean {
 
 	public MapModel getEventMapModel() {
 		DefaultMapModel simpleModel = new DefaultMapModel();
+		
+		EventCriteria searchCriteria = filter.getSearchCriteria();
+		if(session.isLoggedIn()) {
+			searchCriteria.setUsername(session.getUserAccount().getUsername());
+		}
+		
+		if(searchCriteria.getStartDate() == null || searchCriteria.getEndDate() == null) {
+			Date currDate = new Date();
+			
+			currDate = DateUtils.truncate(currDate, Calendar.DATE);
+			searchCriteria.setStartDate(currDate);
+			log.debug("startDTG: " + DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(currDate));
+			
+			Date newDate = new Date();
+			newDate = DateUtils.truncate(newDate, Calendar.DATE);
+			newDate = DateUtils.addDays(newDate, 31);
+			newDate = DateUtils.addMilliseconds(newDate, -1);
+			
+			searchCriteria.setEndDate(newDate);
+			log.debug("endDTG: " + DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(newDate));
+		}
 
-		for (Event event : eventService.getEvents(filter.getSearchCriteria(), session.getIsModerator())) {
+		for (Event event : eventService.getEvents(searchCriteria, session.getIsModerator())) {
 			simpleModel.addOverlay(new Marker(new LatLng(event.getLatitude()
 					.doubleValue(), event.getLongitude().doubleValue()), event
 					.getTitle(), event.getCity()));
