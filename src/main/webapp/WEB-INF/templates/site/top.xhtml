@@ -9,34 +9,44 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:body>
 	<f:view contentType="text/html">
-		<p:layout id="innerlayout" style="height: 100%;'">
-			<p:layoutUnit position="south" size="40">
-				<h:form>
-					<h:panelGrid columns="3" style="width: 100%;" columnClasses="threecols,threecols,threecols">
-						<h:outputText value="" />
-						<h:panelGroup style="width: 100%; text-align: center; display: block;">
-							<h:commandLink action="home" value="Home" title="Home" actionListener="#{StatusBean.setHome}"/>
-							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="events" value="Events" title="Events" actionListener="#{StatusBean.setEvents}"/>
-							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="history" value="History" title="History" actionListener="#{StatusBean.setHistory}"/>
-							<f:verbatim>&nbsp;</f:verbatim>
-							<h:commandLink action="links" value="Links" title="Links" actionListener="#{StatusBean.setLinks}"/>
-						</h:panelGroup>
-						<h:commandLink action="startLogin" value="Login or Register" style="float:right;" rendered="#{!StatusBean.isLogin and !UserSession.isLoggedIn}" title="Login or Register"  actionListener="#{StatusBean.setLogin}"/>
-						<h:panelGroup rendered="#{UserSession.isLoggedIn}" style="float:right;">
-							<h:commandLink value="#{UserSession.userAccount.username}" action="accountSettings" title="Account Settings"/>
-							<f:verbatim>&nbsp;&nbsp;</f:verbatim>
-							<h:commandLink action="#{LogoutBean.logout}" value="Logout"  rendered="#{UserSession.isLoggedIn}" title="Logout"/>
-						</h:panelGroup>
-						<h:outputText value=" " rendered="#{StatusBean.isLogin}"/>
-					</h:panelGrid>
-				</h:form>
-			</p:layoutUnit>
-			<p:layoutUnit position="center">
-				<h:outputText value="Center Content" />
-			</p:layoutUnit>
-		</p:layout>
+		<h:panelGroup layout="block" style="width: 100%; height: 200px;">
+			<h:graphicImage library="images" name="banner.png" height="200" width="1280" />
+		</h:panelGroup>
+		<h:panelGroup layout="block" style="width: 100%; height: 40px; vertical-align: middle; background-color: #C1BABA;">
+			<h:form>
+				<h:panelGrid columns="3" style="width: 100%; height: 40px;"
+					columnClasses="threecols,threecols,threecols">
+					<h:outputText value="" />
+					<h:panelGroup
+						style="width: 100%; text-align: center; display: block;">
+						<h:commandLink action="home" value="Home" title="Home"
+							actionListener="#{StatusBean.setHome}" styleClass="headerLink" />
+						<f:verbatim>&nbsp;</f:verbatim>
+						<h:commandLink action="events" value="Events" title="Events"
+							actionListener="#{StatusBean.setEvents}" styleClass="headerLink" />
+						<f:verbatim>&nbsp;</f:verbatim>
+						<h:commandLink action="history" value="History" title="History"
+							actionListener="#{StatusBean.setHistory}" styleClass="headerLink" />
+						<f:verbatim>&nbsp;</f:verbatim>
+						<h:commandLink action="links" value="Links" title="Links"
+							actionListener="#{StatusBean.setLinks}" styleClass="headerLink" />
+					</h:panelGroup>
+					<h:commandLink action="startLogin" value="Login or Register"
+						style="float:right; padding-right: 5px;"
+						rendered="#{!StatusBean.isLogin and !UserSession.isLoggedIn}"
+						title="Login or Register" actionListener="#{StatusBean.setLogin}" styleClass="headerLink2"/>
+					<h:panelGroup rendered="#{UserSession.isLoggedIn}"
+						style="float:right; padding-right: 5px;">
+						<h:commandLink value="#{UserSession.userAccount.username}"
+							action="accountSettings" title="Account Settings" styleClass="headerLink" />
+						<f:verbatim>&nbsp;&nbsp;</f:verbatim>
+						<h:commandLink action="#{LogoutBean.logout}" value="Logout"
+							rendered="#{UserSession.isLoggedIn}" title="Logout" styleClass="headerLink" />
+					</h:panelGroup>
+					<h:outputText value=" " rendered="#{StatusBean.isLogin}" />
+				</h:panelGrid>
+			</h:form>
+		</h:panelGroup>
 	</f:view>
 </h:body>
 </html>

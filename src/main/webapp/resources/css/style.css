@@ -1,5 +1,46 @@
 @CHARSET "ISO-8859-1";
 
+html, body {
+	height: 100%;
+	background-color: #CCCCCC;
+	font-family: Verdana;
+}
+
+#wrap {
+	min-height: 100%;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	background-color: white;
+}
+
+#main {
+	overflow:auto;
+	padding-bottom: 50px;
+	background-color: white;	
+}  /* must be same height as the footer */
+
+#footer {
+	position: relative;
+	margin-top: -50px; /* negative value of footer height */
+	height: 50px;
+	clear:both;
+	
+	border-top: 1px solid black;
+}
+
+#header {
+	/* border-bottom: 1px solid black; */
+}
+
+/*Opera Fix*/
+body:before {
+	content:"";
+	height:100%;
+	float:left;
+	width:0;
+	margin-top:-32767px;/
+}
+
 .threecols {
 	width: 33%;
 }
@@ -14,6 +55,16 @@
 	width: 50%;
 	vertical-align: top;
 	text-align: left;'
+}
+
+.leftEventColumn {
+	vertical-align: top;
+	width: 205px;
+}
+
+.centerEventColumn {
+	vertical-align: top;
+	width: 1030px;
 }
 
 .twoColumn {
@@ -39,3 +90,19 @@
 .alignTopColumn {
 	vertical-align: top;
 }
+
+.headerLink {
+	text-shadow: 0 0 4px rgba(0, 0, 0, 0.4); 
+	font-size: 14pt; 
+	color: #EEEEEE;
+	font-weight: 500;
+}
+
+A:link.headerLink {
+	text-decoration: none;
+}
+
+A:hover.headerLink {
+	text-decoration: underline;
+}
+
