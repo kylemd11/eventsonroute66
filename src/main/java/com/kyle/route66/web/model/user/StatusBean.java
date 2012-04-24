@@ -66,5 +66,41 @@ public class StatusBean {
 			return false;
 		}
 	}
+	
+	public String getHomeStyleClass() {
+		if(state == StateConstants.HOME) {
+			return "selected";
+		}
+		else {
+			return "";
+		}
+	}
+	
+	public String getHistoryStyleClass() {
+		if(state == StateConstants.HISTORY) {
+			return "selected";
+		}
+		else {
+			return "";
+		}
+	}
+	
+	public String getLinksStyleClass() {
+		if(state == StateConstants.LINKS) {
+			return "selected";
+		}
+		else {
+			return "";
+		}
+	}
+	
+	public String getEventsStyleClass() {
+		if(state == StateConstants.EVENTS) {
+			return "selected";
+		}
+		else {
+			return "";
+		}
+	}
 }
 

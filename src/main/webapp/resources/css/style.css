@@ -3,7 +3,7 @@
 html, body {
 	height: 100%;
 	background-color: #CCCCCC;
-	font-family: Verdana;
+	font-family: Verdana,Arial,sans-serif;
 }
 
 #wrap {
@@ -60,11 +60,13 @@ body:before {
 .leftEventColumn {
 	vertical-align: top;
 	width: 205px;
+	padding-right: 5px;
 }
 
 .centerEventColumn {
 	vertical-align: top;
-	width: 1030px;
+	width: 1020px;
+	padding-right: 5px;
 }
 
 .twoColumn {
@@ -92,10 +94,11 @@ body:before {
 }
 
 .headerLink {
-	text-shadow: 0 0 4px rgba(0, 0, 0, 0.4); 
-	font-size: 14pt; 
-	color: #EEEEEE;
-	font-weight: 500;
+	/* text-shadow: 0 0 4px rgba(0, 0, 0, 0.3); */ 
+	font-size: 18px !important; 
+	color: #222222;
+	font-weight: bold;
+	padding-right: 5px;
 }
 
 A:link.headerLink {
@@ -106,3 +109,6 @@ A:hover.headerLink {
 	text-decoration: underline;
 }
 
+A:link.headerLink.selected {
+	text-decoration: underline;
+}

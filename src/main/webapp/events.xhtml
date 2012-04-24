@@ -17,16 +17,22 @@
 					rendered="#{EventFilterBean.isStateFiltered}">
 					<h:outputText value="State:" />
 					<h:outputText value="#{EventFilterBean.stateFilter}" />
-					<p:commandLink value="remove"
+					<p:commandLink 
 						actionListener="#{EventFilterBean.removeStateFilter}"
-						update="@form :eventDisplay :stateForm" />
+						update="@form :eventDisplay :stateForm">
+						<h:graphicImage library="images" name="cancel.png" height="16"
+								width="16" style="padding-right: 5px;" title="Remove"/>
+						</p:commandLink>
 				</h:panelGrid>
 				<h:panelGrid columns="3"
 					rendered="#{EventFilterBean.isEventTypeFiltered}">
 					<h:outputText value="Event Type:" />
 					<h:outputText value="#{EventFilterBean.eventTypeFilter}" />
-					<p:commandLink value="remove"
-						actionListener="#{EventFilterBean.removeEventTypeFilter}" />
+					<p:commandLink 
+						actionListener="#{EventFilterBean.removeEventTypeFilter}" >
+						<h:graphicImage library="images" name="cancel.png" height="16"
+								width="16" style="padding-right: 5px;" title="Remove"/>
+						</p:commandLink>
 				</h:panelGrid>
 				<h:panelGrid columns="3"
 					rendered="#{EventFilterBean.isDateRangeFiltered}">
@@ -34,9 +40,12 @@
 					<h:outputText value="#{EventFilterBean.startDate}">
 						<f:convertDateTime pattern="MM/dd/yyyy" />
 					</h:outputText>
-					<p:commandLink value="remove"
+					<p:commandLink 
 						actionListener="#{EventFilterBean.removeDateRangeFilter}"
-						update="@form :eventDisplay :dateForm" />
+						update="@form :eventDisplay :dateForm" >
+						<h:graphicImage library="images" name="cancel.png" height="16"
+								width="16" style="padding-right: 5px;" title="Remove"/>
+						</p:commandLink>
 					<h:outputText value="End Date:" />
 					<h:outputText value="#{EventFilterBean.endDate}">
 						<f:convertDateTime pattern="MM/dd/yyyy" />
@@ -48,9 +57,12 @@
 					<h:outputText value="#{EventFilterBean.zipCode}">
 						<f:convertDateTime pattern="MM/dd/yyyy" />
 					</h:outputText>
-					<p:commandLink value="remove"
+					<p:commandLink 
 						actionListener="#{EventFilterBean.removeLocationFilter}"
-						update="@form :eventDisplay :locationForm" />
+						update="@form :eventDisplay :locationForm" >
+						<h:graphicImage library="images" name="cancel.png" height="16"
+								width="16" style="padding-right: 5px;" title="Remove"/>
+						</p:commandLink>
 					<h:outputText value="Distance:" />
 					<h:outputText value="#{EventFilterBean.distance}" />
 				</h:panelGrid>
