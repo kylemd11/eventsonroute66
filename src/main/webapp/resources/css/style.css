@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 html, body {
-	height: 100%;
+	height: 99%;
 	background-color: #CCCCCC;
 	font-family: Verdana,Arial,sans-serif;
 }
@@ -21,11 +21,9 @@ html, body {
 
 #footer {
 	position: relative;
-	margin-top: -50px; /* negative value of footer height */
-	height: 50px;
-	clear:both;
-	
-	border-top: 1px solid black;
+	margin-top: -35px; /* negative value of footer height */
+	height: 35px;
+	clear:both;	
 }
 
 #header {
@@ -111,4 +109,9 @@ A:hover.headerLink {
 
 A:link.headerLink.selected {
 	text-decoration: underline;
+}
+
+.calendar-icon {
+	background-image: url('/resources/images/calendar-icon.png') !important;
+	background-size:35px 35px;
 }

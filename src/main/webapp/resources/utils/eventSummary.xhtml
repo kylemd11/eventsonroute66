@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+<h:body>
+	<composite:interface>
+		<composite:attribute name="event" required="true"/>
+	</composite:interface>
+	<composite:implementation>
+				<h:panelGroup style="text-align:center;display:block;margin:auto;">
+						<h:outputText
+							style="font-weight: bold; font-size: 10pt; border-bottom: 2px solid black;"
+							value="#{cc.attrs.event.title}" />
+					</h:panelGroup>
+					
+						<h:outputText
+							style="font-weight: bold; font-size: 10pt; border-bottom: 2px solid black;"
+							value="Where" />
+						<h:panelGroup style="text-align: left;">
+							<h:outputText value="#{cc.attrs.event.address1}" />
+							<br />
+							<h:panelGroup
+								rendered="#{cc.attrs.event.address2 != null}">
+								<h:outputText value="#{cc.attrs.event.address2}" />
+							</h:panelGroup>
+							<h:outputText
+								value="#{cc.attrs.event.city}, #{cc.attrs.event.stateCd} #{cc.attrs.event.zipCode}" />
+						</h:panelGroup>
+						<h:outputText value="When:" />
+						<h:outputText value="#{cc.attrs.event.startDtg}">
+							<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+						</h:outputText>
+						<h:outputText value="To:" />
+						<h:outputText value="#{cc.attrs.event.endDtg}">
+							<f:convertDateTime pattern="MM/dd/yyyy hh:mm a" />
+						</h:outputText>
+						<h:commandLink action="#{EventBean.showEvent}" value="Details"
+							rendered="#{(!UserSession.isLoggedIn or event.username != UserSession.userAccount.username or !event.isPending) and !UserSession.isModerator}">
+							<f:param name="id" value="#{cc.attrs.event.eventSeqId}" />
+						</h:commandLink>
+						<h:commandLink action="#{NewEventBean.editEvent}" value="Edit"
+							rendered="#{(UserSession.isLoggedIn and event.username == UserSession.userAccount.username and event.isPending) or UserSession.isModerator}">
+							<f:param name="id" value="#{cc.attrs.event.eventSeqId}" />
+						</h:commandLink>
+	</composite:implementation>
+</h:body>
+</html>

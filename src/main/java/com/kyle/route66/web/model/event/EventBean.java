@@ -75,6 +75,8 @@ public class EventBean {
 	public String showEvent() {
 		Map<String, String> params = FacesContext.getCurrentInstance()
 				.getExternalContext().getRequestParameterMap();
+		
+		log.debug("id: " + params.get("id"));
 		this.event = eventRepository.findByEventSeqId(Integer
 				.valueOf((String) params.get("id")));
 

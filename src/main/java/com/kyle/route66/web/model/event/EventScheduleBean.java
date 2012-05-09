@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.faces.event.ActionEvent;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.logging.Log;
@@ -29,6 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.kyle.route66.db.dao.EventDao;
+import com.kyle.route66.db.dao.EventRepository;
 import com.kyle.route66.db.model.Event;
 import com.kyle.route66.service.EventService;
 import com.kyle.route66.service.model.EventCriteria;
@@ -46,33 +49,70 @@ public class EventScheduleBean {
 	private EventService eventService;
 	
 	@Autowired
+	private EventRepository eventRepository;
+	
+	@Autowired
 	private UserSession session;
 
+	
+	
+	private EventCriteria criteria = null;
+	private MapModel advancedModel = null;
+	
+	private ScheduleModel scheduleModel = null;
+	
+	private Event event;
 	private Marker marker;
 
 	public ScheduleModel getEventModel() {
-		ScheduleModel eventModel = new LazyScheduleModel() {			
-			@Override
-			public void loadEvents(Date start, Date end) {
-				EventCriteria searchCriteria = filter.getSearchCriteria();
-				searchCriteria.setStartDate(start);
-				searchCriteria.setEndDate(end);
-				
-				if(session.isLoggedIn()) {
-					searchCriteria.setUsername(session.getUserAccount().getUsername());
-				}
-				
-				for (Event event : eventService.getEvents(searchCriteria, session.getIsModerator())) {
-					addEvent(new DefaultScheduleEvent(event.getTitle(),event.getStartDtg(),event.getEndDtg()));
-				}
-			}
-		};
+		if (filter.isDirty() || scheduleModel == null) {
+			scheduleModel = new LazyScheduleModel() {
+				@Override
+				public void loadEvents(Date start, Date end) {
+					EventCriteria searchCriteria = filter.getSearchCriteria();
+					searchCriteria.setStartDate(start);
+					searchCriteria.setEndDate(end);
 
-		return eventModel;
+					if (session.isLoggedIn()) {
+						searchCriteria.setUsername(session.getUserAccount()
+								.getUsername());
+					}
+
+					for (Event event : eventService.getEvents(searchCriteria,
+							session.getIsModerator())) {
+						addEvent(new DefaultScheduleEvent(event.getTitle(),
+								event.getStartDtg(), event.getEndDtg(), event));
+					}
+				}
+			};
+			
+			filter.clean();
+		}
+
+		return scheduleModel;
 	}
 	
 	public LazyDataModel<Event> getLazyModel() { 
 		LazyDataModel<Event> lazyModel = new LazyDataModel<Event>() {
+
+			@Override
+			public void setRowIndex(final int rowIndex) {
+				if (rowIndex == -1 || getPageSize() == 0) {
+					super.setRowIndex(-1);
+				} else {
+					super.setRowIndex(rowIndex % getPageSize());
+				}
+			}
+			
+			@Override
+			public Event getRowData(String rowKey) {
+				return eventRepository.findByEventSeqId(Integer.parseInt(rowKey));
+			}
+
+			@Override
+			public Object getRowKey(Event evt) {
+				return evt.getEventSeqId();
+			}
 
 			@Override
 			public int getRowCount() {
@@ -112,36 +152,46 @@ public class EventScheduleBean {
 	}
 
 	public MapModel getEventMapModel() {
-		DefaultMapModel simpleModel = new DefaultMapModel();
+		log.debug("getEventMapModel()");
+		if(filter.isDirty() || advancedModel == null) {
+			log.debug("getting new data!");
 		
-		EventCriteria searchCriteria = filter.getSearchCriteria();
-		if(session.isLoggedIn()) {
-			searchCriteria.setUsername(session.getUserAccount().getUsername());
+			EventCriteria searchCriteria = filter.getSearchCriteria();
+			if(session.isLoggedIn()) {
+				searchCriteria.setUsername(session.getUserAccount().getUsername());
+			}
+			
+			if(searchCriteria.getStartDate() == null || searchCriteria.getEndDate() == null) {
+				Date currDate = new Date();
+				
+				currDate = DateUtils.truncate(currDate, Calendar.DATE);
+				searchCriteria.setStartDate(currDate);
+				log.debug("startDTG: " + DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(currDate));
+				
+				Date newDate = new Date();
+				newDate = DateUtils.truncate(newDate, Calendar.DATE);
+				newDate = DateUtils.addDays(newDate, 31);
+				newDate = DateUtils.addMilliseconds(newDate, -1);
+				
+				searchCriteria.setEndDate(newDate);
+				log.debug("endDTG: " + DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(newDate));
+			}		
+		
+			advancedModel = new DefaultMapModel();
+			
+			for (Event event : eventService.getEvents(searchCriteria, session.getIsModerator())) {
+				
+				LatLng latLng = new LatLng(event.getLatitude().doubleValue(), event.getLongitude().doubleValue());
+				advancedModel.addOverlay(new Marker(latLng, event.getTitle(), event));
+			}
+			
+			filter.clean();
 		}
-		
-		if(searchCriteria.getStartDate() == null || searchCriteria.getEndDate() == null) {
-			Date currDate = new Date();
-			
-			currDate = DateUtils.truncate(currDate, Calendar.DATE);
-			searchCriteria.setStartDate(currDate);
-			log.debug("startDTG: " + DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(currDate));
-			
-			Date newDate = new Date();
-			newDate = DateUtils.truncate(newDate, Calendar.DATE);
-			newDate = DateUtils.addDays(newDate, 31);
-			newDate = DateUtils.addMilliseconds(newDate, -1);
-			
-			searchCriteria.setEndDate(newDate);
-			log.debug("endDTG: " + DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(newDate));
+		else {
+			log.debug("returning old data");
 		}
 
-		for (Event event : eventService.getEvents(searchCriteria, session.getIsModerator())) {
-			simpleModel.addOverlay(new Marker(new LatLng(event.getLatitude()
-					.doubleValue(), event.getLongitude().doubleValue()), event
-					.getTitle(), event.getCity()));
-		}
-
-		return simpleModel;
+		return advancedModel;
 	}
 	
 	public void setEventSelection(ScheduleEntrySelectEvent selectEvent) {
@@ -156,10 +206,8 @@ public class EventScheduleBean {
 		}
 		else {
 			log.debug(((Event)event.getData()).getEventSeqId());
-			//this.event = eventRepository.findByEventSeqId(((Event)event.getData()).getEventSeqId());
-			//log.debug(this.event);
+			this.event = (Event)event.getData();
 		}
-		
 	}
 
 	public void setEventService(EventService eventService) {
@@ -179,14 +227,26 @@ public class EventScheduleBean {
 	}
 
 	public Marker getMarker() {
+		log.debug("getMarker()");
 		return marker;
+	}
+	
+	public Event getEvent() {
+		return this.event;
 	}
 
 	public void onMarkerSelect(OverlaySelectEvent event) {
+		log.debug("onMarkerSelect()");
 		this.marker = (Marker) event.getOverlay();
 	}
 	
 	public void setSession(UserSession session) {
 		this.session = session;
 	}
+
+	public void setEventRepository(EventRepository eventRepository) {
+		this.eventRepository = eventRepository;
+	}
+	
+	
 }

@@ -25,22 +25,29 @@ import com.kyle.route66.web.constants.StateConstants;
 @Scope("session")
 public class EventStatusBean {
         
+	@Autowired
+	private EventFilterBean filter;
+	
 	private int state = EventStateConstants.CALENDAR;
 		
 	public void setCalendar(ActionEvent ae) {
 		state = EventStateConstants.CALENDAR;
+		filter.setDirty();
 	}
 	
 	public void setTimeline(ActionEvent ae) {
 		state = EventStateConstants.TIMELINE;
+		filter.setDirty();
 	}
 	
 	public void setList(ActionEvent ae) {
 		state = EventStateConstants.LIST;
+		filter.setDirty();
 	}
 	
 	public void setMap(ActionEvent ae) {
 		state = EventStateConstants.MAP;
+		filter.setDirty();
 	}
 	
 	public boolean getIsCalendarDisabled() {
@@ -57,6 +64,10 @@ public class EventStatusBean {
 	
 	public boolean getIsMapDisabled() {
 		return state == EventStateConstants.MAP;
+	}
+
+	public void setFilter(EventFilterBean filter) {
+		this.filter = filter;
 	}
 }
 

@@ -16,20 +16,31 @@
 </h:head>
 <h:body id="body">
 	<f:view contentType="text/html">
-			<p:layout fullPage="true">
-				<p:layoutUnit position="north" size="200">
+			<h:panelGroup
+			style="height: 100%; width: 1280px; margin: auto; display: block; box-shadow: 0px 0px 5px 5px #333333;">
+			<h:panelGroup id="wrap" style="display: block;">
+				<h:panelGroup id="header"
+					style="height: 240px; width: 100%; margin: auto; display: block;">
 					<ui:include src="/WEB-INF/templates/site/top.xhtml" />
-				</p:layoutUnit>
-				<p:layoutUnit position="south" size="50">
-					<h:outputText value="Bottom content." />
-				</p:layoutUnit>
-				<p:layoutUnit position="west" size="250" rendered="#{StatusBean.showLeftPanel}" header="Details">
-					<ui:insert name="left">Left Template Content</ui:insert>
-				</p:layoutUnit>
-				<p:layoutUnit position="center">
-					<ui:insert name="center">Center Template Content</ui:insert>
-				</p:layoutUnit>
-			</p:layout>
+				</h:panelGroup>
+				<h:panelGroup id="main"
+					style="height: 100%; width: 100%; display: block">
+					<h:panelGrid columns="2" style="width: 100%; height: 100%;"
+						columnClasses="leftEventColumn, centerEventColumn">
+						<h:panelGroup style="height: 100%; width: 250px;">
+							<ui:insert name="left">Left Template Content</ui:insert>
+						</h:panelGroup>
+						<h:panelGroup style="height: 100%; width: 100%;">
+							<ui:insert name="center">Center Template Content</ui:insert>
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:panelGroup>
+			</h:panelGroup>
+			<h:panelGroup id="footer"
+				style="height: 50px; width: 100%; display: block;">
+				<ui:include src="/WEB-INF/templates/site/footer.xhtml" />
+			</h:panelGroup>
+		</h:panelGroup>
 	</f:view>
 </h:body>
 </html>

@@ -42,6 +42,8 @@ public class EventFilterBean {
 	private String zipCode = null;
 	private int distance = -1;
 	
+	private boolean dirty = false;
+	
 	
 	@Autowired
 	private StateRepository stateRepository;
@@ -130,6 +132,8 @@ public class EventFilterBean {
 		 Map<String,String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 		this.eventTypeFilter = eventTypeRepository.findByCode((String)params.get("eventTypeCode"));
 		
+		this.dirty = true;
+		
 		return "";
 	}
 	
@@ -143,6 +147,8 @@ public class EventFilterBean {
 		 } else { 
 			 this.stateFilter = stateRepository.findByCode((String)params.get("stateCode"));
 		 }
+		 
+		 this.dirty = true;
 		
 		return "";
 	}
@@ -162,6 +168,7 @@ public class EventFilterBean {
 			else {
 				this.datesEntered = true;
 			}
+			this.dirty = true;
 		}
 		
 		return "";
@@ -172,7 +179,9 @@ public class EventFilterBean {
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN,
 					"You must pick a distance", "You must pick a distance");
 			FacesContext.getCurrentInstance().addMessage("locationForm:distanceInput", msg);
-		}
+			
+			this.dirty = true;
+		}		
 		
 		return "";
 	}
@@ -233,21 +242,25 @@ public class EventFilterBean {
 	
 	public void removeStateFilter(ActionEvent ae) {
 		this.stateFilter = null;
+		this.dirty = true;
 	}
 	
 	public void removeEventTypeFilter(ActionEvent ae) {
 		this.eventTypeFilter = null;
+		this.dirty = true;
 	}
 	
 	public void removeDateRangeFilter(ActionEvent ae) {
 		this.datesEntered = false;
 		this.startDate = null;
 		this.endDate = null;
+		this.dirty = true;
 	}
 	
 	public void removeLocationFilter(ActionEvent ae) {
 		this.zipCode = null;
 		this.distance = -1;
+		this.dirty = true;
 	}
 
 	public State getStateFilterValue() {
@@ -262,4 +275,15 @@ public class EventFilterBean {
 		return new EventCriteria(stateFilter, eventTypeFilter, startDate, endDate, zipCode, distance);
 	}
 	
+	public boolean isDirty() {
+		return this.dirty;
+	}
+	
+	public void clean() {
+		this.dirty = false;
+	}
+
+	public void setDirty() {
+		this.dirty = true;
+	}
 }

@@ -6,7 +6,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:utils="http://java.sun.com/jsf/composite/utils">
 <ui:composition template="/WEB-INF/templates/site/main.xhtml">
 	<ui:define name="left">
 		<h:form id="filterForm">
@@ -186,22 +187,28 @@
 						rendered="#{UserSession.isLoggedIn}" />
 				</h:panelGroup>
 				<h:panelGroup style="float: right;">
-					<p:commandButton value="Calendar"
-						actionListener="#{EventStatusBean.setCalendar}"
+					<p:commandLink actionListener="#{EventStatusBean.setCalendar}"
 						disabled="#{EventStatusBean.isCalendarDisabled}"
-						update="@form :eventDisplay" />
+						update="@form :eventDisplay"
+						style="padding-right: 5px;">
+						<h:graphicImage library="images" name="Calendar.png" height="30" width="30" title="Calendar"/>
+					</p:commandLink>
 					<p:commandButton value="Timeline"
 						actionListener="#{EventStatusBean.setTimeline}"
 						disabled="#{EventStatusBean.isTimelineDisabled}"
-						update="@form :eventDisplay" />
-					<p:commandButton value="List"
-						actionListener="#{EventStatusBean.setList}"
+						update="@form :eventDisplay" 
+						rendered="false"/>
+					<p:commandLink actionListener="#{EventStatusBean.setList}"
 						disabled="#{EventStatusBean.isListDisabled}"
-						update="@form :eventDisplay" />
-					<p:commandButton value="Map"
-						actionListener="#{EventStatusBean.setMap}"
+						update="@form :eventDisplay"
+						style="padding-right: 5px;">
+						<h:graphicImage library="images" name="table.png" height="30" width="30" title="List"/>
+					</p:commandLink>
+					<p:commandLink actionListener="#{EventStatusBean.setMap}"
 						disabled="#{EventStatusBean.isMapDisabled}"
-						update="@form :eventDisplay" />
+						update="@form :eventDisplay">
+						<h:graphicImage library="images" name="Maps.png" height="30" width="30" title="Map"/>
+					</p:commandLink>
 				</h:panelGroup>
 			</h:form>
 		</h:panelGroup>
@@ -212,10 +219,10 @@
 					rendered="#{EventStatusBean.isCalendarDisabled}" view="month"
 					draggable="false" resizeable="false" editable="true">
 					<p:ajax event="eventSelect"
-						listener="#{EventScheduleBean.setEventSelection}" />
+						listener="#{EventScheduleBean.setEventSelection}" update="eventDetails" oncomplete="eventDialog.show()"/>
 				</p:schedule>
 				<p:dataTable id="dataTable" var="event"
-					value="#{EventScheduleBean.lazyModel}" paginator="true" rows="10"
+					value="#{EventScheduleBean.events}" paginator="true" rows="10"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					rowsPerPageTemplate="5,10,15"
 					rendered="#{EventStatusBean.isListDisabled}">
@@ -234,7 +241,7 @@
 							<f:param name="id" value="#{event.eventSeqId}" />
 						</h:commandLink>
 					</p:column>
-					<p:column>
+					<p:column rendered="false">
 						<f:facet name="header">
 							<h:outputText value="Type" />
 						</f:facet>
@@ -282,8 +289,7 @@
 						<p:ajax event="overlaySelect"
 							listener="#{EventScheduleBean.onMarkerSelect}" />
 						<p:gmapInfoWindow>
-							<h:outputText value="#{EventScheduleBean.marker.data}" />
-							<h:outputText value="#{EventScheduleBean.marker.title}" />
+							<utils:eventSummary event="#{EventScheduleBean.marker.data}"/>							
 						</p:gmapInfoWindow>
 					</p:gmap>
 					<h:panelGroup style="width: 100%; vertical-align: top;">
@@ -291,6 +297,14 @@
 							value="Note: Map displays the next 30 days by default unless filtered on the left." />
 					</h:panelGroup>
 				</h:panelGrid>
+
+				<p:dialog widgetVar="eventDialog" header="Event Details"
+					showEffect="clip" hideEffect="clip">
+					<h:panelGrid id="eventDetails" columns="1">
+						<utils:eventSummary event="#{EventScheduleBean.event}"/>
+						<p:commandButton value="Close" oncomplete="eventDialog.hide();" />
+					</h:panelGrid>
+				</p:dialog>
 			</h:form>
 		</h:panelGroup>
 	</ui:define>
