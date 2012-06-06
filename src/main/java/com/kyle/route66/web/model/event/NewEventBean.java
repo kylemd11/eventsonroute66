@@ -92,6 +92,8 @@ public class NewEventBean {
 	private String dateTimeFormat = "MM/dd/yyyy hh:mm a";
 	private String dateFormat = "MM/dd/yyyy";
 
+	private boolean editFlag = false;
+
 	public List<EventType> getEventTypes() {
 		return eventTypeRepository.findAll();
 	}
@@ -232,6 +234,7 @@ public class NewEventBean {
 		this.event.setCity("");
 		this.event.setStateCd("IL");
 		this.event.setZipCode("");
+		this.event.setSummary("");
 		this.event.setContent("");
 		this.event.setEventTypeCd("PU");
 		this.event.setLatitude(BigDecimal.ZERO);
@@ -255,31 +258,43 @@ public class NewEventBean {
 		this.event.setLatitude(null);
 		this.event.setLongitude(null);
 		
+		this.event.setLockedBy(session.getUserAccount().getUsername());
+		this.event.setLockedDate(new Date());
+		
 		isNew = true;
+		this.editFlag = true;
 	}
 	
 	public void save(ActionEvent ae) {
 	}
 	
 	public String save() {
-		final Geocoder geocoder = new Geocoder();
-		GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(getEventAddress()).setLanguage("en").getGeocoderRequest();
-		GeocodeResponse geocode = geocoder.geocode(geocoderRequest);
+		Event event = eventRepository.findByEventSeqId(this.event.getEventSeqId());
 		
-		this.event.setLatitude(geocode.getResults().get(0).getGeometry().getLocation().getLat());
-		this.event.setLongitude(geocode.getResults().get(0).getGeometry().getLocation().getLng());
-		
-		log.debug(this.event.getLatitude() + ":" + this.event.getLongitude());
-		
-		this.event.setIsNew(false);
-		
-		if(!session.getIsModerator()) {
-			this.event.setEventStatusCd("P");
+		if(!event.isLocked() || event.getLockedBy().equals(session.getUserAccount().getUsername())) {
+			final Geocoder geocoder = new Geocoder();
+			GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(getEventAddress()).setLanguage("en").getGeocoderRequest();
+			GeocodeResponse geocode = geocoder.geocode(geocoderRequest);
+			
+			this.event.setLatitude(geocode.getResults().get(0).getGeometry().getLocation().getLat());
+			this.event.setLongitude(geocode.getResults().get(0).getGeometry().getLocation().getLng());
+			
+			this.event.setIsNew(false);
+			
+			if(!session.getIsModerator()) {
+				this.event.setEventStatusCd("P");
+			}
+			
+			this.event.setLockedDate(null);
+			this.event.setLockedBy("");
+			
+			this.eventRepository.save(this.event);
+			return "events";
 		}
-		
-		this.eventRepository.save(this.event);
-		
-		return "events";
+		else {
+			this.event = event;
+			return "";
+		}
 	}
 	
 	public String delete() {
@@ -328,8 +343,23 @@ public class NewEventBean {
 		this.event = eventRepository.findByEventSeqId(Integer
 				.valueOf((String) params.get("id")));
 		
+		if(!this.event.isLocked() || (this.event.isLocked() && this.event.getLockedBy().equals(session.getUserAccount().getUsername()))) {
+			this.event.setLockedBy(session.getUserAccount().getUsername());
+			this.event.setLockedDate(new Date());
+			this.editFlag = true;
+			
+			this.eventRepository.save(this.event);
+		}
+		else {
+			this.editFlag = false;
+		}
+		
 		isNew = false;
 
 		return "new_event";
+	}
+	
+	public boolean getCanEdit() {
+		return this.editFlag;
 	}
 }

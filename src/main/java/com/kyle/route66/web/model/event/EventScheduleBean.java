@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.event.ActionEvent;
+import javax.faces.model.SelectItem;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -32,7 +33,11 @@ import org.springframework.stereotype.Service;
 
 import com.kyle.route66.db.dao.EventDao;
 import com.kyle.route66.db.dao.EventRepository;
+import com.kyle.route66.db.dao.EventStatusRepository;
+import com.kyle.route66.db.dao.StateRepository;
 import com.kyle.route66.db.model.Event;
+import com.kyle.route66.db.model.EventStatus;
+import com.kyle.route66.db.model.State;
 import com.kyle.route66.service.EventService;
 import com.kyle.route66.service.model.EventCriteria;
 import com.kyle.route66.web.model.user.UserSession;
@@ -52,17 +57,26 @@ public class EventScheduleBean {
 	private EventRepository eventRepository;
 	
 	@Autowired
+	private EventStatusRepository eventStatusRepository;
+	
+	@Autowired
+	private StateRepository stateRepository;
+	
+	@Autowired
 	private UserSession session;
-
 	
 	
 	private EventCriteria criteria = null;
 	private MapModel advancedModel = null;
 	
+	
 	private ScheduleModel scheduleModel = null;
+	private Date scheduleDate = new Date();
+	private Route66LazyModel<Event> lazyModel = null;
 	
 	private Event event;
 	private Marker marker;
+	
 
 	public ScheduleModel getEventModel() {
 		if (filter.isDirty() || scheduleModel == null) {
@@ -83,6 +97,8 @@ public class EventScheduleBean {
 						addEvent(new DefaultScheduleEvent(event.getTitle(),
 								event.getStartDtg(), event.getEndDtg(), event));
 					}
+					
+					scheduleDate = calculateScheduleDate(start);
 				}
 			};
 			
@@ -93,53 +109,94 @@ public class EventScheduleBean {
 	}
 	
 	public LazyDataModel<Event> getLazyModel() { 
-		LazyDataModel<Event> lazyModel = new LazyDataModel<Event>() {
-
-			@Override
-			public void setRowIndex(final int rowIndex) {
-				if (rowIndex == -1 || getPageSize() == 0) {
-					super.setRowIndex(-1);
-				} else {
-					super.setRowIndex(rowIndex % getPageSize());
-				}
-			}
-			
-			@Override
-			public Event getRowData(String rowKey) {
-				return eventRepository.findByEventSeqId(Integer.parseInt(rowKey));
-			}
-
-			@Override
-			public Object getRowKey(Event evt) {
-				return evt.getEventSeqId();
-			}
-
-			@Override
-			public int getRowCount() {
-				EventCriteria searchCriteria = filter.getSearchCriteria();
-				return eventService.getEvents(searchCriteria, session.getIsModerator()).size();
-			}
-
-			@Override
-			public List<Event> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
-				EventCriteria searchCriteria = filter.getSearchCriteria();
-				
-				searchCriteria.setFirst(first);
-				searchCriteria.setPageSize(pageSize);	
-				
-				log.debug("first: " + first);
-				log.debug("pageSize: " + pageSize);
-				
-				if(session.isLoggedIn()) {
-					searchCriteria.setUsername(session.getUserAccount().getUsername());
+		if(filter.isDirty() || lazyModel == null) {
+			lazyModel = new Route66LazyModel<Event>() {
+	
+				@Override
+				public void setRowIndex(final int rowIndex) {
+					if (rowIndex == -1 || getPageSize() == 0) {
+						super.setRowIndex(-1);
+					} else {
+						super.setRowIndex(rowIndex % getPageSize());
+					}
 				}
 				
-				return eventService.getEvents(searchCriteria, session.getIsModerator());
-			}
+				@Override
+				public Event getRowData(String rowKey) {
+					return eventRepository.findByEventSeqId(Integer.parseInt(rowKey));
+				}
+	
+				@Override
+				public Object getRowKey(Event evt) {
+					return evt.getEventSeqId();
+				}
+	
+				@Override
+				public int getRowCount() {
+					EventCriteria searchCriteria = filter.getSearchCriteria();
+					return eventService.getEvents(searchCriteria, session.getIsModerator()).size();
+				}
+	
+				@Override
+				public List<Event> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+					EventCriteria searchCriteria = filter.getSearchCriteria();
+					
+					searchCriteria.setFirst(first);
+					searchCriteria.setPageSize(pageSize);	
+					
+					log.debug("first: " + first);
+					log.debug("pageSize: " + pageSize);
+					log.debug("filters: " + filters);
+					
+					if(filters.containsKey("eventStatus")) {
+						searchCriteria.setEventStatus(filters.get("eventStatus"));
+					}
+					
+					if(filters.containsKey("state")) {
+						searchCriteria.setState(stateRepository.findOne(filters.get("state")));
+					}
+					
+					if (session.isLoggedIn()) {
+						log.debug("username: " + getUsername());
+						searchCriteria.setUsername(getUsername());
+					}
+					
+					return eventService.getEvents(searchCriteria, session.getIsModerator());
+				}
+			};
 			
-		};
+			if (session.isLoggedIn()) {
+				lazyModel.setUsername(session.getUserAccount().getUsername());
+			}
+		
+		filter.clean();
+		}
 		
         return lazyModel;  
+    }
+	
+	public SelectItem[] getStatusOptions()  {  
+		List<SelectItem> options = new ArrayList<SelectItem>();
+  
+		options.add(new SelectItem("", "Select"));  
+        
+        for(EventStatus status : eventStatusRepository.findAll()) {
+        	options.add(new SelectItem(status.getCode(), status.getDescription()));
+        }
+        
+        return options.toArray(new SelectItem[0]);  
+    } 
+	
+	public SelectItem[] getStateOptions()  {  
+		List<SelectItem> options = new ArrayList<SelectItem>();
+  
+		options.add(new SelectItem("", "Select"));  
+        
+        for(State state : stateRepository.findAll()) {
+        	options.add(new SelectItem(state.getCode(), state.getName()));
+        }
+        
+        return options.toArray(new SelectItem[0]);  
     }
 
 	public List<Event> getEvents() {
@@ -194,6 +251,10 @@ public class EventScheduleBean {
 		return advancedModel;
 	}
 	
+	public Date getScheduleDate() {
+		return scheduleDate;
+	}
+
 	public void setEventSelection(ScheduleEntrySelectEvent selectEvent) {
 		log.debug("setEventSelection()");
 		ScheduleEvent event = selectEvent.getScheduleEvent();
@@ -247,6 +308,35 @@ public class EventScheduleBean {
 	public void setEventRepository(EventRepository eventRepository) {
 		this.eventRepository = eventRepository;
 	}
+
+	public void setEventStatusRepository(EventStatusRepository eventStatusRepository) {
+		this.eventStatusRepository = eventStatusRepository;
+	}
+
+	public void setStateRepository(StateRepository stateRepository) {
+		this.stateRepository = stateRepository;
+	}
+
+	private Date calculateScheduleDate(Date scheduleStartDate) {
+		return DateUtils.setDays(DateUtils.addMonths(scheduleStartDate, 1), 1);
+	}
 	
-	
+	private abstract class Route66LazyModel<T> extends LazyDataModel<T> {
+		private String username;
+		
+		
+		
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		
+		public String getUsername() {
+			return this.username;
+		}
+
+
+
+		@Override
+		public abstract List<T> load(int arg0, int arg1, String arg2, SortOrder arg3,Map<String, String> arg4);
+	}
 }

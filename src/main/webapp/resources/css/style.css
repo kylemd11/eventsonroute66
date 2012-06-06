@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 html, body {
-	height: 99%;
+	height: 98%;
 	background-color: #CCCCCC;
 	font-family: Verdana,Arial,sans-serif;
 }
@@ -61,10 +61,34 @@ body:before {
 	padding-right: 5px;
 }
 
+.leftFrontPageColumn {
+	vertical-align: top;
+	width: 305px;
+	padding-right: 5px;
+}
+
+.leftNewEventColumn {
+	vertical-align: top;
+	width: 375px;
+	padding-right: 5px;
+}
+
 .centerEventColumn {
 	vertical-align: top;
 	width: 1020px;
 	padding-right: 5px;
+}
+
+.centerLoginColumn {
+	vertical-align: top;
+	width: 100%;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.oneLeftColumn {
+	width: 100%;
+	text-align: left;
 }
 
 .twoColumn {
@@ -89,6 +113,29 @@ body:before {
 
 .alignTopColumn {
 	vertical-align: top;
+}
+
+.upcomingDate {
+	width: 75px;
+	text-align: left;
+}
+
+.upcomingTitle {
+	width: 105px;
+	text-align: left;
+}
+
+.upcomingState {
+	width: 50px;
+	text-align: left;
+}
+
+.blueRow {
+	background-color: blue;
+}
+
+.greenRow { 
+	background-color: green;
 }
 
 .headerLink {

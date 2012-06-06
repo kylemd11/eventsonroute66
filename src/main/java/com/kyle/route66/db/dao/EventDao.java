@@ -29,6 +29,8 @@ public class EventDao {
 	public List<Event> getEvents(EventCriteria criteria, boolean isModerator) {
 		boolean multiple = false;
 		
+		log.debug("user: " + criteria.getUsername());
+		
 		String sql = "select e from Event e where ";
 
 		if (criteria.getState() != null) {
@@ -64,6 +66,10 @@ public class EventDao {
 			
 			if(isModerator) {
 				sql += "e.isNew = false ";
+				
+				if(criteria.getEventStatus() != null) {
+					sql += " and e.eventStatusCd = :eventStatus ";
+				}
 			}
 			else {
 				sql += "(e.eventStatusCd = 'A' or (e.username = :username and e.isNew = false)) ";
@@ -108,6 +114,10 @@ public class EventDao {
 		
 		if(criteria.getUsername() != null && !isModerator) {
 			query.setParameter("username", criteria.getUsername());
+		}
+		
+		if(criteria.getUsername() != null && isModerator && criteria.getEventStatus() != null) {
+			query.setParameter("eventStatus", criteria.getEventStatus());
 		}
 
 		return (List<Event>)query.getResultList();

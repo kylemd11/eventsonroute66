@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:p="http://primefaces.org/ui">
+<h:body>
+	<composite:interface />
+	<composite:implementation>
+		<h:form  style="width: 305px;">
+			<p:dataList value="#{UpcomingEventsBean.lazyModel}" var="event"
+				paginator="true" rows="20" effectSpeed="fast"
+				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="20" type="none" style="width: 305px;" paginatorPosition="bottom">
+
+				<f:facet name="header">
+                Upcoming Events
+            </f:facet>
+
+				<p:column >
+					<h:panelGrid style="width: 305px;padding: 5px;" columns="3" columnClasses="upcomingDate, upcomingTitle, upcomingState">
+					
+					<h:outputText value="#{event.startDtg}" style="width:">
+						<f:convertDateTime pattern="MM/dd/yyyy" />
+					</h:outputText>
+					<h:commandLink action="#{EventBean.showEvent}"
+						value="#{event.title}" title="#{event.summary}">
+						<f:param name="id" value="#{event.eventSeqId}" />
+					</h:commandLink>
+					<h:outputText  value="#{event.state.name}"/>
+					</h:panelGrid>
+				</p:column>
+			</p:dataList>
+		</h:form>
+	</composite:implementation>
+</h:body>
+</html>

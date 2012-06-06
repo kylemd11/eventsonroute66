@@ -31,8 +31,9 @@ public class ImageServlet implements HttpRequestHandler {
 		String[] split = req.getRequestURI().split("/");
 
 		try {
+			log.debug(split[2] + ":" + split[3]);
 			ArticleImage image = this.imageDao.getImage(
-					Integer.parseInt(split[3]), URLDecoder.decode(split[4],"UTF-8"));
+					Integer.parseInt(split[2]), URLDecoder.decode(split[3],"UTF-8"));
 
 			if (image != null) {
 				res.setContentType("image/gif");

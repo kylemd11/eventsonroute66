@@ -6,8 +6,12 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-<ui:composition template="/WEB-INF/templates/site/main.xhtml">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:utils="http://java.sun.com/jsf/composite/utils">
+<ui:composition template="/WEB-INF/templates/site/frontpage.xhtml">
+	<ui:define name="left">
+		<utils:upcomingEvents/>
+	</ui:define>
 	<ui:define name="center">
 		<h:outputText value="Center Main Event Content" />
 	</ui:define>

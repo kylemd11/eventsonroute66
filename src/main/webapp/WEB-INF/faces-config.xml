@@ -47,8 +47,20 @@
    <to-view-id>/events.xhtml</to-view-id>
   </navigation-case>
   <navigation-case>
+   <from-outcome>moderator_events</from-outcome>
+   <to-view-id>/moderator/events.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
    <from-outcome>new_event</from-outcome>
    <to-view-id>/newEvent.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>links</from-outcome>
+   <to-view-id>/links.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>moderator_links</from-outcome>
+   <to-view-id>/moderator/links.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  
@@ -70,6 +82,14 @@
  
  <navigation-rule>
   <from-view-id>/events.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>success</from-outcome>
+   <to-view-id>/event.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ 
+ <navigation-rule>
+  <from-view-id>/index.xhtml</from-view-id>
   <navigation-case>
    <from-outcome>success</from-outcome>
    <to-view-id>/event.xhtml</to-view-id>

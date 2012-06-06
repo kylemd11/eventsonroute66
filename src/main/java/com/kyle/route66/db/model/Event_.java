@@ -7,7 +7,7 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="Dali", date="2012-04-18T14:33:43.159-0500")
+@Generated(value="Dali", date="2012-06-01T19:35:12.845-0500")
 @StaticMetamodel(Event.class)
 public class Event_ {
 	public static volatile SingularAttribute<Event, Integer> eventSeqId;
@@ -21,9 +21,12 @@ public class Event_ {
 	public static volatile SingularAttribute<Event, String> stateCd;
 	public static volatile SingularAttribute<Event, String> zipCode;
 	public static volatile SingularAttribute<Event, String> content;
+	public static volatile SingularAttribute<Event, String> summary;
 	public static volatile SingularAttribute<Event, String> eventTypeCd;
 	public static volatile SingularAttribute<Event, Date> createDtg;
 	public static volatile SingularAttribute<Event, Date> updateDtg;
+	public static volatile SingularAttribute<Event, String> lockedBy;
+	public static volatile SingularAttribute<Event, Date> lockedDate;
 	public static volatile SingularAttribute<Event, BigDecimal> latitude;
 	public static volatile SingularAttribute<Event, BigDecimal> longitude;
 	public static volatile SingularAttribute<Event, Boolean> isNew;

@@ -22,7 +22,9 @@
 						<h:commandLink action="home" value="Home" title="Home"
 							actionListener="#{StatusBean.setHome}" styleClass="headerLink #{StatusBean.homeStyleClass}" />
 						<f:verbatim>&nbsp;</f:verbatim>
-						<h:commandLink action="events" value="Events" title="Events"
+						<h:commandLink action="events" value="Events" title="Events" rendered="#{UserSession.isUser or !UserSession.isLoggedIn}"
+							actionListener="#{StatusBean.setEvents}" styleClass="headerLink #{StatusBean.eventsStyleClass}" />
+						<h:commandLink action="moderator_events" value="Events" title="Events" rendered="#{UserSession.isModerator}"
 							actionListener="#{StatusBean.setEvents}" styleClass="headerLink #{StatusBean.eventsStyleClass}" />
 						<f:verbatim>&nbsp;</f:verbatim>
 						<h:commandLink action="history" value="History" title="History"

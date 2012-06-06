@@ -12,7 +12,7 @@
 		<h:form>
 			<p:fileUpload fileUploadListener="#{NewEventBean.handleFileUpload}"
 				mode="advanced" multiple="true" auto="true" update="dataTable"
-				allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+				allowTypes="/(\.|\/)(gif|jpe?g|png)$/" disabled="#{!NewEventBean.canEdit}"/>
 			
 			<p:dataTable id="dataTable" var="image"
 				value="#{NewEventBean.images}">
@@ -22,7 +22,7 @@
 					</f:facet>
 					<p:lightBox>
 						<h:outputLink
-							value="/route66/image/#{NewEventBean.event.eventSeqId}/#{image.image.name}"
+							value="/image/#{NewEventBean.event.eventSeqId}/#{image.image.name}"
 							title="#{image.image.name}">
 							<h:graphicImage
 								value="/image/#{NewEventBean.event.eventSeqId}/#{image.image.name}"
@@ -32,20 +32,21 @@
 					<h:outputText value="#{image.image.prettySize}"
 						style="display: block;" />
 					<h:outputText
-						value="/route66/image/#{NewEventBean.event.eventSeqId}/#{image.image.encodedName}" />
+						value="/image/#{NewEventBean.event.eventSeqId}/#{image.image.encodedName}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
 						<h:outputText value="Action" />
 					</f:facet>
-					<p:commandLink value="Delete" action="#{NewEventBean.deleteImage}"
-						update="@form" ajax="true">
+					<p:commandLink action="#{NewEventBean.deleteImage}"
+						update="@form" ajax="true" disabled="#{!NewEventBean.canEdit}">
 						<f:param name="imageSeqId"
 							value="#{image.image.articleImageSeqId}" />
+							<h:graphicImage library="images" name="cancel.png" height="16"
+							width="16" style="padding-right: 5px;" title="Remove" />
 					</p:commandLink>
 				</p:column>
 			</p:dataTable>
-			<h:outputText value="Instructions: " />
 		</h:form>
 	</ui:define>
 	<ui:define name="center">
@@ -53,6 +54,9 @@
 			<h:outputText
 				style="font-weight: bold; font-size: 16pt; border-bottom: 2px solid black;"
 				value="Create New Event" />
+			<h:panelGroup rendered="#{!NewEventBean.canEdit}" style="padding-top: 5px; margin-top: 5px;">
+				<h:graphicImage library="images" name="lock.png" height="14" width="14" title="Calendar"/><h:outputText value=" Locked By: #{NewEventBean.event.lockedBy}" style="font-size: 14px;"/>
+			</h:panelGroup>	
 			<h:form>
 				<p:blockUI block="generalField" trigger="allDayInput">					
         			<p:graphicImage value="/images/ajax-loader.gif"/>  
@@ -66,10 +70,10 @@
 								<h:outputLabel value="Title:" for="titleInput" />
 							</h:panelGroup>
 							<p:inputText id="titleInput" value="#{NewEventBean.event.title}"
-								required="true" requiredMessage="Required" />
+								required="true" requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
 							<p:message for="titleInput" />
 							<h:outputText value="All Day Event?"/>
-							<p:selectBooleanCheckbox id="allDayInput" value="#{NewEventBean.event.allDay}" immediate="true">
+							<p:selectBooleanCheckbox id="allDayInput" value="#{NewEventBean.event.allDay}" immediate="true" disabled="#{!NewEventBean.canEdit}">
 								<p:ajax update="startDateInput endDateInput"/>
 							</p:selectBooleanCheckbox>  
 							<h:outputText value=""/>
@@ -80,7 +84,7 @@
 							<p:calendar value="#{NewEventBean.event.startDtg}"
 								showOn="button" maxlength="20" size="20" id="startDateInput"
 								pattern="#{NewEventBean.dateFormat}" required="true"
-								requiredMessage="Required" />
+								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
 							<p:message for="startDateInput" />
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -89,14 +93,14 @@
 							<p:calendar value="#{NewEventBean.event.endDtg}" showOn="button"
 								maxlength="20" size="20" id="endDateInput"
 								pattern="#{NewEventBean.dateFormat}" required="true"
-								requiredMessage="Required" />
+								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
 							<p:message for="endDateInput" />
 							<h:outputLabel for="typeInput" value="Type:" rendered="false"/>
 							<p:selectOneMenu id="typeInput"
 								value="#{NewEventBean.event.eventTypeCd}" required="true"
 								requiredMessage="Required"
 								validator="#{NewEventBean.validateNotEmpty}"
-								 rendered="false">
+								 rendered="false" disabled="#{!NewEventBean.canEdit}">
 								<f:selectItem itemLabel="Select..." itemValue="NONE" />
 								<f:selectItems value="#{NewEventBean.eventTypes}"
 									var="eventType" itemLabel="#{eventType.description}"
@@ -107,12 +111,16 @@
 							<p:selectOneMenu id="statusInput"
 								value="#{NewEventBean.event.eventStatusCd}" required="true"
 								requiredMessage="Required"
-								validator="#{NewEventBean.validateNotEmpty}" rendered="#{UserSession.isModerator}">
+								validator="#{NewEventBean.validateNotEmpty}" rendered="#{UserSession.isModerator}" disabled="#{!NewEventBean.canEdit}">
 								<f:selectItems value="#{NewEventBean.statusCodeTypes}"
 									var="status" itemLabel="#{status.description}"
-									itemValue="#{status.code}" />
+									itemValue="#{status.code}"/>
 							</p:selectOneMenu>
 							<p:message for="statusInput" rendered="#{UserSession.isModerator}"/>
+							<h:outputLabel for="summaryInput" value="Summary:" />
+							<p:inputText id="summaryInput"
+								value="#{NewEventBean.event.summary}" disabled="#{!NewEventBean.canEdit}"/>
+							<p:message for="summaryInput"/>
 						</h:panelGrid>
 					</p:fieldset>
 					<p:fieldset legend="Address">
@@ -123,18 +131,18 @@
 							</h:panelGroup>
 							<p:inputText id="address1Input"
 								value="#{NewEventBean.event.address1}" required="true"
-								requiredMessage="Required" />
+								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
 							<p:message for="address1Input" />
 							<h:outputLabel for="address2Input" value="Address 2:" />
 							<p:inputText id="address2Input"
-								value="#{NewEventBean.event.address2}" />
-							<p:message for="address2Input" />
+								value="#{NewEventBean.event.address2}" disabled="#{!NewEventBean.canEdit}"/>
+							<p:message for="address2Input"/>
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="cityInput" value="City:" />
 							</h:panelGroup>
 							<p:inputText id="cityInput" value="#{NewEventBean.event.city}"
-								required="true" requiredMessage="Required" />
+								required="true" requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
 							<p:message for="cityInput" />
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -143,7 +151,7 @@
 							<p:selectOneMenu id="stateInput"
 								value="#{NewEventBean.event.stateCd}" required="true"
 								requiredMessage="Required"
-								validator="#{NewEventBean.validateNotEmpty}">
+								validator="#{NewEventBean.validateNotEmpty}" disabled="#{!NewEventBean.canEdit}">
 								<f:selectItem itemLabel="Select..." itemValue="NONE" />
 								<f:selectItems value="#{NewEventBean.states}" var="state"
 									itemLabel="#{state.name}" itemValue="#{state.code}" />
@@ -154,7 +162,7 @@
 							<h:outputLabel for="zipInput" value="Zip Code:" />
 							</h:panelGroup>
 							<p:inputMask  id="zipInput" value="#{NewEventBean.event.zipCode}"
-								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999"/>
+								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999" disabled="#{!NewEventBean.canEdit}"/>
 							<p:message for="zipInput" />
 						</h:panelGrid>
 					</p:fieldset>
@@ -178,7 +186,7 @@
 						</p:panel>
 					<p:editor id="editor" value="#{NewEventBean.event.content}"
 						required="true" requiredMessage="Required"
-						style="width: 100%; text-align: center;" />
+						style="width: 100%; text-align: center;"  disabled="#{!NewEventBean.canEdit}"/>
 				</h:panelGrid>				
 				<h:panelGrid columns="2" style="width: 100%;">
 						<h:panelGroup style="float: left; display: inline;">
@@ -186,7 +194,7 @@
 								ajax="true" oncomplete="eventDialog.show()" update=":eventPreviewDialog"/>
 						</h:panelGroup>
 						<h:panelGroup style="float: right;">
-							<p:commandButton value="Submit" action="#{NewEventBean.save}" ajax="false" />
+							<p:commandButton value="Submit" action="#{NewEventBean.save}" ajax="false" disabled="#{!NewEventBean.canEdit}"/>
 							<p:commandButton value="Cancel" immediate="true" action="#{NewEventBean.delete}" ajax="false" />
 						</h:panelGroup>
 				</h:panelGrid>

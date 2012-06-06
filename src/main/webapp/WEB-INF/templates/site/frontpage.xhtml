@@ -10,13 +10,19 @@
 <h:head id="head">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>www.eventsonroute66.com</title>
-	<h:outputStylesheet library="css" name="pf-override.css"  />
-	<h:outputStylesheet library="css" name="style.css"  />
-	<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+	<h:outputStylesheet library="css" name="pf-override.css" />
+	<h:outputStylesheet library="css" name="style.css" />
+	<script src="http://maps.google.com/maps/api/js?sensor=false"
+		type="text/javascript"></script>
+	<!--[if !IE 7]>
+	<style type="text/css">
+		#wrap {display:table;height:100%}
+	</style>
+<![endif]-->
 </h:head>
 <h:body id="body">
 	<f:view contentType="text/html">
-			<h:panelGroup
+		<h:panelGroup
 			style="height: 100%; width: 1280px; margin: auto; display: block; box-shadow: 0px 0px 5px 5px #333333;">
 			<h:panelGroup id="wrap" style="display: block;">
 				<h:panelGroup id="header"
@@ -26,7 +32,10 @@
 				<h:panelGroup id="main"
 					style="height: 100%; width: 100%; display: block">
 					<h:panelGrid columns="2" style="width: 100%; height: 100%;"
-						columnClasses="centerLoginColumn">						
+						columnClasses="leftFrontPageColumn, centerEventColumn">
+						<h:panelGroup style="height: 100%; width: 375px;">
+							<ui:insert name="left">Left Template Content</ui:insert>
+						</h:panelGroup>
 						<h:panelGroup style="height: 100%; width: 100%;">
 							<ui:insert name="center">Center Template Content</ui:insert>
 						</h:panelGroup>

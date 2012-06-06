@@ -49,19 +49,13 @@ public class EventService {
 	}
 	
 	public List<Event> getEvents(EventCriteria criteria, boolean isModerator) {
+		if(isModerator) {
+			log.debug("MODERATOR!!!!");
+		}
 		List<Event> events;
 		
-		//if(criteria.getState() != null || criteria.getEventType() != null || criteria.getStartDate() != null || criteria.getEndDate() != null  || criteria.getUsername() != null) {
-			events = eventDao.getEvents(criteria, isModerator);
-		//}
-		//else {
-		//	events = getEvents();
-		//}
+		events = eventDao.getEvents(criteria, isModerator);
 		
-			log.debug("events: " + events.size());
-			
-			log.debug("zipCode: " + criteria.getZipCode());
-			log.debug("distance: " + criteria.getDistance());
 		if(criteria.getZipCode() != null && criteria.getDistance() != null) {
 			return distanceService.filterEventsByDistance(events, criteria);
 		}

@@ -15,6 +15,7 @@ public class EventCriteria {
 	private String username;
 	private Integer first = null;
 	private Integer pageSize = null;
+	private String eventStatus;
 	
 	public EventCriteria(State state, EventType eventType, Date startDate,
 			Date endDate, String zipCode, Integer distance) {
@@ -27,6 +28,10 @@ public class EventCriteria {
 		this.distance = distance;
 	}
 	
+	public EventCriteria() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public State getState() {
 		return state;
 	}
@@ -167,6 +172,13 @@ public class EventCriteria {
 			return false;
 		return true;
 	}
+
+	public void setEventStatus(String eventStatus) {
+		this.eventStatus = eventStatus;
+	}
 	
+	public String getEventStatus() {
+		return this.eventStatus;
+	}
 	
 }

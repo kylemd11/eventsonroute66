@@ -50,6 +50,11 @@ public class EventStatusBean {
 		filter.setDirty();
 	}
 	
+	public void setPending(ActionEvent ae) {
+		state = EventStateConstants.PENDING;
+		filter.setDirty();
+	}
+	
 	public boolean getIsCalendarDisabled() {
 		return state == EventStateConstants.CALENDAR;
 	}
@@ -64,6 +69,10 @@ public class EventStatusBean {
 	
 	public boolean getIsMapDisabled() {
 		return state == EventStateConstants.MAP;
+	}
+	
+	public boolean getIsPendingDisabled() {
+		return state == EventStateConstants.PENDING;
 	}
 
 	public void setFilter(EventFilterBean filter) {

@@ -18,6 +18,7 @@ public class UserSession {
 	
 	private boolean isModerator = false;
 	private boolean isAdmin = false;
+	private boolean isUser = false;
 	
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
@@ -47,6 +48,9 @@ public class UserSession {
 		else if(authority.getAuthority().equalsIgnoreCase(RoleConstants.ADMINISTRATOR)) {
 			this.isAdmin = true;
 		}
+		else {
+			this.isUser = true;
+		}
 	}
 
 	public UserAccount getUserAccount() {
@@ -59,6 +63,10 @@ public class UserSession {
 	
 	public boolean getIsAdmin()	{
 		return isAdmin;
+	}
+	
+	public boolean getIsUser()	{
+		return isUser;
 	}
 
 	public void setAuthoritiesRepository(AuthoritiesRepository authoritiesRepository) {

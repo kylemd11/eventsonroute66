@@ -7,11 +7,11 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<ui:composition template="/WEB-INF/templates/site/main.xhtml">
+<ui:composition template="/WEB-INF/templates/site/noLeft.xhtml">
 	<ui:define name="center">
 		<h:panelGrid columns="2" columnClasses="twoColumnCenter,twoColumnCenter" style="width: 100%;">
 		
-		<p:panel header="Login" style="width: 400px;">
+		<p:panel header="Login" style="width: 400px; margin: auto;">
 			<h:form id="loginForm">
 				<p:message for="loginForm" />
 				<h:panelGrid columns="3" style="width: 385px;">
@@ -30,7 +30,7 @@
 				</h:panelGrid>
 			</h:form>
 		</p:panel>
-		<p:panel header="New Members" style="width: 400px;">
+		<p:panel header="New Members" style="width: 400px; margin: auto;">
 			<h:form>
 					<p:commandButton value="Create new account" action="newAccount" ajax="false" />
 			</h:form>
