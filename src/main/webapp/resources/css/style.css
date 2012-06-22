@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 html, body {
-	height: 98%;
+	height: 99%;
 	background-color: #CCCCCC;
 	font-family: Verdana,Arial,sans-serif;
 }
@@ -81,9 +81,7 @@ body:before {
 
 .centerLoginColumn {
 	vertical-align: top;
-	width: 100%;
-	padding-right: 5px;
-	padding-left: 5px;
+	width: 100%;	
 }
 
 .oneLeftColumn {
@@ -157,6 +155,27 @@ A:hover.headerLink {
 A:link.headerLink.selected {
 	text-decoration: underline;
 }
+
+.loginLink {
+	/* text-shadow: 0 0 4px rgba(0, 0, 0, 0.3); */ 
+	font-size: 12px !important; 
+	color: #222222;
+	/* font-weight: bold; */
+	padding-right: 5px;
+}
+
+A:link.loginLink {
+	text-decoration: none;
+	color: #222222;
+}
+
+A:hover.loginLink {
+	color: #000000;
+	padding-right: 5px;
+	text-decoration: underline;
+}
+
+
 
 .calendar-icon {
 	background-image: url('/resources/images/calendar-icon.png') !important;

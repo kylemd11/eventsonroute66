@@ -58,7 +58,7 @@
 				<h:graphicImage library="images" name="lock.png" height="14" width="14" title="Calendar"/><h:outputText value=" Locked By: #{NewEventBean.event.lockedBy}" style="font-size: 14px;"/>
 			</h:panelGroup>	
 			<h:form>
-				<p:blockUI block="generalField" trigger="allDayInput">					
+				<p:blockUI block="generalField" trigger="allDayInput startDateInput endDateInput">					
         			<p:graphicImage value="/images/ajax-loader.gif"/>  
 				</p:blockUI>
 				<h:panelGrid columns="2" style="width: 100%;"
@@ -70,7 +70,9 @@
 								<h:outputLabel value="Title:" for="titleInput" />
 							</h:panelGroup>
 							<p:inputText id="titleInput" value="#{NewEventBean.event.title}"
-								required="true" requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
+								required="true" requiredMessage="Required" disabled="#{!NewEventBean.canEdit}">
+								<f:validateLength maximum="256" minimum="1"/>
+								</p:inputText>
 							<p:message for="titleInput" />
 							<h:outputText value="All Day Event?"/>
 							<p:selectBooleanCheckbox id="allDayInput" value="#{NewEventBean.event.allDay}" immediate="true" disabled="#{!NewEventBean.canEdit}">
@@ -84,7 +86,10 @@
 							<p:calendar value="#{NewEventBean.event.startDtg}"
 								showOn="button" maxlength="20" size="20" id="startDateInput"
 								pattern="#{NewEventBean.dateFormat}" required="true"
-								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
+								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"
+								mindate="#{NewEventBean.today}" maxdate="#{NewEventBean.event.endDtg}">
+								<p:ajax event="dateSelect" update="endDateInput" process="@this"/> 
+								</p:calendar>
 							<p:message for="startDateInput" />
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -93,7 +98,10 @@
 							<p:calendar value="#{NewEventBean.event.endDtg}" showOn="button"
 								maxlength="20" size="20" id="endDateInput"
 								pattern="#{NewEventBean.dateFormat}" required="true"
-								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
+								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"
+								mindate="#{NewEventBean.event.startDtg}">
+								<p:ajax event="dateSelect" update="startDateInput" process="@this"/>
+								</p:calendar>
 							<p:message for="endDateInput" />
 							<h:outputLabel for="typeInput" value="Type:" rendered="false"/>
 							<p:selectOneMenu id="typeInput"
@@ -119,7 +127,9 @@
 							<p:message for="statusInput" rendered="#{UserSession.isModerator}"/>
 							<h:outputLabel for="summaryInput" value="Summary:" />
 							<p:inputText id="summaryInput"
-								value="#{NewEventBean.event.summary}" disabled="#{!NewEventBean.canEdit}"/>
+								value="#{NewEventBean.event.summary}" disabled="#{!NewEventBean.canEdit}">
+								<f:validateLength maximum="200"/>
+								</p:inputText>
 							<p:message for="summaryInput"/>
 						</h:panelGrid>
 					</p:fieldset>
@@ -131,18 +141,24 @@
 							</h:panelGroup>
 							<p:inputText id="address1Input"
 								value="#{NewEventBean.event.address1}" required="true"
-								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
+								requiredMessage="Required" disabled="#{!NewEventBean.canEdit}">
+								<f:validateLength minimum="1" maximum="256"/>
+								</p:inputText>
 							<p:message for="address1Input" />
 							<h:outputLabel for="address2Input" value="Address 2:" />
 							<p:inputText id="address2Input"
-								value="#{NewEventBean.event.address2}" disabled="#{!NewEventBean.canEdit}"/>
+								value="#{NewEventBean.event.address2}" disabled="#{!NewEventBean.canEdit}">
+								<f:validateLength maximum="256"/>
+								</p:inputText>
 							<p:message for="address2Input"/>
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
 							<h:outputLabel for="cityInput" value="City:" />
 							</h:panelGroup>
 							<p:inputText id="cityInput" value="#{NewEventBean.event.city}"
-								required="true" requiredMessage="Required" disabled="#{!NewEventBean.canEdit}"/>
+								required="true" requiredMessage="Required" disabled="#{!NewEventBean.canEdit}">
+								<f:validateLength minimum="1" maximum="128"/>
+								</p:inputText>
 							<p:message for="cityInput" />
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -162,7 +178,9 @@
 							<h:outputLabel for="zipInput" value="Zip Code:" />
 							</h:panelGroup>
 							<p:inputMask  id="zipInput" value="#{NewEventBean.event.zipCode}"
-								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999" disabled="#{!NewEventBean.canEdit}"/>
+								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999-9999" disabled="#{!NewEventBean.canEdit}">
+								<f:validateLength minimum="5" maximum="10"/>
+								</p:inputMask>
 							<p:message for="zipInput" />
 						</h:panelGrid>
 					</p:fieldset>
@@ -190,13 +208,16 @@
 				</h:panelGrid>				
 				<h:panelGrid columns="2" style="width: 100%;">
 						<h:panelGroup style="float: left; display: inline;">
-							<p:commandButton value="Preview" actionListener="#{NewEventBean.save}"
+							<p:commandButton id="previewEvent" value="Preview" actionListener="#{NewEventBean.save}"
 								ajax="true" oncomplete="eventDialog.show()" update=":eventPreviewDialog"/>
 						</h:panelGroup>
-						<h:panelGroup style="float: right;">
-							<p:commandButton value="Submit" action="#{NewEventBean.save}" ajax="false" disabled="#{!NewEventBean.canEdit}"/>
-							<p:commandButton value="Cancel" immediate="true" action="#{NewEventBean.delete}" ajax="false" />
-						</h:panelGroup>
+						<h:panelGrid columns="2" style="float: right;">
+							<p:commandButton id="submitEvent" value="Submit" action="#{NewEventBean.save}" ajax="false" disabled="#{!NewEventBean.canEdit}"/>
+							<p:commandButton id="cancelEvent" value="Cancel" immediate="true" action="#{NewEventBean.delete}" ajax="false" />
+						</h:panelGrid>
+						<p:tooltip for="submitEvent" value="Save Event" showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="cancelEvent" value="Cancel Event" showEffect="fade" hideEffect="fade" />  
+						<p:tooltip for="previewEvent" value="Preview what event will look like." showEffect="fade" hideEffect="fade" />  
 				</h:panelGrid>
 			</h:form>
 		</h:panelGrid>

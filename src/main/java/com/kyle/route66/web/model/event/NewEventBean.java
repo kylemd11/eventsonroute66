@@ -248,7 +248,7 @@ public class NewEventBean {
 		log.debug("event: " + this.event.getEventSeqId());
 		
 		this.event.setTitle(null);
-		this.event.setStartDtg(null);
+		//this.event.setStartDtg(null);
 		this.event.setEndDtg(null);
 		this.event.setCity(null);
 		this.event.setStateCd(null);
@@ -361,5 +361,9 @@ public class NewEventBean {
 	
 	public boolean getCanEdit() {
 		return this.editFlag;
+	}
+	
+	public Date getToday() {
+		return new Date();
 	}
 }

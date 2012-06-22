@@ -25,8 +25,6 @@ import com.kyle.route66.web.model.user.UserSession;
 @Service("UpcomingEventsBean")
 @Scope("session")
 public class UpcomingEventsBean {
-	
-
 	private static final Log log = LogFactory.getLog(UpcomingEventsBean.class);
 
 	@Autowired
@@ -63,24 +61,29 @@ public class UpcomingEventsBean {
 				return evt.getEventSeqId();
 			}
 
-			@Override
-			public int getRowCount() {
-				EventCriteria searchCriteria = new EventCriteria();
-				searchCriteria.setStartDate(DateUtils.truncate(new Date(), Calendar.HOUR));
-				
-				return eventService.getEvents(searchCriteria, false).size();
-			}
+//			@Override
+//			public int getRowCount() {
+//				EventCriteria searchCriteria = new EventCriteria();
+//				searchCriteria.setStartDate(DateUtils.truncate(new Date(), Calendar.HOUR));
+//				
+//				return eventService.getEvents(searchCriteria, false).size();
+//			}
 
 			@Override
 			public List<Event> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
+				
 				EventCriteria searchCriteria = new EventCriteria();
 				
 				searchCriteria.setStartDate(DateUtils.truncate(new Date(), Calendar.HOUR));
+				
+				setRowCount(eventService.getEvents(searchCriteria, false).size());
+				
 				searchCriteria.setFirst(first);
 				searchCriteria.setPageSize(pageSize);	
 				
 				log.debug("first: " + first);
 				log.debug("pageSize: " + pageSize);
+				
 				
 				return eventService.getEvents(searchCriteria, false);
 			}

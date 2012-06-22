@@ -10,7 +10,7 @@
 <h:body>
 	<f:view contentType="text/html">
 		<h:panelGroup layout="block" style="width: 100%; height: 200px;">
-			<h:graphicImage library="images" name="banner.png" height="200" width="1280" />
+			<h:graphicImage library="images" name="banner.png" height="200" width="1260" />
 		</h:panelGroup>
 		<h:panelGroup layout="block" style="width: 100%; height: 40px; vertical-align: middle; background: url('/javax.faces.resource/images/ui-bg_highlight-soft_75_cccccc_1x100.png.jsf?ln=primefaces-smoothness') repeat-x scroll 50% 50% #CCCCCC;">
 			<h:form>
@@ -36,14 +36,16 @@
 					<h:commandLink action="startLogin" value="Login or Register"
 						style="float:right; padding-right: 5px;"
 						rendered="#{!StatusBean.isLogin and !UserSession.isLoggedIn}"
-						title="Login or Register" actionListener="#{StatusBean.setLogin}" styleClass="headerLink"/>
+						title="Login or Register" actionListener="#{StatusBean.setLogin}" styleClass="loginLink"/>
 					<h:panelGroup rendered="#{UserSession.isLoggedIn}"
 						style="float:right; padding-right: 5px;">
-						<h:commandLink value="#{UserSession.userAccount.username}"
-							action="accountSettings" title="Account Settings" styleClass="headerLink" />
-						<f:verbatim>&nbsp;&nbsp;</f:verbatim>
-						<h:commandLink action="#{LogoutBean.logout}" value="Logout"
-							rendered="#{UserSession.isLoggedIn}" title="Logout" styleClass="headerLink" />
+						<h:commandLink 
+							action="accountSettings" title="Account Settings" styleClass="loginLink">
+							<h:graphicImage library="images" name="account.png" height="16" width="16" />
+							<h:outputText value="#{UserSession.userAccount.username}" style="padding-left: 5px;"/>
+							</h:commandLink>
+						<h:commandLink action="#{LogoutBean.logout}" value="[logout]"
+							rendered="#{UserSession.isLoggedIn}" title="Logout" styleClass="loginLink" />
 					</h:panelGroup>
 					<h:outputText value=" " rendered="#{StatusBean.isLogin}" />
 				</h:panelGrid>

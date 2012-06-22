@@ -9,67 +9,80 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/site/noLeft.xhtml">
 	<ui:define name="center">
-		<h:panelGrid style="width: 100%; padding-top: 20px;"
-			columnClasses="oneLeftColumn" id="linksPanel">
-			<ui:repeat value="#{LinksBean.links}" var="link">
-				<h:panelGroup style="width: 100%; display: block;">
-				<h:outputLink value="#{link.url}" title="#{link.title}">
-					<h:outputText value="#{link.title}" />
-				</h:outputLink>
-				<h:panelGrid columns="2" style="float:right;" rendered="#{UserSession.isModerator}">
- 				<p:commandLink action="#{LinksBean.setLink}" update=":linkForm" oncomplete="linkDialog.show();">
-					<f:param name="linkSeqId" value="#{link.linkSeqId}" />
-					<h:graphicImage library="images" name="edit.png" height="16"
-								width="16" style="padding-right: 5px;" title="Edit"/>
-				</p:commandLink>
-				<p:commandLink action="#{LinksBean.setLink}" update=":deleteForm" oncomplete="confirmation.show();">
-					<f:param name="linkSeqId" value="#{link.linkSeqId}" />
-					<h:graphicImage library="images" name="cancel.png" height="16"
-								width="16" style="padding-right: 5px;" title="Delete"/>
-				</p:commandLink>
-				</h:panelGrid>
+
+		<p:dataList id="linksPanel" value="#{LinksBean.lazyModel}" var="link" paginator="true"
+			rows="20" effectSpeed="fast"
+			paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="20" type="none" paginatorPosition="bottom" rowIndexVar="RowIndex">
+
+			<p:column>
+				<h:panelGroup style="display: block; padding: 5px 5px 0px 5px;">
+					<h:outputLink value="#{link.url}" title="#{link.title}">
+						<h:outputText value="#{link.title}" />
+					</h:outputLink>
+					<h:panelGrid columns="2" style="float:right;"
+						rendered="#{UserSession.isModerator}">
+						<p:commandLink action="#{LinksBean.setLink}" update=":linkForm"
+							oncomplete="linkDialog.show();">
+							<f:param name="linkSeqId" value="#{link.linkSeqId}" />
+							<h:graphicImage library="images" name="edit.png" height="16"
+								width="16" style="padding-right: 5px;" title="Edit" />
+						</p:commandLink>
+						<p:commandLink action="#{LinksBean.setLink}" update=":deleteForm"
+							oncomplete="confirmation.show();">
+							<f:param name="linkSeqId" value="#{link.linkSeqId}" />
+							<h:graphicImage library="images" name="cancel.png" height="16"
+								width="16" style="padding-right: 5px;" title="Delete" />
+						</p:commandLink>
+					</h:panelGrid>
 				</h:panelGroup>
-				<h:outputText value="#{link.summary}"
-					style="padding-left: 15px; display: block; padding-bottom: 25px;"/>
-			</ui:repeat>			
-		</h:panelGrid>
+				<h:outputText value="#{link.summary}" style="display: block; padding: 3px 5px 0px 15px;" />
+				<p:separator rendered="#{RowIndex != 19 and RowIndex != (LinksBean.lazyModel.rowCount - 1)}"/>
+				<h:outputText value=" " style="display: block; padding-top: 4px;" rendered="#{RowIndex == 19 or RowIndex == (LinksBean.lazyModel.rowCount - 1)}"/>
+			</p:column>
+		</p:dataList>
 		<h:form>
-		<p:commandButton action="#{LinksBean.newLink}" value="New" style="float: right;" update=":linkForm" oncomplete="linkDialog.show();" ajax="true" rendered="#{UserSession.isModerator}"/>
+			<p:commandButton action="#{LinksBean.newLink}" value="New"
+				style="float: right;" update=":linkForm"
+				oncomplete="linkDialog.show();" ajax="true"
+				rendered="#{UserSession.isModerator}" />
 		</h:form>
 		<p:dialog widgetVar="linkDialog" header="Link Details"
 			showEffect="blind" hideEffect="blind" draggable="false"
-			resizable="false" modal="true" closable="false" rendered="#{UserSession.isModerator}">
+			resizable="false" modal="true" closable="false"
+			rendered="#{UserSession.isModerator}">
 			<h:form id="linkForm">
 				<h:inputHidden value="#{LinksBean.linkSeqId}" />
-				<h:panelGrid columns="3" columnClasses="alignTopColumn, alignTopColumn, alignTopColumn">
+				<h:panelGrid columns="3"
+					columnClasses="alignTopColumn, alignTopColumn, alignTopColumn">
 					<h:outputLabel for="titleInput" value="Title:" />
 					<p:inputText id="titleInput" value="#{LinksBean.title}"
 						required="true" requiredMessage="Required" />
 					<p:message for="titleInput" />
 					<h:outputLabel for="urlInput" value="URL:" />
-					<p:inputText id="urlInput" value="#{LinksBean.url}"
-						required="true" requiredMessage="Required" />
+					<p:inputText id="urlInput" value="#{LinksBean.url}" required="true"
+						requiredMessage="Required" />
 					<p:message for="urlInput" />
 					<h:outputLabel for="summaryInput" value="Summary:" />
 					<p:inputTextarea id="summaryInput" value="#{LinksBean.summary}"
-						required="false" maxlength="256" cols="30" rows="5"/>
+						required="false" maxlength="256" cols="30" rows="5" />
 					<p:message for="summaryInput" />
-					</h:panelGrid>					
-					<h:panelGrid style="float: right;" columns="2">
-						<p:commandButton value="Save" action="#{LinksBean.save}"
-							ajax="true" oncomplete="linkDialog.hide();" update=":linksPanel"/>
-						<p:commandButton value="Cancel" immediate="true" ajax="true"
-							oncomplete="linkDialog.hide();" />
-					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid style="float: right;" columns="2">
+					<p:commandButton value="Save" action="#{LinksBean.save}"
+						ajax="true" oncomplete="linkDialog.hide();" update=":linksPanel" />
+					<p:commandButton value="Cancel" immediate="true" ajax="true"
+						oncomplete="linkDialog.hide();" />
+				</h:panelGrid>
 			</h:form>
 		</p:dialog>
 		<p:confirmDialog id="confirmDialog" message="Are you sure?"
-			header="Delete Link" severity="alert" widgetVar="confirmation" rendered="#{UserSession.isModerator}">
+			header="Delete Link" severity="alert" widgetVar="confirmation"
+			rendered="#{UserSession.isModerator}">
 			<h:form id="deleteForm" style="text-align: right;">
 				<h:inputHidden value="#{LinksBean.linkSeqId}" />
 				<p:commandButton id="confirm" value="Yes"
-					oncomplete="confirmation.hide()"
-					 update=":linksPanel"
+					oncomplete="confirmation.hide()" update=":linksPanel"
 					action="#{LinksBean.delete}" />
 				<p:commandButton id="decline" value="No"
 					onclick="confirmation.hide()" type="button" />

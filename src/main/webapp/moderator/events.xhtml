@@ -208,13 +208,7 @@
 						update="@form :eventDisplay">
 						<h:graphicImage library="images" name="Maps.png" height="30"
 							width="30" title="Map" />
-					</p:commandLink>
-					<p:commandLink actionListener="#{EventStatusBean.setPending}"
-						disabled="#{EventStatusBean.isPendingDisabled}"
-						update="@form :eventDisplay">
-						<h:graphicImage library="images" name="pending.png" height="30"
-							width="50" title="Pending" />
-					</p:commandLink>
+					</p:commandLink>					
 				</h:panelGroup>
 			</h:form>
 		</h:panelGroup>
@@ -233,7 +227,8 @@
 					value="#{EventScheduleBean.lazyModel}" paginator="true" rows="10"
 					paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					rowsPerPageTemplate="5,10,15"
-					rendered="#{EventStatusBean.isListDisabled}">
+					rendered="#{EventStatusBean.isListDisabled}"
+					paginatorPosition="bottom">
 					<p:column headerText="Title">
 						<h:commandLink action="#{EventBean.showEvent}"
 							value="#{event.title}"
