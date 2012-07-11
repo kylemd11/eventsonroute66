@@ -22,6 +22,7 @@ import com.kyle.route66.db.dao.CommentRepository;
 import com.kyle.route66.db.dao.EventRepository;
 import com.kyle.route66.db.model.Comment;
 import com.kyle.route66.db.model.Event;
+import com.kyle.route66.service.EventService;
 import com.kyle.route66.web.model.user.UserSession;
 
 @Service("EventBean")
@@ -33,6 +34,9 @@ public class EventBean {
 	
 	@Autowired
 	private EventRepository eventRepository;
+	
+	@Autowired
+	private EventService eventService;
 	
 	@Autowired
 	private CommentRepository commentRepository;
@@ -63,6 +67,7 @@ public class EventBean {
 		else {
 			log.debug(((Event)event.getData()).getEventSeqId());
 			this.event = eventRepository.findByEventSeqId(((Event)event.getData()).getEventSeqId());
+			this.event.getComments();
 			log.debug(this.event);
 		}
 		
@@ -77,8 +82,11 @@ public class EventBean {
 				.getExternalContext().getRequestParameterMap();
 		
 		log.debug("id: " + params.get("id"));
-		this.event = eventRepository.findByEventSeqId(Integer
-				.valueOf((String) params.get("id")));
+//		this.event = eventRepository.findByEventSeqId(Integer
+//				.valueOf((String) params.get("id")));
+//		this.event.getComments();
+		
+		this.event = eventService.getEvent(Integer.valueOf((String) params.get("id")));
 
 		return "success";
 	}
@@ -131,6 +139,10 @@ public class EventBean {
 		else {
 			return false;
 		}
+	}
+
+	public void setEventService(EventService eventService) {
+		this.eventService = eventService;
 	}
 	
 	

@@ -254,7 +254,6 @@ public class NewEventBean {
 		this.event.setStateCd(null);
 		this.event.setZipCode(null);
 		this.event.setContent(null);
-		this.event.setEventTypeCd(null);
 		this.event.setLatitude(null);
 		this.event.setLongitude(null);
 		
@@ -281,9 +280,10 @@ public class NewEventBean {
 			
 			this.event.setIsNew(false);
 			
-			if(!session.getIsModerator()) {
+			if(!session.getIsModerator() || this.event.getEventStatusCd() == null) {
 				this.event.setEventStatusCd("P");
 			}
+			
 			
 			this.event.setLockedDate(null);
 			this.event.setLockedBy("");

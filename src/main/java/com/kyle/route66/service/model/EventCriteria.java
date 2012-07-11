@@ -180,5 +180,15 @@ public class EventCriteria {
 	public String getEventStatus() {
 		return this.eventStatus;
 	}
+
+	@Override
+	public String toString() {
+		return "EventCriteria [state=" + state + ", eventType=" + eventType
+				+ ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", zipCode=" + zipCode + ", distance=" + distance
+				+ ", username=" + username + ", first=" + first + ", pageSize="
+				+ pageSize + ", eventStatus=" + eventStatus + "]";
+	}
+	
 	
 }

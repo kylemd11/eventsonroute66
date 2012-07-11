@@ -52,6 +52,9 @@ public class EventService {
 		if(isModerator) {
 			log.debug("MODERATOR!!!!");
 		}
+		
+		log.debug(criteria);
+		
 		List<Event> events;
 		
 		events = eventDao.getEvents(criteria, isModerator);
@@ -62,6 +65,28 @@ public class EventService {
 		else {
 			return events;
 		}
+	}
+	
+	public long getEventsCount(EventCriteria criteria, boolean isModerator) {
+		if(isModerator) {
+			log.debug("MODERATOR!!!!");
+		}
+		
+		log.debug(criteria);
+		
+		if(criteria.getZipCode() != null && criteria.getDistance() != null) {
+			List<Event> events;
+			
+			events = eventDao.getEvents(criteria, isModerator);
+			return distanceService.filterEventsByDistance(events, criteria).size();
+		}
+		else {
+			return eventDao.getEventsCount(criteria, isModerator);
+		}
+	}
+	
+	public Event getEvent(Integer eventSeqId) {
+		return eventDao.getEvent(eventSeqId);
 	}
 
 	public void setEventRepository(EventRepository eventRepository) {
@@ -88,6 +113,10 @@ public class EventService {
 	public void setDistanceService(DistanceService distanceService) {
 		this.distanceService = distanceService;
 	}
-	
-	
+
+	public void deleteBlankEvents() {
+		int eventsDeleted = this.eventDao.deleteBlankEvents();
+		
+		log.info("Deleted " + eventsDeleted + " blank events.");
+	}
 }

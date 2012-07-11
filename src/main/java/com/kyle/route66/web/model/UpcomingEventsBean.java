@@ -61,14 +61,6 @@ public class UpcomingEventsBean {
 				return evt.getEventSeqId();
 			}
 
-//			@Override
-//			public int getRowCount() {
-//				EventCriteria searchCriteria = new EventCriteria();
-//				searchCriteria.setStartDate(DateUtils.truncate(new Date(), Calendar.HOUR));
-//				
-//				return eventService.getEvents(searchCriteria, false).size();
-//			}
-
 			@Override
 			public List<Event> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
 				
@@ -76,16 +68,22 @@ public class UpcomingEventsBean {
 				
 				searchCriteria.setStartDate(DateUtils.truncate(new Date(), Calendar.HOUR));
 				
-				setRowCount(eventService.getEvents(searchCriteria, false).size());
-				
 				searchCriteria.setFirst(first);
 				searchCriteria.setPageSize(pageSize);	
 				
-				log.debug("first: " + first);
-				log.debug("pageSize: " + pageSize);
+				List<Event> events = eventService.getEvents(searchCriteria, false);
 				
+				if(events.size() >= pageSize) {
+					searchCriteria.setFirst(null);
+					searchCriteria.setPageSize(null);
+					
+					setRowCount(((Long)eventService.getEventsCount(searchCriteria, false)).intValue());
+				}
+				else {
+					setRowCount(events.size());
+				}
 				
-				return eventService.getEvents(searchCriteria, false);
+				return events;
 			}
 		};
 	}

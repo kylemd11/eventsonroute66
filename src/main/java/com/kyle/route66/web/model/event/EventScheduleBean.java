@@ -132,12 +132,6 @@ public class EventScheduleBean {
 				}
 	
 				@Override
-				public int getRowCount() {
-					EventCriteria searchCriteria = filter.getSearchCriteria();
-					return eventService.getEvents(searchCriteria, session.getIsModerator()).size();
-				}
-	
-				@Override
 				public List<Event> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
 					EventCriteria searchCriteria = filter.getSearchCriteria();
 					
@@ -161,7 +155,18 @@ public class EventScheduleBean {
 						searchCriteria.setUsername(getUsername());
 					}
 					
-					return eventService.getEvents(searchCriteria, session.getIsModerator());
+					List<Event> events = eventService.getEvents(searchCriteria, session.getIsModerator());
+					
+					if(events.size() >= pageSize) {
+						searchCriteria.setFirst(null);
+						searchCriteria.setPageSize(null);
+						setRowCount(eventService.getEvents(searchCriteria, session.getIsModerator()).size());
+					}
+					else {
+						setRowCount(events.size());
+					}
+					
+					return events;
 				}
 			};
 			

@@ -16,7 +16,6 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name="authorities"
-    ,catalog="route66Db"
     , uniqueConstraints = @UniqueConstraint(columnNames={"username", "authority"}) 
 )
 public class Authorities  implements java.io.Serializable {
