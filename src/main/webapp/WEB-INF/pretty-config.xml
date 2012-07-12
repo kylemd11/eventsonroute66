@@ -1,0 +1,33 @@
+<pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.0
+                                   		http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.0.xsd">
+	<url-mapping id="home">
+		<pattern value="/" />
+		<view-id value="/index.jsf" />
+	</url-mapping>
+	<url-mapping id="events">
+		<pattern value="/events" />
+		<view-id value="/events.jsf" />
+	</url-mapping>
+	<url-mapping id="links">
+		<pattern value="/links" />
+		<view-id value="/links.jsf" />
+	</url-mapping>
+	<url-mapping id="new_event">
+		<pattern value="/event/new" />
+		<view-id value="/newEvent.jsf" />
+	</url-mapping>
+	<url-mapping id="event">
+		<pattern value="/event" />
+		<view-id value="/event.jsf" />
+	</url-mapping>
+	<url-mapping id="login">
+		<pattern value="/login" />
+		<view-id value="/login.jsf" />
+	</url-mapping>
+	<url-mapping id="moderator_events">
+		<pattern value="/moderator/events" />
+		<view-id value="/moderator/events.jsf" />
+	</url-mapping>
+</pretty-config>

@@ -15,7 +15,7 @@ public class NewEventCleanupService {
 	@Autowired
 	private EventService eventService;
 
-	@Scheduled(cron = "* 1 * * * ?")
+	@Scheduled(cron = "1 1 * * * ?")
 	public void cleanupNewEvents() {
 		log.info("Cleaning up new events!");
 		

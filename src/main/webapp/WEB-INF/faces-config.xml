@@ -16,19 +16,23 @@
    <from-action>#{LoginBean.login}</from-action>
    <from-outcome>success</from-outcome>
    <to-view-id>/index.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-action>#{LogoutBean.logout}</from-action>
    <from-outcome>success</from-outcome>
    <to-view-id>/index.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>startLogin</from-outcome>
    <to-view-id>/login.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>home</from-outcome>
    <to-view-id>/index.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>forgotPassword</from-outcome>
@@ -45,18 +49,22 @@
   <navigation-case>
    <from-outcome>events</from-outcome>
    <to-view-id>/events.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>moderator_events</from-outcome>
    <to-view-id>/moderator/events.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>new_event</from-outcome>
    <to-view-id>/newEvent.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>links</from-outcome>
    <to-view-id>/links.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>moderator_links</from-outcome>
@@ -85,6 +93,7 @@
   <navigation-case>
    <from-outcome>success</from-outcome>
    <to-view-id>/event.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
  </navigation-rule>
  
@@ -93,6 +102,7 @@
   <navigation-case>
    <from-outcome>success</from-outcome>
    <to-view-id>/event.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
  </navigation-rule>
  
