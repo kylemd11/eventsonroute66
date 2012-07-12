@@ -14,6 +14,10 @@
 		<pattern value="/links" />
 		<view-id value="/links.jsf" />
 	</url-mapping>
+	<url-mapping id="history">
+		<pattern value="/history" />
+		<view-id value="/history.jsf" />
+	</url-mapping>
 	<url-mapping id="new_event">
 		<pattern value="/event/new" />
 		<view-id value="/newEvent.jsf" />
@@ -29,5 +33,9 @@
 	<url-mapping id="moderator_events">
 		<pattern value="/moderator/events" />
 		<view-id value="/moderator/events.jsf" />
+	</url-mapping>
+	<url-mapping id="member_account">
+		<pattern value="/member/account" />
+		<view-id value="/member/accountDetails.jsf" />
 	</url-mapping>
 </pretty-config>

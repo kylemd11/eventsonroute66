@@ -12,43 +12,43 @@ import com.kyle.route66.web.constants.RoleConstants;
 @Service("UserSession")
 @Scope("session")
 public class UserSession {
-        
+
 	private boolean loggedIn = false;
 	private UserAccount userAccount;
-	
+
 	private boolean isModerator = false;
 	private boolean isAdmin = false;
 	private boolean isUser = false;
-	
+
 	@Autowired
 	private AuthoritiesRepository authoritiesRepository;
-	
-    public boolean isLoggedIn() {
+
+	public boolean isLoggedIn() {
 		return loggedIn;
 	}
 
 	public void setLoggedIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
-	
+
 	public boolean getIsLoggedIn() {
 		return loggedIn;
 	}
-	
+
 	public void setUserAccount(UserAccount userAccount) {
 		this.userAccount = userAccount;
-		
+
 		setLoggedIn(this.userAccount != null);
-		
-		Authorities authority = authoritiesRepository.findByUsername(this.userAccount.getUsername());
-		
-		if(authority.getAuthority().equalsIgnoreCase(RoleConstants.MODERATOR)) {
+
+		Authorities authority = authoritiesRepository
+				.findByUsername(this.userAccount.getUsername());
+
+		if (authority.getAuthority().equalsIgnoreCase(RoleConstants.MODERATOR)) {
 			this.isModerator = true;
-		}
-		else if(authority.getAuthority().equalsIgnoreCase(RoleConstants.ADMINISTRATOR)) {
+		} else if (authority.getAuthority().equalsIgnoreCase(
+				RoleConstants.ADMINISTRATOR)) {
 			this.isAdmin = true;
-		}
-		else {
+		} else {
 			this.isUser = true;
 		}
 	}
@@ -56,23 +56,22 @@ public class UserSession {
 	public UserAccount getUserAccount() {
 		return userAccount;
 	}
-	
+
 	public boolean getIsModerator() {
 		return isModerator;
 	}
-	
-	public boolean getIsAdmin()	{
+
+	public boolean getIsAdmin() {
 		return isAdmin;
 	}
-	
-	public boolean getIsUser()	{
+
+	public boolean getIsUser() {
 		return isUser;
 	}
 
-	public void setAuthoritiesRepository(AuthoritiesRepository authoritiesRepository) {
+	public void setAuthoritiesRepository(
+			AuthoritiesRepository authoritiesRepository) {
 		this.authoritiesRepository = authoritiesRepository;
 	}
-	
-	
- }
 
+}

@@ -45,6 +45,7 @@
   <navigation-case>
    <from-outcome>accountSettings</from-outcome>
    <to-view-id>/member/accountDetails.xhtml</to-view-id>
+   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>events</from-outcome>
@@ -64,6 +65,11 @@
   <navigation-case>
    <from-outcome>links</from-outcome>
    <to-view-id>/links.xhtml</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>history</from-outcome>
+   <to-view-id>/history.xhtml</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
