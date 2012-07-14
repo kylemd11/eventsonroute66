@@ -9,21 +9,16 @@
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/site/noLeft.xhtml">
 	<ui:define name="center">
-		<h:form id="linksDisplayForm">
-			<p:dataList id="linksPanel" value="#{LinksBean.lazyModel}" var="link"
-				paginator="true" rows="20" effectSpeed="fast"
-				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"
-				rowsPerPageTemplate="20" type="none" paginatorPosition="bottom"
-				rowIndexVar="RowIndex">
-
-				<p:column>
+		<h:form id="linksPanel">
+			<ui:repeat value="#{LinksBean.links}" var="link">
+				<h:panelGroup>
 					<h:panelGroup style="display: block; padding: 5px 5px 0px 5px;">
-						<h:outputLink value="#{link.url}" title="#{link.title}">
+						<h:outputLink value="#{link.url}" title="#{link.title}"
+							style="font-size: 10pt !important;">
 							<h:outputText value="#{link.title}" />
 						</h:outputLink>
 						<h:panelGrid columns="2" style="float:right;"
 							rendered="#{UserSession.isModerator}">
-							
 							<p:commandLink action="#{LinksBean.setLink}" update=":linkForm"
 								oncomplete="linkDialog.show();">
 								<f:param name="linkSeqId" value="#{link.linkSeqId}" />
@@ -36,7 +31,6 @@
 								<h:graphicImage library="images" name="cancel.png" height="16"
 									width="16" style="padding-right: 5px;" title="Delete" />
 							</p:commandLink>
-							
 						</h:panelGrid>
 					</h:panelGroup>
 					<h:outputText value="#{link.summary}"
@@ -45,8 +39,8 @@
 						rendered="#{RowIndex != 19 and RowIndex != (LinksBean.lazyModel.rowCount - 1)}" />
 					<h:outputText value=" " style="display: block; padding-top: 4px;"
 						rendered="#{RowIndex == 19 or RowIndex == (LinksBean.lazyModel.rowCount - 1)}" />
-				</p:column>
-			</p:dataList>
+				</h:panelGroup>
+			</ui:repeat>
 		</h:form>
 		<h:form>
 			<p:commandButton action="#{LinksBean.newLink}" value="New"
