@@ -33,6 +33,7 @@ import com.kyle.route66.service.LinkService;
 import com.kyle.route66.service.model.EventCriteria;
 import com.kyle.route66.web.model.user.StatusBean;
 import com.kyle.route66.web.model.user.UserSession;
+import com.kyle.route66.web.ui.LinkDto;
 
 @Service("LinksBean")
 @Scope("request")
@@ -49,7 +50,7 @@ public class LinksBean {
 	@Autowired
 	private LinkService linkService;
 	
-	private LazyDataModel<Link> lazyModel = null;
+	private LazyDataModel<LinkDto> lazyModel = null;
 	
 	private Integer linkSeqId;
 	private String title;
@@ -57,7 +58,7 @@ public class LinksBean {
 	private String summary;
 	
 	public LinksBean() {
-		lazyModel = new LazyDataModel<Link>() {
+		lazyModel = new LazyDataModel<LinkDto>() {
 			
 			@Override
 			public void setRowIndex(final int rowIndex) {
@@ -69,43 +70,31 @@ public class LinksBean {
 			}
 			
 			@Override
-			public Link getRowData(String rowKey) {
+			public LinkDto getRowData(String rowKey) {
 				return linkService.find(Integer.parseInt(rowKey));
 			}
 
 			@Override
-			public Object getRowKey(Link link) {
+			public Object getRowKey(LinkDto link) {
 				return link.getLinkSeqId();
 			}
 
-//			@Override
-//			public int getRowCount() {
-//				return linkService.getCount();
-//			}
-
 			@Override
-			public List<Link> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
-				log.debug("first: " + first);
-				log.debug("pageSize: " + pageSize);
-				setRowCount(linkService.getCount());
+			public List<LinkDto> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {
 				
-				return linkService.getLinks(first, pageSize);
+				List<LinkDto> links = linkService.getLinks(first, pageSize);
+				
+				if(links.size() >= pageSize) {
+					setRowCount(linkService.getCount());
+				}
+				
+				return links;
 			}
 		};
 	}
 	
-	public LazyDataModel<Link> getLazyModel() {
+	public LazyDataModel<LinkDto> getLazyModel() {
 		return lazyModel;
-	}
-	
-	public List<Link> getLinks() {
-		List<Link> links = new ArrayList<Link>();
-		
-		for(Link link : linkRepository.findAll()) {
-			links.add(link);
-		}
-		
-		return links;
 	}
 	
 	public String setLink() {
@@ -113,8 +102,7 @@ public class LinksBean {
 		Map<String, String> params = FacesContext.getCurrentInstance()
 				.getExternalContext().getRequestParameterMap();
 
-		Link link = linkRepository.findOne(Integer.parseInt((String) params
-				.get("linkSeqId")));
+		LinkDto link = linkService.find(Integer.parseInt((String) params.get("linkSeqId")));
 		
 		this.linkSeqId = link.getLinkSeqId();
 		this.title = link.getTitle();
@@ -136,24 +124,24 @@ public class LinksBean {
 	}
 	
 	public String save() {
-		Link link;
+		LinkDto link;
 		if(this.linkSeqId != null) {
-			link = linkRepository.findOne(this.linkSeqId);
+			link = linkService.findReference(this.linkSeqId);
 		}
 		else {
-			link = new Link();			
+			link = new LinkDto();			
 		}
 		
 		link.setTitle(this.title);
 		link.setUrl(this.url);
 		link.setSummary(this.summary);
 		
-		linkRepository.save(link);
+		linkService.save(link);
 		return "";
 	}
 	
 	public String delete() {
-		linkRepository.delete(this.linkSeqId);
+		linkService.delete(this.linkSeqId);
 		return "";
 	}
 

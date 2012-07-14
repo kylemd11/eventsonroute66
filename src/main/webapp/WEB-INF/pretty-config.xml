@@ -10,10 +10,10 @@
 		<pattern value="/events" />
 		<view-id value="/events.jsf" />
 	</url-mapping>
-	<url-mapping id="links">
+	<!-- <url-mapping id="links">
 		<pattern value="/links" />
 		<view-id value="/links.jsf" />
-	</url-mapping>
+	</url-mapping> -->
 	<url-mapping id="history">
 		<pattern value="/history" />
 		<view-id value="/history.jsf" />

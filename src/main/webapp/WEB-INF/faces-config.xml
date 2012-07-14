@@ -65,7 +65,6 @@
   <navigation-case>
    <from-outcome>links</from-outcome>
    <to-view-id>/links.xhtml</to-view-id>
-   <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>history</from-outcome>

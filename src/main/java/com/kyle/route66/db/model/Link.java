@@ -31,6 +31,13 @@ public class Link implements java.io.Serializable {
 		this.url = url;
 	}
 
+	public Link(Integer linkSeqId, String title, String url, String summary) {
+		this.linkSeqId = linkSeqId;
+		this.title = title;
+		this.url = url;
+		this.summary = summary;
+	}
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "link_seq_id", unique = true, nullable = false)
