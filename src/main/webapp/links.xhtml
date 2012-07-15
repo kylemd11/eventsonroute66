@@ -71,7 +71,7 @@
 				</h:panelGrid>
 				<h:panelGrid style="float: right;" columns="2">
 					<p:commandButton value="Save" action="#{LinksBean.save}"
-						ajax="true" oncomplete="linkDialog.hide();" update=":linksDisplayForm" />
+						ajax="true" oncomplete="linkDialog.hide();" update=":linksPanel" />
 					<p:commandButton value="Cancel" immediate="true" ajax="true"
 						oncomplete="linkDialog.hide();" />
 				</h:panelGrid>
@@ -83,7 +83,7 @@
 			<h:form id="deleteForm" style="text-align: right;">
 				<h:inputHidden value="#{LinksBean.linkSeqId}" />
 				<p:commandButton id="confirm" value="Yes"
-					oncomplete="confirmation.hide()" update=":linksDisplayForm"
+					oncomplete="confirmation.hide()" update=":linksPanel"
 					action="#{LinksBean.delete}" />
 				<p:commandButton id="decline" value="No"
 					onclick="confirmation.hide()" type="button" />

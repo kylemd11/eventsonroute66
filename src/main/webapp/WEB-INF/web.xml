@@ -62,14 +62,12 @@
         org.springframework.web.context.support.HttpRequestHandlerServlet
     </servlet-class>
 </servlet>
- 
+
 	<servlet-mapping>
     	<servlet-name>ImageServlet</servlet-name>
     	<url-pattern>/image/*</url-pattern>
 	</servlet-mapping>
 	
-	
-
   <filter>
    <filter-name>Pretty Filter</filter-name>
    <filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>

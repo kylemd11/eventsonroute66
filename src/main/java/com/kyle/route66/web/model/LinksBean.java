@@ -97,6 +97,16 @@ public class LinksBean {
 		return lazyModel;
 	}
 	
+	public List<LinkDto> getLinks() {
+		List<LinkDto> links = new ArrayList<LinkDto>();
+		
+		for(LinkDto link : linkService.getAll()) {
+			links.add(link);
+		}
+		
+		return links;
+	}
+	
 	public String setLink() {
 		log.debug("setLink()");
 		Map<String, String> params = FacesContext.getCurrentInstance()

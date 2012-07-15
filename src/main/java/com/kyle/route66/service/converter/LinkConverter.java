@@ -11,10 +11,15 @@ public class LinkConverter implements Converter {
 	private static final Log log = LogFactory.getLog(LinkConverter.class);
 	
 	@Override
-	public Object toDto(Object obj) {
+	public Object toDto(Object obj, boolean isReference) {
 		log.debug("toDto()");
 		Link db = (Link)obj;
-		return new LinkDto(db.getLinkSeqId(), db.getTitle(), db.getUrl(), db.getSummary());
+		if(!isReference) {
+			return new LinkDto(db.getLinkSeqId(), db.getTitle(), db.getUrl(), db.getSummary());
+		}
+		else {
+			return new LinkDto(db.getLinkSeqId(), null, null, null);
+		}
 	}
 
 	@Override

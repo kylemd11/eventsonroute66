@@ -17,7 +17,11 @@ public class ConversionService {
 	private static final Log log = LogFactory.getLog(ConversionService.class);
 	
 	public static Object toDto(Object obj) {
-		return getConverter(obj).toDto(obj);
+		return getConverter(obj).toDto(obj, false);
+	}
+	
+	public static Object toDto(Object obj, boolean isReference) {
+		return getConverter(obj).toDto(obj, isReference);
 	}
 	
 	public static List toDto(List objs) {
@@ -26,7 +30,7 @@ public class ConversionService {
 		Converter converter = getConverter(objs.get(0));
 		
 		for(Object obj : objs) {
-			dtos.add(converter.toDto(obj));
+			dtos.add(converter.toDto(obj, false));
 		}
 		
 		return dtos;

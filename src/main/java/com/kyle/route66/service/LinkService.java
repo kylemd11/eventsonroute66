@@ -73,10 +73,20 @@ public class LinkService {
 	}
 
 	public LinkDto findReference(Integer linkSeqId) {
-		return (LinkDto) ConversionService.toDto(this.em.getReference(Link.class, linkSeqId));
+		return (LinkDto) ConversionService.toDto(this.em.getReference(Link.class, linkSeqId), true);
 	}
 	
 	public void setEm(EntityManager em) {
 		this.em = em;
+	}
+
+	public List<LinkDto> getAll() {
+		List<LinkDto> links = new ArrayList<LinkDto>();
+		
+		for(Link link : linkRepository.findAll()) {
+			links.add((LinkDto) ConversionService.toDto(link));
+		}
+		
+		return links;
 	}
 }
