@@ -57,7 +57,7 @@
 			<h:panelGroup rendered="#{!NewEventBean.canEdit}" style="padding-top: 5px; margin-top: 5px;">
 				<h:graphicImage library="images" name="lock.png" height="14" width="14" title="Calendar"/><h:outputText value=" Locked By: #{NewEventBean.event.lockedBy}" style="font-size: 14px;"/>
 			</h:panelGroup>	
-			<h:form>
+			<h:form id="eventForm">
 				<p:blockUI block="generalField" trigger="allDayInput startDateInput endDateInput">					
         			<p:graphicImage value="/images/ajax-loader.gif"/>  
 				</p:blockUI>
@@ -133,7 +133,12 @@
 							<p:message for="summaryInput"/>
 						</h:panelGrid>
 					</p:fieldset>
-					<p:fieldset legend="Address">
+					<p:fieldset legend="Address" id="addressFieldset">
+						<h:outputText value="Enter the address or find it on the map"/>
+						<p:commandLink oncomplete="mapDialog.show()" actionListener="#{NewEventBean.copyAddress}" update=":selectedAddress" ajax="true">
+						<h:graphicImage library="images" name="Maps.png" height="30"
+							width="30" title="Map" />
+					</p:commandLink>
 						<h:panelGrid columns="3" columnClasses="labelColumn,dataColumn,dataColumn">
 							<h:panelGroup>
 								<h:outputText value="*" style="color: red;"/>
@@ -178,7 +183,7 @@
 							<h:outputLabel for="zipInput" value="Zip Code:" />
 							</h:panelGroup>
 							<p:inputMask  id="zipInput" value="#{NewEventBean.event.zipCode}"
-								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999-9999" disabled="#{!NewEventBean.canEdit}">
+								required="true" requiredMessage="Required" length="11" maxlength="10" mask="99999" disabled="#{!NewEventBean.canEdit}">
 								<f:validateLength minimum="5" maximum="10"/>
 								</p:inputMask>
 							<p:message for="zipInput" />
@@ -232,6 +237,45 @@
 				<h:outputText value="#{NewEventBean.event.content}" escape="false"/>
 			</h:panelGrid>
 		</p:dialog>
+		<p:dialog header="Address Selection" widgetVar="mapDialog" width="625" height="535" showEffect="blind" hideEffect="blind" draggable="false"
+					resizable="false" modal="true" closable="false">
+			<p:gmap center="39.368279,-99.580078" zoom="4" type="HYBRID"
+				style="width:600px;height:400px" widgetVar="map" onPointClick="handlePointClick(event);">
+				<p:ajax event="pointSelect" listener="#{NewEventBean.onPointSelect}" update=":selectedAddress"/>
+				</p:gmap>
+			
+			<p:fieldset legend="Selected Address" id="selectedAddress" style="margin-top: 10px; margin-bottom: 10px;">
+				<h:outputText value="No location selected" rendered="#{NewEventBean.event.address1 == null}"/>
+				<h:panelGrid columns="1" rendered="#{NewEventBean.event.address1 != null}">
+					<h:outputText value="#{NewEventBean.event.address1}" />
+				<h:outputText
+					value="#{NewEventBean.event.city}, #{NewEventBean.event.stateCd} #{NewEventBean.event.zipCode}" />			
+				</h:panelGrid>
+			</p:fieldset>
+			
+			<h:panelGroup style="float: right;">	
+				<p:commandButton value="OK" oncomplete="mapDialog.hide();" update="eventForm:addressFieldset"/>
+				<p:commandButton value="Cancel" oncomplete="mapDialog.hide();" immediate="true"/>
+			</h:panelGroup>
+		</p:dialog>
+		<script type="text/javascript">  
+    var currentMarker = null;  
+      
+    function handlePointClick(event) {  
+    	if(currentMarker != null) {
+    		currentMarker.setMap(null);  
+        	currentMarker = null;
+    	}
+    
+        if(currentMarker == null) {  
+            currentMarker = new google.maps.Marker({  
+                position:new google.maps.LatLng(event.latLng.lat(), event.latLng.lng())  
+            });  
+                              
+            map.addOverlay(currentMarker);  
+        } 
+    }  
+</script> 
 	</ui:define>
 </ui:composition>
 </html>

@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.imgscalr.Scalr;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.ScheduleEntrySelectEvent;
+import org.primefaces.event.map.PointSelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.UploadedFile;
@@ -54,6 +55,7 @@ import com.kyle.route66.db.model.EventArticleImage;
 import com.kyle.route66.db.model.EventStatus;
 import com.kyle.route66.db.model.EventType;
 import com.kyle.route66.db.model.State;
+import com.kyle.route66.service.LocationService;
 import com.kyle.route66.web.model.user.UserSession;
 
 @Service("NewEventBean")
@@ -80,6 +82,9 @@ public class NewEventBean {
 	private EventStatusRepository eventStatusRepository;
 	
 	@Autowired
+	private LocationService locationService;
+	
+	@Autowired
 	private UserSession session;
 	
 	@Autowired
@@ -93,6 +98,14 @@ public class NewEventBean {
 	private String dateFormat = "MM/dd/yyyy";
 
 	private boolean editFlag = false;
+
+	private String selectedAddress;
+
+	private String selectedCity;
+
+	private String selectedState;
+
+	private String selectedZip;
 
 	public List<EventType> getEventTypes() {
 		return eventTypeRepository.findAll();
@@ -226,6 +239,11 @@ public class NewEventBean {
 	}
 	
 	public void createNewEvent(ActionEvent ae) {
+		this.selectedAddress = null;
+		this.selectedCity = null;
+		this.selectedState = null;
+		this.selectedZip = null;
+		
 		this.event = new Event();
 		
 		this.event.setTitle("");
@@ -271,12 +289,7 @@ public class NewEventBean {
 		Event event = eventRepository.findByEventSeqId(this.event.getEventSeqId());
 		
 		if(!event.isLocked() || event.getLockedBy().equals(session.getUserAccount().getUsername())) {
-			final Geocoder geocoder = new Geocoder();
-			GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(getEventAddress()).setLanguage("en").getGeocoderRequest();
-			GeocodeResponse geocode = geocoder.geocode(geocoderRequest);
-			
-			this.event.setLatitude(geocode.getResults().get(0).getGeometry().getLocation().getLat());
-			this.event.setLongitude(geocode.getResults().get(0).getGeometry().getLocation().getLng());
+			getGeoLocationForAddress();
 			
 			this.event.setIsNew(false);
 			
@@ -295,6 +308,13 @@ public class NewEventBean {
 			this.event = event;
 			return "";
 		}
+	}
+
+	private void getGeoLocationForAddress() {
+		Map<String, BigDecimal> geoLocation = locationService.getGeoLocationForAddress(this.event.getAddress1(), this.event.getCity(), this.event.getStateCd(), this.event.getZipCode());
+		
+		this.event.setLatitude(geoLocation.get("latitude"));
+		this.event.setLongitude(geoLocation.get("longitude"));
 	}
 	
 	public String delete() {
@@ -366,4 +386,58 @@ public class NewEventBean {
 	public Date getToday() {
 		return new Date();
 	}
+	
+	public void onPointSelect(PointSelectEvent event) {  
+        LatLng latlng = event.getLatLng();  
+          
+        log.info("Point Selected at Lat:" + latlng.getLat() + ", Lng:" + latlng.getLng());  
+        
+        Map<String, String> addressForGeoLocation = locationService.getAddressForGeoLocation(new BigDecimal(latlng.getLat()), new BigDecimal(latlng.getLng()));
+        
+        
+        this.event.setAddress1(addressForGeoLocation.get("address"));
+        this.event.setCity(addressForGeoLocation.get("city"));
+        this.event.setStateCd(addressForGeoLocation.get("state"));
+        this.event.setZipCode(addressForGeoLocation.get("zip"));
+        
+        this.event.setAddress2("");
+        
+        log.info(addressForGeoLocation);
+    }
+
+	public void setLocationService(LocationService locationService) {
+		this.locationService = locationService;
+	}
+
+	public String getSelectedAddress() {
+		return selectedAddress;
+	}
+
+	public void setSelectedAddress(String selectedAddress) {
+		this.selectedAddress = selectedAddress;
+	}
+
+	public String getSelectedCity() {
+		return selectedCity;
+	}
+
+	public void setSelectedCity(String selectedCity) {
+		this.selectedCity = selectedCity;
+	}
+
+	public String getSelectedState() {
+		return selectedState;
+	}
+
+	public void setSelectedState(String selectedState) {
+		this.selectedState = selectedState;
+	}
+
+	public String getSelectedZip() {
+		return selectedZip;
+	}
+
+	public void setSelectedZip(String selectedZip) {
+		this.selectedZip = selectedZip;
+	}  
 }
