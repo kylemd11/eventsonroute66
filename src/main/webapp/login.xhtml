@@ -7,35 +7,50 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<h:outputScript library="javascript" name="facebook.js" target="body" />
+</h:head>
 <ui:composition template="/WEB-INF/templates/site/noLeft.xhtml">
 	<ui:define name="center">
-		<h:panelGrid columns="2" columnClasses="twoColumnCenter,twoColumnCenter" style="width: 100%;">
-		
-		<p:panel header="Login" style="width: 400px; margin: auto;">
-			<h:form id="loginForm">
-				<p:message for="loginForm" />
-				<h:panelGrid columns="3" style="width: 385px;">
-					<h:outputLabel for="usernameInput" value="Username:" />
-					<p:inputText id="usernameInput" value="#{LoginBean.username}"
-						required="true" requiredMessage="Required" style="float: right;"/>
-					<p:message for="usernameInput" />
-					<h:outputLabel for="passwordInput" value="Password:" />
-					<p:password id="passwordInput" value="#{LoginBean.password}"
-						required="true" requiredMessage="Required" style="float: right;"/>
-					<p:message for="passwordInput" />
-					<h:outputText value="" />
-					<p:commandButton value="Login" action="#{LoginBean.login}"
-						style="float: right;" ajax="false" />
-						<p:commandLink action="forgotPassword" value="Forgot Password?" style="float: right;" ajax="false"/>
-				</h:panelGrid>
-			</h:form>
-		</p:panel>
-		<p:panel header="New Members" style="width: 400px; margin: auto;">
-			<h:form>
-					<p:commandButton value="Create new account" action="newAccount" ajax="false" />
-			</h:form>
-		</p:panel>
+		<h:panelGrid columns="2"
+			columnClasses="twoColumnCenter,twoColumnCenter" style="width: 100%;">
+
+			<p:panel header="Login" style="width: 400px; margin: auto;">
+				<h:form id="loginForm">
+					<p:message for="loginForm" />
+					<h:panelGrid columns="3" style="width: 385px;">
+						<h:outputLabel for="usernameInput" value="Username:" />
+						<p:inputText id="usernameInput" value="#{LoginBean.username}"
+							required="true" requiredMessage="Required" style="float: right;" />
+						<p:message for="usernameInput" />
+						<h:outputLabel for="passwordInput" value="Password:" />
+						<p:password id="passwordInput" value="#{LoginBean.password}"
+							required="true" requiredMessage="Required" style="float: right;" />
+						<p:message for="passwordInput" />
+						<h:outputText value="" />
+						<p:commandButton value="Login" action="#{LoginBean.login}"
+							style="float: right;" ajax="false" />
+						<p:commandLink action="forgotPassword" value="Forgot Password?"
+							style="float: right;" ajax="false" />
+					</h:panelGrid>
+				</h:form>
+				<a href="#" onclick="facebook_login();"><h:graphicImage library="images" name="facebook-login-button.png" style="padding-right: 5px;" title="Login with facebook" /></a>
+				<h:form id="facebookForm">
+					<p:inputText id="usernameFacebook"
+						value="#{LoginBean.facebookUsername}" style="display: none;"/>
+					<p:commandButton id="facebooksubmit" value="submit" action="#{LoginBean.facebookLogin}" style="display: none;"/>
+				</h:form>
+			</p:panel>
+			<p:panel header="New Members" style="width: 400px; margin: auto;">
+				<h:form>
+					<p:commandButton value="Create new account" action="newAccount"
+						ajax="false" />
+				</h:form>
+			</p:panel>
 		</h:panelGrid>
+		<script type="text/javascript">
+		facebook_phase2(); 
+		</script>
 	</ui:define>
 </ui:composition>
 </html>

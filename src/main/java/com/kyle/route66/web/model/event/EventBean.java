@@ -94,9 +94,11 @@ public class EventBean {
 	public MapModel getEventMapModel() {
 		DefaultMapModel simpleModel = new DefaultMapModel();
 
+		if(this.event != null) {
 		simpleModel.addOverlay(new Marker(new LatLng(this.event.getLatitude()
 				.doubleValue(), this.event.getLongitude().doubleValue()),
 				this.event.getTitle(), this.event.getCity()));
+		}
 
 		return simpleModel;
 	}

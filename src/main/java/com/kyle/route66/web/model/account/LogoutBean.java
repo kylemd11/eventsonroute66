@@ -37,7 +37,7 @@ public class LogoutBean {
 			e.printStackTrace();
 		}*/
 		
-		return "success";
+		return "logout";
 	}
 	
 	public void setSession(UserSession session) {
