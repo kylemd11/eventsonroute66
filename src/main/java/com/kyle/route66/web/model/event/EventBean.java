@@ -43,6 +43,8 @@ public class EventBean {
 	
 	@Autowired
 	private UserSession session;
+	
+	private Integer eventSeqId;
 
 	private Event event;
 
@@ -66,6 +68,7 @@ public class EventBean {
 		}
 		else {
 			log.debug(((Event)event.getData()).getEventSeqId());
+			this.eventSeqId = ((Event)event.getData()).getEventSeqId();
 			this.event = eventRepository.findByEventSeqId(((Event)event.getData()).getEventSeqId());
 			this.event.getComments();
 			log.debug(this.event);
@@ -85,7 +88,7 @@ public class EventBean {
 //		this.event = eventRepository.findByEventSeqId(Integer
 //				.valueOf((String) params.get("id")));
 //		this.event.getComments();
-		
+		this.eventSeqId = Integer.valueOf((String) params.get("id"));
 		this.event = eventService.getEvent(Integer.valueOf((String) params.get("id")));
 
 		return "success";
@@ -147,6 +150,14 @@ public class EventBean {
 		this.eventService = eventService;
 	}
 	
-	
+	public Integer getEventSeqId() {
+		return eventSeqId;
+	}
+
+	public void setEventSeqId(Integer id) {
+		this.eventSeqId = id;
+		
+		this.event = eventService.getEvent(id);
+	}
 	
 }

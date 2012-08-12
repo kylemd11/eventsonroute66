@@ -26,6 +26,11 @@
 		<pattern value="/event" />
 		<view-id value="/event.jsf" />
 	</url-mapping>
+	<url-mapping id="event_rest">
+		<pattern value="/event/#{EventBean.eventSeqId}" />
+		<view-id value="/event.jsf" />
+	</url-mapping>
+	
 	<url-mapping id="login">
 		<pattern value="/login" />
 		<view-id value="/login.jsf" />
