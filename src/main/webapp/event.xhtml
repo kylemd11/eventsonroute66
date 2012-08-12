@@ -8,6 +8,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/templates/site/event.xhtml">
+	<ui:define name="head">
+		<meta property="og:title" content="#{EventBean.event.title}"/>
+		<meta property="og:type" content="activity"/>
+		<meta property="og:image" content="http://www.eventsonroute66.com/resources/images/logo.png"/>
+		<meta property="og:url" content="http://www.eventsonroute66.com/event/#{EventBean.eventSeqId}"/>
+		<meta property="og:site_name" content="EventsOnRoute66.com"/>
+		<meta property="og:app_id" content="474286489251115"/>
+	</ui:define>
 	<ui:define name="left">
 		<h:panelGrid columns="1" style="width: 100%; text-align: center;">
 			<h:outputText
@@ -53,7 +61,10 @@
 					<f:convertDateTime pattern="MM/dd/yyyy" />
 				</h:outputText>
 			</h:panelGrid>
-		</h:panelGrid>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<iframe src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.eventsonroute66.com%2Fevents&amp;send=false&amp;layout=standard&amp;width=250&amp;show_faces=true&amp;action=like&amp;colorscheme=light&amp;font&amp;height=80&amp;appId=474286489251115" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:80px;" allowTransparency="true"></iframe>
+			</h:panelGrid>			
 	</ui:define>
 	<ui:define name="center">
 		<h:panelGrid columns="1" style="width: 100%; text-align: center;">

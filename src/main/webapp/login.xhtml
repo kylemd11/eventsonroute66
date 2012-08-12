@@ -7,10 +7,10 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<h:outputScript library="javascript" name="facebook.js" target="body" />
-</h:head>
 <ui:composition template="/WEB-INF/templates/site/noLeft.xhtml">
+	<ui:define name="scripts">
+		<h:outputScript library="javascript" name="facebook.js" target="body" />
+	</ui:define>
 	<ui:define name="center">
 		<h:panelGrid columns="2"
 			columnClasses="twoColumnCenter,twoColumnCenter" style="width: 100%;">
