@@ -28,6 +28,7 @@ import com.kyle.route66.db.model.UserAccountRequest;
 import com.kyle.route66.db.model.Users;
 import com.kyle.route66.service.EmailService;
 import com.kyle.route66.service.RandomStringService;
+import com.kyle.route66.service.UserService;
 import com.kyle.route66.web.model.user.StatusBean;
 import com.kyle.route66.web.model.user.UserSession;
 
@@ -44,6 +45,9 @@ public class AccountActivatorBean {
 	
 	@Autowired
 	private UserAccountRepository userAccountRepository;
+	
+	@Autowired
+	private UserService userService;
 	
 	public void setUserAccountRequestRepository(
 			UserAccountRequestRepository userAccountRequestRepository) {
@@ -70,8 +74,8 @@ public class AccountActivatorBean {
 		
 		if(userAccountRequest != null) {
 			Date now = new Date();
-			Users user = usersRepository.findByUsername(userAccountRequest.getUsername());
-			UserAccount account = userAccountRepository.findByUsername(userAccountRequest.getUsername());
+			Users user = getUserByUsername(userAccountRequest);
+			UserAccount account = getUserAccountByUsername(userAccountRequest);
 			
 			if(now.before(userAccountRequest.getExpirationDate())) {
 				user.setEnabled(1);
@@ -96,4 +100,18 @@ public class AccountActivatorBean {
 			return "";
 		}
 	}
+
+	public UserAccount getUserAccountByUsername(UserAccountRequest userAccountRequest) {
+		return userAccountRepository.findByUsername(userAccountRequest.getUsername());
+	}
+
+	public Users getUserByUsername(UserAccountRequest userAccountRequest) {
+		return usersRepository.findByUsername(userAccountRequest.getUsername());
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+	
+	
 }

@@ -1,7 +1,5 @@
 package com.kyle.route66.web.model.account;
 
-import java.io.IOException;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -28,14 +26,6 @@ public class LogoutBean {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
 		session.invalidate();
-		
-		
-		/*try {
-			FacesContext.getCurrentInstance().getExternalContext().redirect("/logout.jsp");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 		
 		return "logout";
 	}

@@ -70,6 +70,10 @@ public class UserService {
 		
 		return password;
 	}
+	
+	public UserAccount findAccountByUsername(String username) {
+		return userAccountRepository.findByUsername(username);
+	}
 
 	public void setUserAccountRepository(UserAccountRepository userAccountRepository) {
 		this.userAccountRepository = userAccountRepository;
@@ -85,5 +89,11 @@ public class UserService {
 
 	public void setPasswordEncoder(ShaPasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
+	}
+
+	public String reverseEngineerPassword(String facebookUsername) {
+		String combined = facebookUsername + "(facebook)eF6@vU8";
+		
+		return Base64.encodeBase64String(combined.getBytes());
 	}
 }

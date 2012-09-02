@@ -6,7 +6,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,15 +50,6 @@ public class LoginBean {
 	private AuthenticationManager am;
 	
 	@Autowired
-	private UserAccountRepository userAccountRepository;
-	
-	@Autowired
-	private UsersRepository usersRepository;
-	
-	@Autowired
-	private AuthoritiesRepository authoritiesRepository;
-	
-	@Autowired
 	private UserService userService;
 	
 	public String getUsername() {
@@ -95,7 +85,7 @@ public class LoginBean {
 			
 			SecurityContextHolder.getContext().setAuthentication(result);
 
-			session.setUserAccount(userAccountRepository.findByUsername(this.username));
+			session.setUserAccount(userService.findAccountByUsername(this.username));
 			
 		} catch (AuthenticationException e) {
 			log.error(e.getMessage());
@@ -108,7 +98,7 @@ public class LoginBean {
 	}
 	
 	public String facebookLogin() {
-		UserAccount user = userAccountRepository.findByUsername(facebookUsername + "(facebook)");
+		UserAccount user = userService.findAccountByUsername(facebookUsername + "(facebook)");
 		
 		if(user == null) {
 			String password = userService.createFacebookAccount(facebookUsername);
@@ -118,16 +108,12 @@ public class LoginBean {
 		}
 		else {
 			this.username = user.getUsername();
-			log.debug("password: " + user.getUser().getPassword());
-			
-			String combined = facebookUsername + "(facebook)eF6@vU8";
-			
-			this.password = Base64.encodeBase64String(combined.getBytes());
+			this.password = userService.reverseEngineerPassword(facebookUsername);
 		}
 		
 		return login();
 	}
-	
+
 	public void setAm(AuthenticationManager am) {
 		this.am = am;
 	}
@@ -140,20 +126,7 @@ public class LoginBean {
 		this.status = status;
 	}
 
-	public UserAccountRepository getUserAccountRep() {
-		return userAccountRepository;
-	}
-
-	public void setUsersRepository(UsersRepository usersRepository) {
-		this.usersRepository = usersRepository;
-	}
-
-	public void setAuthoritiesRepository(AuthoritiesRepository authoritiesRepository) {
-		this.authoritiesRepository = authoritiesRepository;
-	}
-
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
 }
