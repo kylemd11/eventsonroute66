@@ -88,6 +88,17 @@ public class UpcomingEventsBean {
 		};
 	}
 	
+	public boolean isHasResults() {
+		EventCriteria searchCriteria = new EventCriteria();
+		
+		searchCriteria.setStartDate(DateUtils.truncate(new Date(), Calendar.HOUR));
+		
+		searchCriteria.setFirst(null);
+		searchCriteria.setPageSize(null);
+		
+		return ((Long)eventService.getEventsCount(searchCriteria, false)).intValue() > 0;
+	}
+	
 	public LazyDataModel<Event> getLazyModel() {
 		return lazyModel;
 	}

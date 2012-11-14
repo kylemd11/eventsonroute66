@@ -10,7 +10,10 @@
 <h:body>
 	<composite:interface />
 	<composite:implementation>
-		<h:form  style="width: 305px;">
+		<p:panel header="Upcoming Events" rendered="#{!UpcomingEventsBean.hasResults}">
+			<h:outputText value="There are no upcoming events scheduled."/>
+		</p:panel>
+		<h:form  style="width: 305px;" rendered="#{UpcomingEventsBean.hasResults}">		
 			<p:dataList value="#{UpcomingEventsBean.lazyModel}" var="event"
 				paginator="true" rows="20" effectSpeed="fast"
 				paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"

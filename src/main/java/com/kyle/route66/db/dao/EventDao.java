@@ -62,6 +62,16 @@ public class EventDao {
 			multiple = true;
 		}
 		
+		if(criteria.getStartDate() != null && criteria.getEndDate() == null) {
+			if(multiple) {
+				sql += "and ";
+			}
+			
+			sql += "(e.startDtg > :startDate) ";
+			
+			multiple = true;
+		}
+		
 		if(criteria.getUsername() != null) {
 			if(multiple) {
 				sql += "and ";
@@ -115,6 +125,10 @@ public class EventDao {
 			query.setParameter("endDate", criteria.getEndDate());
 		}
 		
+		if(criteria.getStartDate() != null && criteria.getEndDate() == null) {
+			query.setParameter("startDate", criteria.getStartDate());
+		}
+		
 		if(criteria.getUsername() != null && !isModerator) {
 			query.setParameter("username", criteria.getUsername());
 		}
@@ -155,6 +169,16 @@ public class EventDao {
 			}
 			
 			sql += "((e.startDtg between :startDate and :endDate) or (e.endDtg between :startDate and :endDate)) ";
+			
+			multiple = true;
+		}
+		
+		if(criteria.getStartDate() != null && criteria.getEndDate() == null) {
+			if(multiple) {
+				sql += "and ";
+			}
+			
+			sql += "(e.startDtg > :startDate) ";
 			
 			multiple = true;
 		}
@@ -210,6 +234,10 @@ public class EventDao {
 		if(criteria.getStartDate() != null && criteria.getEndDate() != null) {
 			query.setParameter("startDate", criteria.getStartDate());
 			query.setParameter("endDate", criteria.getEndDate());
+		}
+		
+		if(criteria.getStartDate() != null && criteria.getEndDate() == null) {
+			query.setParameter("startDate", criteria.getStartDate());
 		}
 		
 		if(criteria.getUsername() != null && !isModerator) {
